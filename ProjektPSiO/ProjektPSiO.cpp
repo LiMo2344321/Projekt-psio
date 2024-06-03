@@ -6,10 +6,10 @@ int main() {
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Projekt", sf::Style::Titlebar | sf::Style::Close);
 
     const float gravity = 0.0035f;
-    int groundHeight = window.getSize().y - 200; 
+    int groundHeight = window.getSize().y - 200;
     sf::Vector2f velocity(0, 0);
 
-    
+
     sf::Texture texture;
     if (!texture.loadFromFile("idle.png")) {
         std::cerr << "Error loading texture" << std::endl;
@@ -18,8 +18,8 @@ int main() {
 
     sf::Sprite sprite;
     sprite.setTexture(texture);
-    sprite.setPosition(0, 0);   
-    sprite.setScale(3.0f, 3.0f); 
+    sprite.setPosition(0, 0);
+    sprite.setScale(3.0f, 3.0f);
 
     sf::RectangleShape floor(sf::Vector2f(window.getSize().x, 200));
     floor.setFillColor(sf::Color::Green);
@@ -35,7 +35,7 @@ int main() {
 
     sf::RectangleShape platform2(sf::Vector2f(180, 250));
     platform2.setFillColor(sf::Color::Red);
-    platform2.setPosition(750, groundHeight - 250); 
+    platform2.setPosition(750, groundHeight - 250);
     platforms.push_back(platform2);
 
     sf::RectangleShape platform3(sf::Vector2f(300, 50));
@@ -58,7 +58,7 @@ int main() {
     //port
     sf::RectangleShape platform6(sf::Vector2f(180, 200));
     platform6.setFillColor(sf::Color::Red);
-    platform6.setPosition(1800, groundHeight - 200); 
+    platform6.setPosition(1800, groundHeight - 200);
     platforms.push_back(platform6);
 
     float moveSpeed = 0.3f, jumpSpeed = 1.5f;
@@ -96,7 +96,7 @@ int main() {
             velocity.y = 0;
         }
 
-        
+
         for (auto& platform : platforms) {
             if (sprite.getGlobalBounds().intersects(platform.getGlobalBounds())) {
                 if (sprite.getPosition().y + sprite.getGlobalBounds().height - velocity.y <= platform.getPosition().y) {
@@ -110,7 +110,7 @@ int main() {
 
         window.clear(sf::Color(0, 240, 255));
         window.draw(sprite);
-        window.draw(floor); 
+        window.draw(floor);
         for (const auto& platform : platforms) {
             window.draw(platform);
         }
