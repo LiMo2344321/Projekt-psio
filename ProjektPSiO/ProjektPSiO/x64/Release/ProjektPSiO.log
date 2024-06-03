@@ -1,7 +1,20 @@
 ﻿  ProjektPSiO.cpp
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         with
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         [
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:             T=unsigned int
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         ]
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         and
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         [
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:             T=float
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         ]
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(26,26): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(33,45): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(38,45): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(61,46): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
   Trwa generowanie kodu
-  5 of 5 functions (100.0%) were compiled.
-    4 functions were new in current compilation
+  1 of 147 functions ( 0.7%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Zakończono generowanie kodu
   ProjektPSiO.vcxproj -> C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\x64\Release\ProjektPSiO.exe
