@@ -1,6 +1,8 @@
 ﻿#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include "Map.h"
+
 
 int main() {
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Projekt", sf::Style::Titlebar | sf::Style::Close);
@@ -8,7 +10,6 @@ int main() {
     const float gravity = 0.0035f;
     int groundHeight = window.getSize().y - 200;
     sf::Vector2f velocity(0, 0);
-
 
     sf::Texture texture;
     if (!texture.loadFromFile("idle.png")) {
@@ -25,41 +26,28 @@ int main() {
     floor.setFillColor(sf::Color::Green);
     floor.setPosition(0, groundHeight);
 
+    sf::Texture shipTexture;
+    if (!shipTexture.loadFromFile("Ship1.png")) {
+        std::cerr << "Error loading ship texture" << std::endl;
+        return -1;
+    }
+
+    sf::Texture mastTexture;
+    if (!mastTexture.loadFromFile("Maszt.png")) {
+        std::cerr << "Error loading mast texture" << std::endl;
+        return -1;
+    }
+
+    sf::Texture flagTexture;
+    if (!flagTexture.loadFromFile("Flag1.png")) {
+        std::cerr << "Error loading flag texture" << std::endl;
+        return -1;
+    }
+
     std::vector<sf::RectangleShape> platforms;
-
-    //pierwsza platforma
-    sf::RectangleShape platform1(sf::Vector2f(200, 150));
-    platform1.setFillColor(sf::Color::Red);
-    platform1.setPosition(200, groundHeight - 150);
-    platforms.push_back(platform1);
-
-    sf::RectangleShape platform2(sf::Vector2f(180, 250));
-    platform2.setFillColor(sf::Color::Red);
-    platform2.setPosition(750, groundHeight - 250);
-    platforms.push_back(platform2);
-
-    sf::RectangleShape platform3(sf::Vector2f(300, 50));
-    platform3.setFillColor(sf::Color::Red);
-    platform3.setPosition(1100, 400);
-    platforms.push_back(platform3);
-
-
-    sf::RectangleShape platform4(sf::Vector2f(300, 50));
-    platform4.setFillColor(sf::Color::Red);
-    platform4.setPosition(1400, 700);
-    platforms.push_back(platform4);
-
-    sf::RectangleShape platform5(sf::Vector2f(100, 50));
-    platform5.setFillColor(sf::Color::Red);
-    platform5.setPosition(900, 200);
-    platforms.push_back(platform5);
-
-
-    //port
-    sf::RectangleShape platform6(sf::Vector2f(180, 200));
-    platform6.setFillColor(sf::Color::Red);
-    platform6.setPosition(1800, groundHeight - 200);
-    platforms.push_back(platform6);
+    std::vector<sf::Sprite> backgroundElements;
+    int currentMap = 1;
+    loadMap(currentMap, platforms, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture);
 
     float moveSpeed = 0.3f, jumpSpeed = 1.5f;
 
@@ -96,19 +84,58 @@ int main() {
             velocity.y = 0;
         }
 
-
         for (auto& platform : platforms) {
             if (sprite.getGlobalBounds().intersects(platform.getGlobalBounds())) {
                 if (sprite.getPosition().y + sprite.getGlobalBounds().height - velocity.y <= platform.getPosition().y) {
                     sprite.setPosition(sprite.getPosition().x, platform.getPosition().y - sprite.getGlobalBounds().height);
                     velocity.y = 0;
                 }
+                else if (sprite.getPosition().x + sprite.getGlobalBounds().width - velocity.x <= platform.getPosition().x) {
+                    sprite.setPosition(platform.getPosition().x - sprite.getGlobalBounds().width, sprite.getPosition().y);
+                    velocity.x = 0;
+                }
+                else if (sprite.getPosition().x - velocity.x >= platform.getPosition().x + platform.getSize().x) {
+                    sprite.setPosition(platform.getPosition().x + platform.getSize().x, sprite.getPosition().y);
+                    velocity.x = 0;
+                }
             }
         }
 
         sprite.move(velocity.x, velocity.y);
 
+        if (sprite.getPosition().x > window.getSize().x && currentMap == 1) {
+            currentMap++;
+            loadMap(currentMap, platforms, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture);
+            sprite.setPosition(0, sprite.getPosition().y);
+        }
+        else if (sprite.getPosition().x > window.getSize().x && currentMap == 2) {
+            currentMap++;
+            loadMap(currentMap, platforms, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture);
+            sprite.setPosition(0, sprite.getPosition().y);
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && currentMap == 2 && sprite.getPosition().x > 1024 && sprite.getPosition().x < 1204) {
+            currentMap = 3;
+            loadMap(currentMap, platforms, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture);
+            sprite.setPosition(window.getSize().x - sprite.getGlobalBounds().width, 0); 
+        }
+
+        if (currentMap == 1 && sprite.getPosition().x < 0) {
+            sprite.setPosition(0, sprite.getPosition().y);
+        }
+        else if ((currentMap == 2 || currentMap == 3) && sprite.getPosition().x < 0) {
+            sprite.setPosition(0, sprite.getPosition().y);
+        }
+        else if (currentMap == 2 && sprite.getPosition().x + sprite.getGlobalBounds().width > window.getSize().x) {
+            sprite.setPosition(window.getSize().x - sprite.getGlobalBounds().width, sprite.getPosition().y);
+        }
+        else if (currentMap == 3 && sprite.getPosition().x + sprite.getGlobalBounds().width > window.getSize().x) {
+            sprite.setPosition(window.getSize().x - sprite.getGlobalBounds().width, sprite.getPosition().y);
+        }
+
         window.clear(sf::Color(0, 240, 255));
+        for (const auto& element : backgroundElements) {
+            window.draw(element);
+        }
         window.draw(sprite);
         window.draw(floor);
         for (const auto& platform : platforms) {

@@ -5,6 +5,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\ProjektPSiO.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|solutionrelative:ProjektPSiO.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Map.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|solutionrelative:Map.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Map.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|solutionrelative:Map.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,8 +22,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Map.cpp",
+              "DocumentMoniker": "C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Map.cpp",
+              "RelativeDocumentMoniker": "Map.cpp",
+              "ToolTip": "C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Map.cpp",
+              "RelativeToolTip": "Map.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACEAAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-06-04T10:46:51.313Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Map.h",
+              "DocumentMoniker": "C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Map.h",
+              "RelativeDocumentMoniker": "Map.h",
+              "ToolTip": "C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Map.h",
+              "RelativeToolTip": "Map.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAEAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-06-04T10:46:26.226Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -24,7 +58,7 @@
               "RelativeDocumentMoniker": "ProjektPSiO.cpp",
               "ToolTip": "C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\ProjektPSiO.cpp",
               "RelativeToolTip": "ProjektPSiO.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAHgAAAABAAAA",
+              "ViewState": "AQIAAHgAAAAAAAAAAAAAAHYAAABYAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-06-03T19:28:37.983Z",
               "EditorCaption": ""

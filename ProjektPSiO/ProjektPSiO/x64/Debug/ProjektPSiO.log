@@ -1,17 +1,23 @@
-﻿  ProjektPSiO.cpp
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         with
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         [
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:             T=unsigned int
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         ]
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         and
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         [
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:             T=float
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         ]
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(26,26): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(33,45): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(38,45): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(61,46): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+﻿  Map.cpp
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Map.cpp(11,49): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Map.cpp(16,49): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Map.cpp(37,50): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Map.cpp(45,47): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Map.cpp(51,49): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Map.cpp(58,50): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Map.cpp(70,45): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+  ProjektPSiO.cpp
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,59): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,59): warning C4244:         with
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,59): warning C4244:         [
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,59): warning C4244:             T=unsigned int
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,59): warning C4244:         ]
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,59): warning C4244:         and
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,59): warning C4244:         [
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,59): warning C4244:             T=float
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,59): warning C4244:         ]
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(27,26): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+  Generowanie kodu...
   ProjektPSiO.vcxproj -> C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\x64\Debug\ProjektPSiO.exe
   'pwsh.exe' is not recognized as an internal or external command,
   operable program or batch file.
