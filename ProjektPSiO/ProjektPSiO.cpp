@@ -8,14 +8,22 @@
 void handleCollisions(Postac& character, const std::vector<sf::RectangleShape>& platforms) {
     for (const auto& platform : platforms) {
         if (character.getGlobalBounds().intersects(platform.getGlobalBounds())) {
+            // Sprawdzanie kolizji od góry
             if (character.getPosition().y + character.getGlobalBounds().height - character.getVelocity().y <= platform.getPosition().y) {
                 character.setPosition(character.getPosition().x, platform.getPosition().y - character.getGlobalBounds().height);
                 character.setVelocity({ character.getVelocity().x, 0 });
             }
+            // Sprawdzanie kolizji od dołu
+            else if (character.getPosition().y - character.getVelocity().y >= platform.getPosition().y + platform.getSize().y) {
+                character.setPosition(character.getPosition().x, platform.getPosition().y + platform.getSize().y);
+                character.setVelocity({ character.getVelocity().x, 0 });
+            }
+            // Sprawdzanie kolizji z lewej strony
             else if (character.getPosition().x + character.getGlobalBounds().width - character.getVelocity().x <= platform.getPosition().x) {
                 character.setPosition(platform.getPosition().x - character.getGlobalBounds().width, character.getPosition().y);
                 character.setVelocity({ 0, character.getVelocity().y });
             }
+            // Sprawdzanie kolizji z prawej strony
             else if (character.getPosition().x - character.getVelocity().x >= platform.getPosition().x + platform.getSize().x) {
                 character.setPosition(platform.getPosition().x + platform.getSize().x, character.getPosition().y);
                 character.setVelocity({ 0, character.getVelocity().y });
