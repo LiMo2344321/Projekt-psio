@@ -26,5 +26,17 @@
     <ClInclude Include="Map.h">
       <Filter>Pliki źródłowe</Filter>
     </ClInclude>
+    <ClInclude Include="Postac.h">
+      <Filter>Pliki źródłowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Hero.h">
+      <Filter>Pliki źródłowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Pliki źródłowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Cannon.h">
+      <Filter>Pliki źródłowe</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

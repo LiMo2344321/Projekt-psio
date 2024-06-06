@@ -2,25 +2,42 @@
 #include <iostream>
 #include <vector>
 #include "Map.h"
+#include "Hero.h"
+#include "Cannon.h"
 
+void handleCollisions(Postac& character, const std::vector<sf::RectangleShape>& platforms) {
+    for (const auto& platform : platforms) {
+        if (character.getGlobalBounds().intersects(platform.getGlobalBounds())) {
+            if (character.getPosition().y + character.getGlobalBounds().height - character.getVelocity().y <= platform.getPosition().y) {
+                character.setPosition(character.getPosition().x, platform.getPosition().y - character.getGlobalBounds().height);
+                character.setVelocity({ character.getVelocity().x, 0 });
+            }
+            else if (character.getPosition().x + character.getGlobalBounds().width - character.getVelocity().x <= platform.getPosition().x) {
+                character.setPosition(platform.getPosition().x - character.getGlobalBounds().width, character.getPosition().y);
+                character.setVelocity({ 0, character.getVelocity().y });
+            }
+            else if (character.getPosition().x - character.getVelocity().x >= platform.getPosition().x + platform.getSize().x) {
+                character.setPosition(platform.getPosition().x + platform.getSize().x, character.getPosition().y);
+                character.setVelocity({ 0, character.getVelocity().y });
+            }
+        }
+    }
+}
 
 int main() {
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Projekt", sf::Style::Titlebar | sf::Style::Close);
 
     const float gravity = 0.0035f;
     int groundHeight = window.getSize().y - 200;
-    sf::Vector2f velocity(0, 0);
 
-    sf::Texture texture;
-    if (!texture.loadFromFile("idle.png")) {
+    sf::Texture heroTexture;
+    if (!heroTexture.loadFromFile("idle.png")) {
         std::cerr << "Error loading texture" << std::endl;
         return -1;
     }
 
-    sf::Sprite sprite;
-    sprite.setTexture(texture);
-    sprite.setPosition(0, 0);
-    sprite.setScale(3.0f, 3.0f);
+    Hero hero(heroTexture, gravity, 0.3f, 1.5f);
+    hero.setPosition(0, 0);
 
     sf::RectangleShape floor(sf::Vector2f(window.getSize().x, 200));
     floor.setFillColor(sf::Color::Green);
@@ -44,12 +61,17 @@ int main() {
         return -1;
     }
 
+    Cannon cannon(gravity);
+    cannon.setPosition(100, groundHeight - cannon.getGlobalBounds().height);
+
     std::vector<sf::RectangleShape> platforms;
     std::vector<sf::Sprite> backgroundElements;
     int currentMap = 1;
     loadMap(currentMap, platforms, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture);
 
-    float moveSpeed = 0.3f, jumpSpeed = 1.5f;
+    if (currentMap == 1) {
+        backgroundElements.push_back(cannon.getSprite());
+    }
 
     while (window.isOpen()) {
         sf::Event event;
@@ -59,84 +81,48 @@ int main() {
             }
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-            velocity.x = moveSpeed;
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-            velocity.x = -moveSpeed;
-        else
-            velocity.x = 0;
+        hero.handleInput(platforms, groundHeight);
+        hero.update(groundHeight);
+        handleCollisions(hero, platforms);
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) &&
-            (sprite.getPosition().y + sprite.getGlobalBounds().height >= groundHeight ||
-                std::any_of(platforms.begin(), platforms.end(), [&sprite](const sf::RectangleShape& platform) {
-                    return (sprite.getPosition().x + sprite.getGlobalBounds().width > platform.getPosition().x &&
-                        sprite.getPosition().x < platform.getPosition().x + platform.getSize().x &&
-                        sprite.getPosition().y + sprite.getGlobalBounds().height == platform.getPosition().y);
-                    }))) {
-            velocity.y = -jumpSpeed;
-        }
+        cannon.update(groundHeight);
+        handleCollisions(cannon, platforms);
 
-        if (sprite.getPosition().y + sprite.getGlobalBounds().height < groundHeight || velocity.y < 0) {
-            velocity.y += gravity;
-        }
-        else {
-            sprite.setPosition(sprite.getPosition().x, groundHeight - sprite.getGlobalBounds().height);
-            velocity.y = 0;
-        }
-
-        for (auto& platform : platforms) {
-            if (sprite.getGlobalBounds().intersects(platform.getGlobalBounds())) {
-                if (sprite.getPosition().y + sprite.getGlobalBounds().height - velocity.y <= platform.getPosition().y) {
-                    sprite.setPosition(sprite.getPosition().x, platform.getPosition().y - sprite.getGlobalBounds().height);
-                    velocity.y = 0;
-                }
-                else if (sprite.getPosition().x + sprite.getGlobalBounds().width - velocity.x <= platform.getPosition().x) {
-                    sprite.setPosition(platform.getPosition().x - sprite.getGlobalBounds().width, sprite.getPosition().y);
-                    velocity.x = 0;
-                }
-                else if (sprite.getPosition().x - velocity.x >= platform.getPosition().x + platform.getSize().x) {
-                    sprite.setPosition(platform.getPosition().x + platform.getSize().x, sprite.getPosition().y);
-                    velocity.x = 0;
-                }
-            }
-        }
-
-        sprite.move(velocity.x, velocity.y);
-
-        if (sprite.getPosition().x > window.getSize().x && currentMap == 1) {
+        if (hero.getPosition().x > window.getSize().x && currentMap == 1) {
             currentMap++;
             loadMap(currentMap, platforms, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture);
-            sprite.setPosition(0, sprite.getPosition().y);
+            hero.setPosition(0, hero.getPosition().y);
         }
-        else if (sprite.getPosition().x > window.getSize().x && currentMap == 2) {
+        else if (hero.getPosition().x > window.getSize().x && currentMap == 2) {
             currentMap++;
             loadMap(currentMap, platforms, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture);
-            sprite.setPosition(0, sprite.getPosition().y);
+            hero.setPosition(0, hero.getPosition().y);
         }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && currentMap == 2 && sprite.getPosition().x > 1024 && sprite.getPosition().x < 1204) {
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && currentMap == 2 && hero.getPosition().x > 1024 && hero.getPosition().x < 1204) {
             currentMap = 3;
             loadMap(currentMap, platforms, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture);
-            sprite.setPosition(window.getSize().x - sprite.getGlobalBounds().width, 0); 
+            hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, 0);
         }
 
-        if (currentMap == 1 && sprite.getPosition().x < 0) {
-            sprite.setPosition(0, sprite.getPosition().y);
+        if (currentMap == 1 && hero.getPosition().x < 0) {
+            hero.setPosition(0, hero.getPosition().y);
         }
-        else if ((currentMap == 2 || currentMap == 3) && sprite.getPosition().x < 0) {
-            sprite.setPosition(0, sprite.getPosition().y);
+        else if ((currentMap == 2 || currentMap == 3) && hero.getPosition().x < 0) {
+            hero.setPosition(0, hero.getPosition().y);
         }
-        else if (currentMap == 2 && sprite.getPosition().x + sprite.getGlobalBounds().width > window.getSize().x) {
-            sprite.setPosition(window.getSize().x - sprite.getGlobalBounds().width, sprite.getPosition().y);
+        else if (currentMap == 2 && hero.getPosition().x + hero.getGlobalBounds().width > window.getSize().x) {
+            hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, hero.getPosition().y);
         }
-        else if (currentMap == 3 && sprite.getPosition().x + sprite.getGlobalBounds().width > window.getSize().x) {
-            sprite.setPosition(window.getSize().x - sprite.getGlobalBounds().width, sprite.getPosition().y);
+        else if (currentMap == 3 && hero.getPosition().x + hero.getGlobalBounds().width > window.getSize().x) {
+            hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, hero.getPosition().y);
         }
 
         window.clear(sf::Color(0, 240, 255));
         for (const auto& element : backgroundElements) {
             window.draw(element);
         }
-        window.draw(sprite);
+        window.draw(hero.getSprite());
+        window.draw(cannon.getSprite());
         window.draw(floor);
         for (const auto& platform : platforms) {
             window.draw(platform);

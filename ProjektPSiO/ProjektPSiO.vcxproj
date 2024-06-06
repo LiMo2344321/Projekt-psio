@@ -143,7 +143,11 @@
     <ClCompile Include="ProjektPSiO.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cannon.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Hero.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Postac.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
