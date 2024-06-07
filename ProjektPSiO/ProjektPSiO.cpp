@@ -43,7 +43,13 @@ int main() {
         return -1;
     }
 
-    Cannon cannon(gravity);
+    sf::Texture cannonballTexture;
+    if (!cannonballTexture.loadFromFile("cball.png")) {
+        std::cerr << "Error loading cannonball texture" << std::endl;
+        return -1;
+    }
+
+    Cannon cannon(gravity, cannonballTexture);
     cannon.setPosition(650, groundHeight - cannon.getGlobalBounds().height);
 
     std::vector<sf::RectangleShape> platforms;
@@ -67,7 +73,7 @@ int main() {
             currentGroundHeight = groundHeight;
         }
         else if (currentMap == 2) {
-            currentGroundHeight = window.getSize().y + 200; 
+            currentGroundHeight = window.getSize().y + 200;
         }
         else if (currentMap == 3) {
             currentGroundHeight = groundHeight;
@@ -79,6 +85,21 @@ int main() {
 
         cannon.update(currentGroundHeight);
         handleCollisions(cannon, platforms);
+
+        for (auto& cannonball : cannon.getCannonballs()) {
+            if (cannonball.getGlobalBounds().intersects(hero.getGlobalBounds())) {
+                // Handle hero hit by cannonball
+                // For now, let's just reset hero's position
+                hero.setPosition(0, 0);
+            }
+            for (const auto& platform : platforms) {
+                if (cannonball.getGlobalBounds().intersects(platform.getGlobalBounds())) {
+                    // Remove cannonball on platform hit
+                    cannon.getCannonballs().erase(std::remove(cannon.getCannonballs().begin(), cannon.getCannonballs().end(), cannonball), cannon.getCannonballs().end());
+                    break;
+                }
+            }
+        }
 
         if (hero.getPosition().x > window.getSize().x && currentMap == 1) {
             currentMap++;
@@ -126,6 +147,10 @@ int main() {
 
         for (const auto& platform : platforms) {
             window.draw(platform);
+        }
+
+        for (const auto& cannonball : cannon.getCannonballs()) {
+            window.draw(cannonball.getSprite());
         }
 
         window.display();
