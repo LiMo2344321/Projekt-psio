@@ -18,12 +18,12 @@
     <ClCompile Include="ProjektPSiO.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
+    <ClCompile Include="Functions.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Map.h">
+    <ClInclude Include="Functions.h">
       <Filter>Pliki źródłowe</Filter>
     </ClInclude>
     <ClInclude Include="Postac.h">

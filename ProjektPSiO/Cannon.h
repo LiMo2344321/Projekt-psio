@@ -15,7 +15,7 @@ public:
     }
 
     void update(float groundHeight) override {
-        // Add cannon-specific update logic here if needed
+        
         Enemy::update(groundHeight);
     }
 

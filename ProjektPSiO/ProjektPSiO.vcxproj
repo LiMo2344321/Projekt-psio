@@ -139,14 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Functions.cpp" />
     <ClCompile Include="ProjektPSiO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Hero.h" />
-    <ClInclude Include="Map.h" />
+    <ClInclude Include="Functions.h" />
     <ClInclude Include="Postac.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

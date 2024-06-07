@@ -30,6 +30,14 @@ public:
     void setVelocity(const sf::Vector2f& vel) {
         velocity = vel;
     }
+    void setVelx(float x) {
+        velocity.x = x;
+    }
+
+    void setVely(float y) {
+        velocity.y = y;
+    }
+
 
     sf::Vector2f getVelocity() const {
         return velocity;
@@ -48,6 +56,7 @@ protected:
     float gravity;
     sf::Vector2f velocity;
 
+
     void applyGravity(float groundHeight) {
         if (sprite.getPosition().y + sprite.getGlobalBounds().height < groundHeight || velocity.y < 0) {
             velocity.y += gravity;
@@ -59,4 +68,4 @@ protected:
     }
 };
 
-#endif // POSTAC_H
+#endif 

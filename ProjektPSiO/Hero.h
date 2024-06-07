@@ -11,26 +11,41 @@ public:
         sprite.setTexture(texture);
     }
 
-void handleInput(const std::vector<sf::RectangleShape>& platforms, float groundHeight) {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        velocity.x = moveSpeed;
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-        velocity.x = -moveSpeed;
-    else
-        velocity.x = 0;
+    void handleInput(const std::vector<sf::RectangleShape>& platforms, float groundHeight) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+            velocity.x = moveSpeed;
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            velocity.x = -moveSpeed;
+        else
+            velocity.x = 0;
 
-    bool onGround = sprite.getPosition().y + sprite.getGlobalBounds().height >= groundHeight;
-    bool onPlatform = std::any_of(platforms.begin(), platforms.end(), [this](const sf::RectangleShape& platform) {
-        return (sprite.getPosition().y + sprite.getGlobalBounds().height <= platform.getPosition().y + 1 &&
-                sprite.getPosition().y + sprite.getGlobalBounds().height >= platform.getPosition().y - 1 &&
-                sprite.getPosition().x + sprite.getGlobalBounds().width > platform.getPosition().x &&
-                sprite.getPosition().x < platform.getPosition().x + platform.getSize().x);
-    });
+        bool onGround = sprite.getPosition().y + sprite.getGlobalBounds().height >= groundHeight;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && (onGround || onPlatform)) {
-        velocity.y = -jumpSpeed;
+        bool onPlatform = false;
+        for (const auto& platform : platforms) {
+            sf::FloatRect heroBounds = sprite.getGlobalBounds();
+            sf::FloatRect platformBounds = platform.getGlobalBounds();           
+            platformBounds.top -= 1.0f; 
+            platformBounds.height += 1.0f; 
+
+            if (heroBounds.intersects(platformBounds)) {
+                float heroBottom = heroBounds.top + heroBounds.height;
+                float platformTop = platformBounds.top;
+
+                if (heroBottom > platformTop && heroBottom < platformTop + 10) {
+                    onPlatform = true;
+                    sprite.setPosition(sprite.getPosition().x, platformTop - heroBounds.height);
+                    velocity.y = 0;
+                    break;
+                }
+            }
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && (onGround || onPlatform)) {
+            velocity.y = -jumpSpeed;
+        }
+
+
     }
-}
 
 private:
     float moveSpeed;

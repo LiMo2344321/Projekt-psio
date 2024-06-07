@@ -1,42 +1,16 @@
 ﻿#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
-#include "Map.h"
+#include "Functions.h"
 #include "Hero.h"
 #include "Cannon.h"
-
-void handleCollisions(Postac& character, const std::vector<sf::RectangleShape>& platforms) {
-    for (const auto& platform : platforms) {
-        if (character.getGlobalBounds().intersects(platform.getGlobalBounds())) {
-            // Sprawdzanie kolizji od góry
-            if (character.getPosition().y + character.getGlobalBounds().height - character.getVelocity().y <= platform.getPosition().y) {
-                character.setPosition(character.getPosition().x, platform.getPosition().y - character.getGlobalBounds().height);
-                character.setVelocity({ character.getVelocity().x, 0 });
-            }
-            // Sprawdzanie kolizji od dołu
-            else if (character.getPosition().y - character.getVelocity().y >= platform.getPosition().y + platform.getSize().y) {
-                character.setPosition(character.getPosition().x, platform.getPosition().y + platform.getSize().y);
-                character.setVelocity({ character.getVelocity().x, 0 });
-            }
-            // Sprawdzanie kolizji z lewej strony
-            else if (character.getPosition().x + character.getGlobalBounds().width - character.getVelocity().x <= platform.getPosition().x) {
-                character.setPosition(platform.getPosition().x - character.getGlobalBounds().width, character.getPosition().y);
-                character.setVelocity({ 0, character.getVelocity().y });
-            }
-            // Sprawdzanie kolizji z prawej strony
-            else if (character.getPosition().x - character.getVelocity().x >= platform.getPosition().x + platform.getSize().x) {
-                character.setPosition(platform.getPosition().x + platform.getSize().x, character.getPosition().y);
-                character.setVelocity({ 0, character.getVelocity().y });
-            }
-        }
-    }
-}
 
 int main() {
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Projekt", sf::Style::Titlebar | sf::Style::Close);
 
     const float gravity = 0.0035f;
     int groundHeight = window.getSize().y - 200;
+    int currentGroundHeight = groundHeight;
 
     sf::Texture heroTexture;
     if (!heroTexture.loadFromFile("idle.png")) {
@@ -70,7 +44,7 @@ int main() {
     }
 
     Cannon cannon(gravity);
-    cannon.setPosition(100, groundHeight - cannon.getGlobalBounds().height);
+    cannon.setPosition(650, groundHeight - cannon.getGlobalBounds().height);
 
     std::vector<sf::RectangleShape> platforms;
     std::vector<sf::Sprite> backgroundElements;
@@ -89,11 +63,21 @@ int main() {
             }
         }
 
-        hero.handleInput(platforms, groundHeight);
-        hero.update(groundHeight);
+        if (currentMap == 1) {
+            currentGroundHeight = groundHeight;
+        }
+        else if (currentMap == 2) {
+            currentGroundHeight = window.getSize().y + 200; 
+        }
+        else if (currentMap == 3) {
+            currentGroundHeight = groundHeight;
+        }
+
+        hero.handleInput(platforms, currentGroundHeight);
+        hero.update(currentGroundHeight);
         handleCollisions(hero, platforms);
 
-        cannon.update(groundHeight);
+        cannon.update(currentGroundHeight);
         handleCollisions(cannon, platforms);
 
         if (hero.getPosition().x > window.getSize().x && currentMap == 1) {
@@ -130,11 +114,20 @@ int main() {
             window.draw(element);
         }
         window.draw(hero.getSprite());
-        window.draw(cannon.getSprite());
-        window.draw(floor);
+
+        if (currentMap == 1) {
+            window.draw(cannon.getSprite());
+            window.draw(floor);
+        }
+
+        if (currentMap == 3) {
+            window.draw(floor);
+        }
+
         for (const auto& platform : platforms) {
             window.draw(platform);
         }
+
         window.display();
     }
 
