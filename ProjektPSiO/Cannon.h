@@ -40,7 +40,7 @@ private:
 class Cannon : public Enemy {
 public:
     Cannon(float gravity, const sf::Texture& cannonballTexture)
-        : Enemy(gravity), cannonballTexture(cannonballTexture) {
+        : Enemy(gravity), cannonballTexture(cannonballTexture), currentMap(1) {
         if (!texture.loadFromFile("cannonidle.png")) {
             std::cerr << "Error loading cannon texture" << std::endl;
         }
@@ -50,13 +50,14 @@ public:
 
     void update(float groundHeight) override {
         Enemy::update(groundHeight);
-        shoot();
+        if (currentMap == 1) {
+            shoot();
+        }
         updateCannonballs();
     }
 
     void shoot() {
         if (shootClock.getElapsedTime().asSeconds() >= 1.0f) {
-            // Set speed to a negative value for shooting to the left
             cannonballs.emplace_back(cannonballTexture, -0.2f, sprite.getPosition());
             shootClock.restart();
         }
@@ -75,11 +76,16 @@ public:
         return cannonballs;
     }
 
+    void setMap(int map) {
+        currentMap = map;
+    }
+
 private:
     sf::Texture texture;
     sf::Texture cannonballTexture;
     std::vector<Cannonball> cannonballs;
     sf::Clock shootClock;
+    int currentMap;  // Dodaj tê zmienn¹
 };
 
 #endif // CANNON_H

@@ -144,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cannon.h" />
+    <ClInclude Include="Crab.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Functions.h" />

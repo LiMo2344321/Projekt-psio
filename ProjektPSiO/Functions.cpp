@@ -108,19 +108,36 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
 void handleCollisions(Postac& character, const std::vector<sf::RectangleShape>& platforms) {
     for (const auto& platform : platforms) {
         if (character.getGlobalBounds().intersects(platform.getGlobalBounds())) {
+            float characterBottom = character.getPosition().y + character.getGlobalBounds().height;
+            float platformTop = platform.getPosition().y;
+            float platformBottom = platform.getPosition().y + platform.getSize().y;
+            float characterTop = character.getPosition().y;
+            float characterLeft = character.getPosition().x - character.getGlobalBounds().width / 2.0f;
+            float characterRight = character.getPosition().x + character.getGlobalBounds().width / 2.0f;
+            float platformLeft = platform.getPosition().x;
+            float platformRight = platform.getPosition().x + platform.getSize().x;
 
-            if (character.getPosition().y + character.getGlobalBounds().height - character.getVelocity().y <= platform.getPosition().y) {
-                character.setPosition(character.getPosition().x, platform.getPosition().y - character.getGlobalBounds().height);
+            // Kolizja z góry platformy
+            if (characterBottom > platformTop && characterBottom < platformTop + 10 && character.getVelocity().y > 0) {
+                character.setPosition(character.getPosition().x, platformTop - character.getGlobalBounds().height);
                 character.setVely(0.00);
             }
-            else if (character.getPosition().x + character.getGlobalBounds().width - character.getVelocity().x <= platform.getPosition().x) {
-                character.setPosition(platform.getPosition().x - character.getGlobalBounds().width, character.getPosition().y);
+            // Kolizja z do³u platformy
+            else if (characterTop < platformBottom && characterTop > platformBottom - 10 && character.getVelocity().y < 0) {
+                character.setPosition(character.getPosition().x, platformBottom);
+                character.setVely(0.00);
+            }
+            // Kolizja z lewej strony platformy
+            else if (characterRight > platformLeft && characterLeft < platformLeft && character.getVelocity().x > 0) {
+                character.setPosition(platformLeft - character.getGlobalBounds().width / 2.0f, character.getPosition().y);
                 character.setVelx(0.00);
             }
-            else if (character.getPosition().x - character.getVelocity().x >= platform.getPosition().x + platform.getSize().x) {
-                character.setPosition(platform.getPosition().x + platform.getSize().x, character.getPosition().y);
+            // Kolizja z prawej strony platformy
+            else if (characterLeft < platformRight && characterRight > platformRight && character.getVelocity().x < 0) {
+                character.setPosition(platformRight + character.getGlobalBounds().width / 2.0f, character.getPosition().y);
                 character.setVelx(0.00);
             }
         }
     }
 }
+

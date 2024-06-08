@@ -4,6 +4,7 @@
 #include "Functions.h"
 #include "Hero.h"
 #include "Cannon.h"
+#include "Crab.h"
 
 int main() {
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Projekt", sf::Style::Titlebar | sf::Style::Close);
@@ -17,8 +18,24 @@ int main() {
         std::cerr << "Error loading texture" << std::endl;
         return -1;
     }
+    // Załaduj tekstury animacji biegu
+    sf::Texture run1, run2, run3, run4, run5, run6;
+    run1.loadFromFile("run1.png");
+    run2.loadFromFile("run2.png");
+    run3.loadFromFile("run3.png");
+    run4.loadFromFile("run4.png");
+    run5.loadFromFile("run5.png");
+    run6.loadFromFile("run6.png");
 
     Hero hero(heroTexture, gravity, 0.3f, 1.5f);
+    hero.addRunTexture(run1);
+    hero.addRunTexture(run2);
+    hero.addRunTexture(run3);
+    hero.addRunTexture(run4);
+    hero.addRunTexture(run5);
+    hero.addRunTexture(run6);
+
+
     hero.setPosition(0, 0);
 
     sf::RectangleShape floor(sf::Vector2f(window.getSize().x, 200));
@@ -49,8 +66,17 @@ int main() {
         return -1;
     }
 
+    sf::Texture crabTexture;
+    if (!crabTexture.loadFromFile("crabidle.png")) {
+        std::cerr << "Error loading crab texture" << std::endl;
+        return -1;
+    }
+
     Cannon cannon(gravity, cannonballTexture);
     cannon.setPosition(650, groundHeight - cannon.getGlobalBounds().height);
+
+    Crab crab(crabTexture, gravity, 0.1f);
+    crab.setPosition(1050, groundHeight - 480 - crab.getGlobalBounds().height);  // Adjusted for platform3
 
     std::vector<sf::RectangleShape> platforms;
     std::vector<sf::Sprite> backgroundElements;
@@ -86,20 +112,24 @@ int main() {
         cannon.update(currentGroundHeight);
         handleCollisions(cannon, platforms);
 
-        for (auto& cannonball : cannon.getCannonballs()) {
-            if (cannonball.getGlobalBounds().intersects(hero.getGlobalBounds())) {
-                // Handle hero hit by cannonball
-                // For now, let's just reset hero's position
-                hero.setPosition(0, 0);
-            }
-            for (const auto& platform : platforms) {
-                if (cannonball.getGlobalBounds().intersects(platform.getGlobalBounds())) {
-                    // Remove cannonball on platform hit
-                    cannon.getCannonballs().erase(std::remove(cannon.getCannonballs().begin(), cannon.getCannonballs().end(), cannonball), cannon.getCannonballs().end());
-                    break;
+        if (currentMap == 1) {
+            crab.update(platforms[2]);  // Update the crab with the third platform
+        }
+
+            for (auto& cannonball : cannon.getCannonballs()) {
+                if (cannonball.getGlobalBounds().intersects(hero.getGlobalBounds())) {
+                    // Handle hero hit by cannonball
+                    // For now, let's just reset hero's position
+                    hero.setPosition(0, 0);
+                }
+                for (const auto& platform : platforms) {
+                    if (cannonball.getGlobalBounds().intersects(platform.getGlobalBounds())) {
+                        // Remove cannonball on platform hit
+                        cannon.getCannonballs().erase(std::remove(cannon.getCannonballs().begin(), cannon.getCannonballs().end(), cannonball), cannon.getCannonballs().end());
+                        break;
+                    }
                 }
             }
-        }
 
         if (hero.getPosition().x > window.getSize().x && currentMap == 1) {
             currentMap++;
@@ -139,6 +169,7 @@ int main() {
         if (currentMap == 1) {
             window.draw(cannon.getSprite());
             window.draw(floor);
+            window.draw(crab.getSprite()); // Draw the crab on the first map
         }
 
         if (currentMap == 3) {

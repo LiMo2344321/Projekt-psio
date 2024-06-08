@@ -1,26 +1,24 @@
 ﻿  Functions.cpp
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(12,49): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(17,49): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(38,50): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(46,47): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(52,49): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(59,50): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(71,45): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\Functions.cpp(12,49): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\Functions.cpp(17,49): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\Functions.cpp(38,50): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\Functions.cpp(46,47): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\Functions.cpp(52,49): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\Functions.cpp(59,50): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\Functions.cpp(71,45): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
   ProjektPSiO.cpp
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         with
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         [
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:             T=unsigned int
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         ]
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         and
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         [
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:             T=float
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(24,59): warning C4244:         ]
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(26,26): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(76,37): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(77,21): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(80,23): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(41,59): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(41,59): warning C4244:         with
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(41,59): warning C4244:         [
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(41,59): warning C4244:             T=unsigned int
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(41,59): warning C4244:         ]
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(41,59): warning C4244:         and
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(41,59): warning C4244:         [
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(41,59): warning C4244:             T=float
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(41,59): warning C4244:         ]
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(43,26): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(108,37): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(109,21): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(112,23): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
   Generowanie kodu...
-  ProjektPSiO.vcxproj -> C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\x64\Debug\ProjektPSiO.exe
-  'pwsh.exe' is not recognized as an internal or external command,
-  operable program or batch file.
+  ProjektPSiO.vcxproj -> C:\Users\jakub\Source\Repos\LiMo2344321\Projekt-psio\ProjektPSiO\x64\Debug\ProjektPSiO.exe

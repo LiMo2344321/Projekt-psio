@@ -8,6 +8,7 @@ public:
     Postac(float gravity)
         : gravity(gravity), velocity(0, 0) {
         sprite.setScale(3.0f, 3.0f);
+        adjustOrigin();
     }
 
     virtual void update(float groundHeight) {
@@ -38,7 +39,6 @@ public:
         velocity.y = y;
     }
 
-
     sf::Vector2f getVelocity() const {
         return velocity;
     }
@@ -56,7 +56,6 @@ protected:
     float gravity;
     sf::Vector2f velocity;
 
-
     void applyGravity(float groundHeight) {
         if (sprite.getPosition().y + sprite.getGlobalBounds().height < groundHeight || velocity.y < 0) {
             velocity.y += gravity;
@@ -65,6 +64,10 @@ protected:
             sprite.setPosition(sprite.getPosition().x, groundHeight - sprite.getGlobalBounds().height);
             velocity.y = 0;
         }
+    }
+
+    void adjustOrigin() {
+        sprite.setOrigin(sprite.getLocalBounds().width / 2.0f, 0);  // Origin w œrodku sprite'a
     }
 };
 
