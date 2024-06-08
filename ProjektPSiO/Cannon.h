@@ -40,7 +40,7 @@ private:
 class Cannon : public Enemy {
 public:
     Cannon(float gravity, const sf::Texture& cannonballTexture)
-        : Enemy(gravity), cannonballTexture(cannonballTexture), currentMap(1) {
+        : Enemy(gravity), cannonballTexture(cannonballTexture), currentMap(1), currentTextureIndex(0), stepsSinceLastSpriteChange(0), shooting(false) {
         if (!texture.loadFromFile("cannonidle.png")) {
             std::cerr << "Error loading cannon texture" << std::endl;
         }
@@ -48,18 +48,26 @@ public:
         sprite.setScale(3.0f, 3.0f);
     }
 
+    void addShootTexture(const sf::Texture& texture) {
+        shootTextures.push_back(texture);
+    }
+
     void update(float groundHeight) override {
-        Enemy::update(groundHeight);
+        // Enemy::update(groundHeight);  // Commented out to prevent unnecessary updates from base class
         if (currentMap == 1) {
             shoot();
         }
         updateCannonballs();
+        updateAnimation();
     }
 
     void shoot() {
-        if (shootClock.getElapsedTime().asSeconds() >= 1.0f) {
+        if (shootClock.getElapsedTime().asSeconds() >= 2.0f) {
             cannonballs.emplace_back(cannonballTexture, -0.2f, sprite.getPosition());
             shootClock.restart();
+            currentTextureIndex = 0; // Reset animation index on shoot
+            stepsSinceLastSpriteChange = 0;
+            shooting = true; // Start shooting animation
         }
     }
 
@@ -83,9 +91,40 @@ public:
 private:
     sf::Texture texture;
     sf::Texture cannonballTexture;
+    std::vector<sf::Texture> shootTextures;
     std::vector<Cannonball> cannonballs;
     sf::Clock shootClock;
-    int currentMap;  // Dodaj tê zmienn¹
+    int currentMap;
+    size_t currentTextureIndex;
+    int stepsSinceLastSpriteChange;
+    bool shooting;
+
+    void updateAnimation() {
+        const int stepsBetweenSprites = 70; // Change this to control animation speed
+
+        if (shooting && !shootTextures.empty() && stepsSinceLastSpriteChange >= stepsBetweenSprites) {
+            currentTextureIndex++;
+            if (currentTextureIndex >= shootTextures.size()) {
+                currentTextureIndex = 0;
+                shooting = false; // Stop shooting animation
+                sprite.setTexture(texture); // Reset to idle texture
+            }
+            else {
+                sprite.setTexture(shootTextures[currentTextureIndex]);
+            }
+            adjustOriginAndScale();
+            stepsSinceLastSpriteChange = 0;
+        }
+        else {
+            stepsSinceLastSpriteChange++;
+        }
+    }
+
+    void adjustOriginAndScale() {
+        sf::Vector2f currentPosition = sprite.getPosition(); // Store current position
+        sprite.setPosition(currentPosition); // Restore position after changing texture
+    }
 };
+
 
 #endif // CANNON_H

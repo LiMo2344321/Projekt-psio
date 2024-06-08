@@ -76,7 +76,7 @@ private:
     int stepsSinceLastSpriteChange;
 
     void updateAnimation() {
-        const int stepsBetweenSprites = 10; // Zwiêkszona liczba kroków miêdzy zmianami sprite'a
+        const int stepsBetweenSprites = 80; // Zwiêkszona liczba kroków miêdzy zmianami sprite'a
 
         if (velocity.x != 0 && !runTextures.empty()) {
             stepsSinceLastSpriteChange++;

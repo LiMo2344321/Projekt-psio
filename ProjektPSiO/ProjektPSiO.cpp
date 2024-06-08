@@ -18,6 +18,7 @@ int main() {
         std::cerr << "Error loading texture" << std::endl;
         return -1;
     }
+
     // Załaduj tekstury animacji biegu
     sf::Texture run1, run2, run3, run4, run5, run6;
     run1.loadFromFile("run1.png");
@@ -34,7 +35,6 @@ int main() {
     hero.addRunTexture(run4);
     hero.addRunTexture(run5);
     hero.addRunTexture(run6);
-
 
     hero.setPosition(0, 0);
 
@@ -75,6 +75,22 @@ int main() {
     Cannon cannon(gravity, cannonballTexture);
     cannon.setPosition(650, groundHeight - cannon.getGlobalBounds().height);
 
+    // Załaduj tekstury animacji strzału
+    sf::Texture cshoot1, cshoot2, cshoot3, cshoot4, cshoot5, cshoot6;
+    cshoot1.loadFromFile("cshoot1.png");
+    cshoot2.loadFromFile("cshoot2.png");
+    cshoot3.loadFromFile("cshoot3.png");
+    cshoot4.loadFromFile("cshoot4.png");
+    cshoot5.loadFromFile("cshoot5.png");
+    cshoot6.loadFromFile("cshoot6.png");
+
+    cannon.addShootTexture(cshoot1);
+    cannon.addShootTexture(cshoot2);
+    cannon.addShootTexture(cshoot3);
+    cannon.addShootTexture(cshoot4);
+    cannon.addShootTexture(cshoot5);
+    cannon.addShootTexture(cshoot6);
+
     Crab crab(crabTexture, gravity, 0.1f);
     crab.setPosition(1050, groundHeight - 480 - crab.getGlobalBounds().height);  // Adjusted for platform3
 
@@ -83,9 +99,6 @@ int main() {
     int currentMap = 1;
     loadMap(currentMap, platforms, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture);
 
-    if (currentMap == 1) {
-        backgroundElements.push_back(cannon.getSprite());
-    }
 
     while (window.isOpen()) {
         sf::Event event;
@@ -113,23 +126,24 @@ int main() {
         handleCollisions(cannon, platforms);
 
         if (currentMap == 1) {
-            crab.update(platforms[2]);  // Update the crab with the third platform
+            crab.update(platforms[2]);  // Update crab movement
+            handleCollisions(crab, platforms);
+            if (crab.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                hero.setPosition(0, 0);
+            }
         }
 
-            for (auto& cannonball : cannon.getCannonballs()) {
-                if (cannonball.getGlobalBounds().intersects(hero.getGlobalBounds())) {
-                    // Handle hero hit by cannonball
-                    // For now, let's just reset hero's position
-                    hero.setPosition(0, 0);
-                }
-                for (const auto& platform : platforms) {
-                    if (cannonball.getGlobalBounds().intersects(platform.getGlobalBounds())) {
-                        // Remove cannonball on platform hit
-                        cannon.getCannonballs().erase(std::remove(cannon.getCannonballs().begin(), cannon.getCannonballs().end(), cannonball), cannon.getCannonballs().end());
-                        break;
-                    }
+        for (const auto& cannonball : cannon.getCannonballs()) {
+            if (cannonball.getGlobalBounds().intersects(hero.getGlobalBounds())) {
+                hero.setPosition(0, 0);
+            }
+            for (const auto& platform : platforms) {
+                if (cannonball.getGlobalBounds().intersects(platform.getGlobalBounds())) {
+                    cannon.getCannonballs().erase(std::remove(cannon.getCannonballs().begin(), cannon.getCannonballs().end(), cannonball), cannon.getCannonballs().end());
+                    break;
                 }
             }
+        }
 
         if (hero.getPosition().x > window.getSize().x && currentMap == 1) {
             currentMap++;
@@ -169,7 +183,10 @@ int main() {
         if (currentMap == 1) {
             window.draw(cannon.getSprite());
             window.draw(floor);
-            window.draw(crab.getSprite()); // Draw the crab on the first map
+            window.draw(crab.getSprite());
+            for (const auto& cannonball : cannon.getCannonballs()) {
+                window.draw(cannonball.getSprite());
+            }
         }
 
         if (currentMap == 3) {
@@ -180,9 +197,7 @@ int main() {
             window.draw(platform);
         }
 
-        for (const auto& cannonball : cannon.getCannonballs()) {
-            window.draw(cannonball.getSprite());
-        }
+       
 
         window.display();
     }

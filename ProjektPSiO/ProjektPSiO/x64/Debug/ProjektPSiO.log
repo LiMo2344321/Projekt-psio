@@ -17,8 +17,8 @@ C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp
 C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(41,59): warning C4244:             T=float
 C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(41,59): warning C4244:         ]
 C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(43,26): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(108,37): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(109,21): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(112,23): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(121,37): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(122,21): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(125,23): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
   Generowanie kodu...
-  ProjektPSiO.vcxproj -> C:\Users\jakub\Source\Repos\LiMo2344321\Projekt-psio\ProjektPSiO\x64\Debug\ProjektPSiO.exe
+  ProjektPSiO.vcxproj -> C:\Users\jakub\source\repos\LiMo2344321\Projekt-psio\ProjektPSiO\x64\Debug\ProjektPSiO.exe
