@@ -91,12 +91,6 @@ int main() {
         return -1;
     }
 
-    sf::Texture guyTexture;
-    if (!guyTexture.loadFromFile("guyidle1.png")) {
-        std::cerr << "Error loading guy texture" << std::endl;
-        return -1;
-    }
-
     sf::Texture pirateTexture;
     if (!pirateTexture.loadFromFile("pirate.png")) {
         std::cerr << "Error loading pirate texture" << std::endl;
@@ -136,8 +130,24 @@ int main() {
     Crab crab(crabTexture, gravity, 0.1f);
     crab.setPosition(1050, groundHeight - 480 - crab.getGlobalBounds().height);  // Adjusted for platform3
 
-    BigGuy guy1(guyTexture, gravity, 0.2f);
-    BigGuy guy2(guyTexture, gravity, 0.2f);
+    std::vector<sf::Texture> idleTextures(6);
+    std::vector<sf::Texture> runTextures(8);
+    for (int i = 0; i < 6; ++i) {
+        if (!idleTextures[i].loadFromFile("guyidle" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading idle texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
+
+    for (int i = 0; i < 8; ++i) {
+        if (!runTextures[i].loadFromFile("guyrun" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading run texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
+
+    BigGuy guy1(idleTextures, runTextures, gravity, 0.2f);
+    BigGuy guy2(idleTextures, runTextures, gravity, 0.2f);
     guy1.setPosition(802, 250 - guy1.getSprite().getGlobalBounds().height);
     guy2.setPosition(1302, groundHeight - 396 - guy2.getSprite().getGlobalBounds().height);
 
@@ -162,7 +172,7 @@ int main() {
             }
         }
 
-        float deltaTime = clock.restart().asSeconds();
+        sf::Time deltaTime = clock.restart();
 
         if (currentMap == 1) {
             currentGroundHeight = groundHeight;
@@ -196,8 +206,8 @@ int main() {
 
         if (currentMap == 2) {
             // Aktualizuj pozycje przeciwników BigGuy
-            guy1.update(platforms[3], hero.getSprite());
-            guy2.update(platforms[1], hero.getSprite());
+            guy1.update(platforms[3], hero.getSprite(), deltaTime);
+            guy2.update(platforms[1], hero.getSprite(), deltaTime);
 
             handleCollisions(guy1, platforms);
             handleCollisions(guy2, platforms);
