@@ -5,6 +5,8 @@
 #include "Hero.h"
 #include "Cannon.h"
 #include "Crab.h"
+#include "BigGuy.h"
+
 
 int main() {
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Projekt", sf::Style::Titlebar | sf::Style::Close);
@@ -113,12 +115,23 @@ int main() {
     Crab crab(crabTexture, gravity, 0.1f);
     crab.setPosition(1050, groundHeight - 480 - crab.getGlobalBounds().height);  // Adjusted for platform3
 
+
+    sf::Texture guyTexture;
+    if (!guyTexture.loadFromFile("guyidle1.png")) {
+        std::cerr << "Error loading guy texture" << std::endl;
+        return -1;
+    }
+
+    BigGuy guy1(guyTexture, gravity, 0.2f);
+    BigGuy guy2(guyTexture, gravity, 0.2f);
+
     std::vector<sf::RectangleShape> platforms;
     std::vector<sf::Sprite> backgroundElements;
     std::vector<sf::Sprite> spikes;
     int currentMap = 1;
     loadMap(currentMap, platforms, backgroundElements, spikes, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
 
+    sf::Clock clock;
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -126,6 +139,8 @@ int main() {
                 window.close();
             }
         }
+
+        float deltaTime = clock.restart().asSeconds();
 
         if (currentMap == 1) {
             currentGroundHeight = groundHeight;
@@ -141,21 +156,30 @@ int main() {
         hero.update(currentGroundHeight);
         handleCollisions(hero, platforms);
 
-
-
         if (currentMap == 1) {
             crab.update(platforms[2]);  // Update crab movement
             handleCollisions(crab, platforms);
             //if (crab.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
             //    hero.setPosition(0, 0); //przegrana
             //}
+        }
+
+        if (currentMap == 1 || currentMap == 3) {
             for (const auto& spike : spikes) {
                 if (spike.getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
                     hero.setPosition(0, 0); //przegrana
                 }
             }
-           }
+        }
 
+        if (currentMap == 2) {
+            guy1.setPosition(platforms[3].getPosition().x + 100, platforms[3].getPosition().y - guy1.getSprite().getGlobalBounds().height);
+            guy2.setPosition(platforms[2].getPosition().x + 300, platforms[1].getPosition().y - guy2.getSprite().getGlobalBounds().height);
+        }
+
+        // Aktualizuj pozycje przeciwników BigGuy
+        guy1.update(platforms[3], hero.getSprite());
+        guy2.update(platforms[1], hero.getSprite());
 
         for (const auto& cannonball : cannon.getCannonballs()) {
             if (cannonball.getGlobalBounds().intersects(hero.getGlobalBounds())) {
@@ -174,17 +198,6 @@ int main() {
                 hero.setPosition(0, 0); //przegrana
             }
         }
-
-
-        if (currentMap == 3) {
-            for (const auto& spike : spikes) {
-                if (spike.getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                    hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, 0); //przegrana
-                }
-            }
-        }
-
-
 
         if (hero.getPosition().x > window.getSize().x && currentMap == 1) {
             currentMap++;
@@ -229,9 +242,7 @@ int main() {
             window.draw(element);
         }
 
-
         window.draw(hero.getSprite());
-        
 
         if (currentMap == 1) {
             window.draw(crab.getSprite());
@@ -239,16 +250,20 @@ int main() {
             window.draw(cannon.getSprite());
             for (const auto& cannonball : cannon.getCannonballs()) {
                 window.draw(cannonball.getSprite());
-                
             }
             cannon.update(currentGroundHeight);
             handleCollisions(cannon, platforms);
-           
+        }
+
+        if (currentMap == 2) {
+            handleCollisions(guy1, platforms);
+            handleCollisions(guy2, platforms);
+            window.draw(guy1.getSprite());
+            window.draw(guy2.getSprite());
         }
 
         if (currentMap == 3) {
             window.draw(floor);
-        
         }
 
         window.display();

@@ -1,17 +1,1 @@
-﻿  ProjektPSiO.cpp
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(90,59): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(90,59): warning C4244:         with
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(90,59): warning C4244:         [
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(90,59): warning C4244:             T=unsigned int
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(90,59): warning C4244:         ]
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(90,59): warning C4244:         and
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(90,59): warning C4244:         [
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(90,59): warning C4244:             T=float
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(90,59): warning C4244:         ]
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(92,26): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(140,37): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(141,21): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(244,27): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-  ProjektPSiO.vcxproj -> C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\x64\Debug\ProjektPSiO.exe
-  'pwsh.exe' is not recognized as an internal or external command,
-  operable program or batch file.
+﻿  ProjektPSiO.vcxproj -> C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\x64\Debug\ProjektPSiO.exe

@@ -143,6 +143,7 @@
     <ClCompile Include="ProjektPSiO.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BigGuy.h" />
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="Crab.h" />
     <ClInclude Include="Enemy.h" />
