@@ -8,52 +8,66 @@
 
 class Hero : public Postac {
 public:
+    enum class State { Idle, Run, Jump };
+
     Hero(const sf::Texture& texture, float gravity, float moveSpeed, float jumpSpeed)
-        : Postac(gravity), moveSpeed(moveSpeed), jumpSpeed(jumpSpeed), currentTextureIndex(0), stepsSinceLastSpriteChange(0), idleTexture(texture) {
-        sprite.setTexture(idleTexture);
+        : Postac(gravity), moveSpeed(moveSpeed), jumpSpeed(jumpSpeed), currentTextureIndex(0), elapsedTime(0), state(State::Idle) {
+        idleTextures.push_back(texture);
+        sprite.setTexture(idleTextures[0]);
         sprite.setScale(3.0f, 3.0f); // Skaluje sprite hero
         adjustOriginAndScale();
     }
 
-    void handleInput(const std::vector<sf::RectangleShape>& platforms, float groundHeight) {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            velocity.x = moveSpeed;
-            direction = Direction::Right;
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            velocity.x = -moveSpeed;
-            direction = Direction::Left;
-        }
+   void handleInput(const std::vector<sf::RectangleShape>& platforms, float groundHeight) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        velocity.x = moveSpeed;
+        direction = Direction::Right;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) { state = State::Jump; }
         else {
-            velocity.x = 0;
-        }
-
-        bool onGround = sprite.getPosition().y + sprite.getGlobalBounds().height >= groundHeight;
-        bool onPlatform = false;
-
-        for (const auto& platform : platforms) {
-            sf::FloatRect heroBounds = sprite.getGlobalBounds();
-            sf::FloatRect platformBounds = platform.getGlobalBounds();
-            platformBounds.top -= 1.0f;
-            platformBounds.height += 1.0f;
-
-            if (heroBounds.intersects(platformBounds)) {
-                float heroBottom = heroBounds.top + heroBounds.height;
-                float platformTop = platformBounds.top;
-
-                if (heroBottom > platformTop && heroBottom < platformTop + 10) {
-                    onPlatform = true;
-                    sprite.setPosition(sprite.getPosition().x, platformTop - heroBounds.height);
-                    velocity.y = 0;
-                    break;
-                }
-            }
-        }
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && (onGround || onPlatform)) {
-            velocity.y = -jumpSpeed;
+            state = State::Run;
         }
     }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+        velocity.x = -moveSpeed;
+        direction = Direction::Left;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) { state = State::Jump; }
+        else {
+            state = State::Run;
+        }
+    }
+    else {
+        velocity.x = 0;
+        state = State::Idle;
+    }
+
+    bool onGround = sprite.getPosition().y + sprite.getGlobalBounds().height >= groundHeight;
+    bool onPlatform = false;
+
+    for (const auto& platform : platforms) {
+        sf::FloatRect heroBounds = sprite.getGlobalBounds();
+        sf::FloatRect platformBounds = platform.getGlobalBounds();
+        platformBounds.top -= 1.0f;
+        platformBounds.height += 1.0f;
+
+        if (heroBounds.intersects(platformBounds)) {
+            float heroBottom = heroBounds.top + heroBounds.height;
+            float platformTop = platformBounds.top;
+
+            if (heroBottom > platformTop && heroBottom < platformTop + 10) {
+                onPlatform = true;
+                sprite.setPosition(sprite.getPosition().x, platformTop - heroBounds.height);
+                velocity.y = 0;
+                break;
+            }
+        }
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && (onGround || onPlatform)) {
+        velocity.y = -jumpSpeed;
+        state = State::Jump; // Ustaw stan na skok
+    }
+}
+
 
     void update(float groundHeight) override {
         applyGravity(groundHeight);
@@ -65,30 +79,58 @@ public:
         runTextures.push_back(texture);
     }
 
+    void addIdleTexture(const sf::Texture& texture) {
+        idleTextures.push_back(texture);
+    }
+
+    void addJumpTexture(const sf::Texture& texture) {
+        jumpTextures.push_back(texture);
+    }
+
+    void setFps(int fps) {
+        this->fps = fps;
+    }
+
 private:
     enum class Direction { None, Left, Right };
     Direction direction = Direction::None;
     std::vector<sf::Texture> runTextures;
-    sf::Texture idleTexture;
+    std::vector<sf::Texture> idleTextures;
+    std::vector<sf::Texture> jumpTextures;
     float moveSpeed;
     float jumpSpeed;
     size_t currentTextureIndex;
-    int stepsSinceLastSpriteChange;
+    float elapsedTime;
+    int fps = 20; // Default FPS for animation
+    State state;
 
     void updateAnimation() {
-        const int stepsBetweenSprites = 80; // Zwiêkszona liczba kroków miêdzy zmianami sprite'a
+        elapsedTime += clock.restart().asSeconds();
+        float frameDuration = 1.0f / fps;
 
-        if (velocity.x != 0 && !runTextures.empty()) {
-            stepsSinceLastSpriteChange++;
-            if (stepsSinceLastSpriteChange >= stepsBetweenSprites) {
-                currentTextureIndex = (currentTextureIndex + 1) % runTextures.size();
-                sprite.setTexture(runTextures[currentTextureIndex]);
-                adjustOriginAndScale();
-                stepsSinceLastSpriteChange = 0;
+        if (elapsedTime >= frameDuration) {
+            elapsedTime = 0;
+
+            switch (state) {
+            case State::Idle:
+                if (!idleTextures.empty()) {
+                    currentTextureIndex = (currentTextureIndex + 1) % idleTextures.size();
+                    sprite.setTexture(idleTextures[currentTextureIndex]);
+                }
+                break;
+            case State::Run:
+                if (!runTextures.empty()) {
+                    currentTextureIndex = (currentTextureIndex + 1) % runTextures.size();
+                    sprite.setTexture(runTextures[currentTextureIndex]);
+                }
+                break;
+            case State::Jump:
+                if (!jumpTextures.empty()) {
+                    currentTextureIndex = (currentTextureIndex + 1) % jumpTextures.size();
+                    sprite.setTexture(jumpTextures[currentTextureIndex]);
+                }
+                break;
             }
-        }
-        else {
-            sprite.setTexture(idleTexture);
             adjustOriginAndScale();
         }
     }
@@ -104,6 +146,8 @@ private:
             sprite.setScale(3.0f, 3.0f); // Skaluje w prawo
         }
     }
+
+    sf::Clock clock;
 };
 
 #endif // HERO_H

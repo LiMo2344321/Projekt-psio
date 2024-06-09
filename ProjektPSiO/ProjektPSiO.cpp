@@ -13,13 +13,13 @@ int main() {
     int groundHeight = window.getSize().y - 200;
     int currentGroundHeight = groundHeight;
 
-    sf::Texture heroTexture;
-    if (!heroTexture.loadFromFile("idle.png")) {
-        std::cerr << "Error loading texture" << std::endl;
-        return -1;
-    }
+    sf::Texture idle1, idle2, idle3, idle4, idle5;
+    idle1.loadFromFile("idle1.png");
+    idle2.loadFromFile("idle2.png");
+    idle3.loadFromFile("idle3.png");
+    idle4.loadFromFile("idle4.png");
+    idle5.loadFromFile("idle5.png");
 
-    // Załaduj tekstury animacji biegu
     sf::Texture run1, run2, run3, run4, run5, run6;
     run1.loadFromFile("run1.png");
     run2.loadFromFile("run2.png");
@@ -28,7 +28,16 @@ int main() {
     run5.loadFromFile("run5.png");
     run6.loadFromFile("run6.png");
 
-    Hero hero(heroTexture, gravity, 0.3f, 1.5f);
+    sf::Texture jump;
+    jump.loadFromFile("jump.png");
+
+    Hero hero(idle1, gravity, 0.3f, 1.5f);
+    hero.addIdleTexture(idle1);
+    hero.addIdleTexture(idle2);
+    hero.addIdleTexture(idle3);
+    hero.addIdleTexture(idle4);
+    hero.addIdleTexture(idle5);
+
     hero.addRunTexture(run1);
     hero.addRunTexture(run2);
     hero.addRunTexture(run3);
@@ -36,11 +45,11 @@ int main() {
     hero.addRunTexture(run5);
     hero.addRunTexture(run6);
 
+    hero.addJumpTexture(jump);
+
+    hero.setFps(20);
     hero.setPosition(0, 0);
 
-    sf::RectangleShape floor(sf::Vector2f(window.getSize().x, 200));
-    floor.setFillColor(sf::Color::Green);
-    floor.setPosition(0, groundHeight);
 
     sf::Texture shipTexture;
     if (!shipTexture.loadFromFile("Ship1.png")) {
@@ -72,6 +81,16 @@ int main() {
         return -1;
     }
 
+    sf::Texture spikeTexture;
+    if (!spikeTexture.loadFromFile("Spikes.png")) {
+        std::cerr << "Error loading spike texture" << std::endl;
+        return -1;
+    }
+
+    sf::RectangleShape floor(sf::Vector2f(window.getSize().x, 200));
+    floor.setFillColor(sf::Color::Green);
+    floor.setPosition(0, groundHeight);
+
     Cannon cannon(gravity, cannonballTexture);
     cannon.setPosition(650, groundHeight - cannon.getGlobalBounds().height);
 
@@ -96,9 +115,9 @@ int main() {
 
     std::vector<sf::RectangleShape> platforms;
     std::vector<sf::Sprite> backgroundElements;
+    std::vector<sf::Sprite> spikes;
     int currentMap = 1;
-    loadMap(currentMap, platforms, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture);
-
+    loadMap(currentMap, platforms, backgroundElements, spikes, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -122,20 +141,25 @@ int main() {
         hero.update(currentGroundHeight);
         handleCollisions(hero, platforms);
 
-        cannon.update(currentGroundHeight);
-        handleCollisions(cannon, platforms);
+
 
         if (currentMap == 1) {
             crab.update(platforms[2]);  // Update crab movement
             handleCollisions(crab, platforms);
-            if (crab.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                hero.setPosition(0, 0);
+            //if (crab.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+            //    hero.setPosition(0, 0); //przegrana
+            //}
+            for (const auto& spike : spikes) {
+                if (spike.getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                    hero.setPosition(0, 0); //przegrana
+                }
             }
-        }
+           }
+
 
         for (const auto& cannonball : cannon.getCannonballs()) {
             if (cannonball.getGlobalBounds().intersects(hero.getGlobalBounds())) {
-                hero.setPosition(0, 0);
+                hero.setPosition(0, 0); //przegrana
             }
             for (const auto& platform : platforms) {
                 if (cannonball.getGlobalBounds().intersects(platform.getGlobalBounds())) {
@@ -145,19 +169,36 @@ int main() {
             }
         }
 
+        if (currentMap == 2) {
+            if (hero.getPosition().y > window.getSize().y) {
+                hero.setPosition(0, 0); //przegrana
+            }
+        }
+
+
+        if (currentMap == 3) {
+            for (const auto& spike : spikes) {
+                if (spike.getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                    hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, 0); //przegrana
+                }
+            }
+        }
+
+
+
         if (hero.getPosition().x > window.getSize().x && currentMap == 1) {
             currentMap++;
-            loadMap(currentMap, platforms, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture);
+            loadMap(currentMap, platforms, spikes, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
             hero.setPosition(0, hero.getPosition().y);
         }
         else if (hero.getPosition().x > window.getSize().x && currentMap == 2) {
             currentMap++;
-            loadMap(currentMap, platforms, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture);
+            loadMap(currentMap, platforms, spikes, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
             hero.setPosition(0, hero.getPosition().y);
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && currentMap == 2 && hero.getPosition().x > 1024 && hero.getPosition().x < 1204) {
             currentMap = 3;
-            loadMap(currentMap, platforms, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture);
+            loadMap(currentMap, platforms, spikes, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
             hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, 0);
         }
 
@@ -175,29 +216,40 @@ int main() {
         }
 
         window.clear(sf::Color(0, 240, 255));
-        for (const auto& element : backgroundElements) {
-            window.draw(element);
-        }
-        window.draw(hero.getSprite());
-
-        if (currentMap == 1) {
-            window.draw(cannon.getSprite());
-            window.draw(floor);
-            window.draw(crab.getSprite());
-            for (const auto& cannonball : cannon.getCannonballs()) {
-                window.draw(cannonball.getSprite());
-            }
-        }
-
-        if (currentMap == 3) {
-            window.draw(floor);
-        }
 
         for (const auto& platform : platforms) {
             window.draw(platform);
         }
 
-       
+        for (const auto& spike : spikes) {
+            window.draw(spike);
+        }
+
+        for (const auto& element : backgroundElements) {
+            window.draw(element);
+        }
+
+
+        window.draw(hero.getSprite());
+        
+
+        if (currentMap == 1) {
+            window.draw(crab.getSprite());
+            window.draw(floor);
+            window.draw(cannon.getSprite());
+            for (const auto& cannonball : cannon.getCannonballs()) {
+                window.draw(cannonball.getSprite());
+                
+            }
+            cannon.update(currentGroundHeight);
+            handleCollisions(cannon, platforms);
+           
+        }
+
+        if (currentMap == 3) {
+            window.draw(floor);
+        
+        }
 
         window.display();
     }

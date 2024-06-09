@@ -1,9 +1,10 @@
 #include "Functions.h"
 #include "Hero.h"
 
-void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& backgroundElements, int groundHeight, sf::Texture& shipTexture, sf::Texture& mastTexture, sf::Texture& flagTexture) {
+void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& backgroundElements, std::vector<sf::Sprite>& spikes, int groundHeight, sf::Texture& shipTexture, sf::Texture& mastTexture, sf::Texture& flagTexture, sf::Texture& spikeTexture) {
     platforms.clear();
     backgroundElements.clear();
+    spikes.clear();
 
     if (mapIndex == 1) {
         //level1
@@ -27,7 +28,7 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
         platform4.setPosition(1400, 700);
         platforms.push_back(platform4);
 
-            sf::RectangleShape platform5(sf::Vector2f(100, 50));
+        sf::RectangleShape platform5(sf::Vector2f(100, 50));
         platform5.setFillColor(sf::Color::Red);
         platform5.setPosition(900, 200);
         platforms.push_back(platform5);
@@ -37,6 +38,26 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
         platform6.setFillColor(sf::Color::Red);
         platform6.setPosition(1800, groundHeight - 200);
         platforms.push_back(platform6);
+
+        //kolce
+
+        float spikeWidth = 32.0f;
+        float spikeHeight = 16.0f;
+        float targetHeight = 50.0f;  // Desired height of spikes
+
+        float scaleX = targetHeight / spikeHeight;
+        float startX = 930; 
+        float endX = 1800;  
+
+        spikeTexture.setRepeated(true);
+
+        sf::Sprite spikes1;
+        spikes1.setTexture(spikeTexture);
+        spikes1.setTextureRect(sf::IntRect(0, 0, (endX - startX) / scaleX, spikeHeight));  // Use scaled width
+        spikes1.setScale(scaleX, scaleX);
+        spikes1.setPosition(startX, groundHeight - targetHeight);
+        spikes.push_back(spikes1);
+
     }
     else if (mapIndex == 2) {
         //level2
@@ -102,6 +123,24 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
         platform6.setFillColor(sf::Color::Red);
         platform6.setPosition(800, 600);
         platforms.push_back(platform6);
+
+        //kolce
+        float spikeWidth = 32.0f;
+        float spikeHeight = 16.0f;
+        float targetHeight = 50.0f;  // Desired height of spikes
+
+        float scaleX = targetHeight / spikeHeight;
+        float startX = 0;
+        float endX = 950;
+
+        spikeTexture.setRepeated(true);
+
+        sf::Sprite spikes2;
+        spikes2.setTexture(spikeTexture);
+        spikes2.setTextureRect(sf::IntRect(0, 0, (endX - startX) / scaleX, spikeHeight));  
+        spikes2.setScale(scaleX, scaleX);
+        spikes2.setPosition(startX, groundHeight - targetHeight);
+        spikes.push_back(spikes2);
     }
 }
 
