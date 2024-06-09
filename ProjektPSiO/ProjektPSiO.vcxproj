@@ -145,10 +145,12 @@
   <ItemGroup>
     <ClInclude Include="BigGuy.h" />
     <ClInclude Include="Cannon.h" />
+    <ClInclude Include="Captain.h" />
     <ClInclude Include="Crab.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="Pirate.h" />
     <ClInclude Include="Postac.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

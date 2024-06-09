@@ -6,7 +6,7 @@
 class BigGuy : public Enemy {
 public:
     BigGuy(const sf::Texture& texture, float gravity, float speed)
-        : Enemy(gravity), speed(speed), movingRight(true), detectionRange(300.0f) {  // Ustawienie zakresu wykrywania na 300 pikseli
+        : Enemy(gravity), speed(speed), movingRight(true), detectionRange(200.0f) {  // Ustawienie zakresu wykrywania na 300 pikseli
         sprite.setTexture(texture);
         sprite.setScale(2.0f, 2.0f);
     }

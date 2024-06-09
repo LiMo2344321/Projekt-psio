@@ -6,6 +6,8 @@
 #include "Cannon.h"
 #include "Crab.h"
 #include "BigGuy.h"
+#include "Pirate.h"
+#include "Captain.h"
 
 
 int main() {
@@ -89,6 +91,25 @@ int main() {
         return -1;
     }
 
+    sf::Texture guyTexture;
+    if (!guyTexture.loadFromFile("guyidle1.png")) {
+        std::cerr << "Error loading guy texture" << std::endl;
+        return -1;
+    }
+
+    sf::Texture pirateTexture;
+    if (!pirateTexture.loadFromFile("pirate.png")) {
+        std::cerr << "Error loading pirate texture" << std::endl;
+        return -1;
+    }
+
+    sf::Texture captainTexture;
+    if (!captainTexture.loadFromFile("captain.png")) {
+        std::cerr << "Error loading captain texture" << std::endl;
+        return -1;
+    }
+
+
     sf::RectangleShape floor(sf::Vector2f(window.getSize().x, 200));
     floor.setFillColor(sf::Color::Green);
     floor.setPosition(0, groundHeight);
@@ -115,15 +136,16 @@ int main() {
     Crab crab(crabTexture, gravity, 0.1f);
     crab.setPosition(1050, groundHeight - 480 - crab.getGlobalBounds().height);  // Adjusted for platform3
 
-
-    sf::Texture guyTexture;
-    if (!guyTexture.loadFromFile("guyidle1.png")) {
-        std::cerr << "Error loading guy texture" << std::endl;
-        return -1;
-    }
-
     BigGuy guy1(guyTexture, gravity, 0.2f);
     BigGuy guy2(guyTexture, gravity, 0.2f);
+    guy1.setPosition(802, 250 - guy1.getSprite().getGlobalBounds().height);
+    guy2.setPosition(1302, groundHeight - 396 - guy2.getSprite().getGlobalBounds().height);
+
+    Pirate pirate(pirateTexture, gravity, 0.3f);
+    pirate.setPosition(1000, 150 - pirate.getSprite().getGlobalBounds().height);
+
+    Captain captain(captainTexture, gravity, 0.1f);
+    captain.setPosition(800, groundHeight - 280 - captain.getSprite().getGlobalBounds().height);
 
     std::vector<sf::RectangleShape> platforms;
     std::vector<sf::Sprite> backgroundElements;
@@ -173,13 +195,25 @@ int main() {
         }
 
         if (currentMap == 2) {
-            guy1.setPosition(platforms[3].getPosition().x + 100, platforms[3].getPosition().y - guy1.getSprite().getGlobalBounds().height);
-            guy2.setPosition(platforms[2].getPosition().x + 300, platforms[1].getPosition().y - guy2.getSprite().getGlobalBounds().height);
+            // Aktualizuj pozycje przeciwników BigGuy
+            guy1.update(platforms[3], hero.getSprite());
+            guy2.update(platforms[1], hero.getSprite());
+
+            handleCollisions(guy1, platforms);
+            handleCollisions(guy2, platforms);
+
+        }        
+
+        if (currentMap == 3) {
+            // Aktualizuj pozycje przeciwników BigGuy
+            pirate.update(platforms[1]);            
+            handleCollisions(pirate, platforms);       
+
+            captain.update(platforms[5]);
+            handleCollisions(captain, platforms);
+
         }
 
-        // Aktualizuj pozycje przeciwników BigGuy
-        guy1.update(platforms[3], hero.getSprite());
-        guy2.update(platforms[1], hero.getSprite());
 
         for (const auto& cannonball : cannon.getCannonballs()) {
             if (cannonball.getGlobalBounds().intersects(hero.getGlobalBounds())) {
@@ -256,14 +290,15 @@ int main() {
         }
 
         if (currentMap == 2) {
-            handleCollisions(guy1, platforms);
-            handleCollisions(guy2, platforms);
+
             window.draw(guy1.getSprite());
             window.draw(guy2.getSprite());
         }
 
         if (currentMap == 3) {
             window.draw(floor);
+            window.draw(pirate.getSprite());
+            window.draw(captain.getSprite());
         }
 
         window.display();
