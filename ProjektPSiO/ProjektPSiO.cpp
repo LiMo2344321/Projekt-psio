@@ -8,6 +8,7 @@
 #include "BigGuy.h"
 #include "Pirate.h"
 #include "Captain.h"
+#include "Key.h"
 
 
 int main() {
@@ -48,9 +49,9 @@ int main() {
     hero.addJumpTexture(jump);
 
     hero.setFps(20);
-    hero.setPosition(0, 0);
+    hero.setPosition(100, groundHeight);
 
-
+    
     sf::Texture shipTexture;
     if (!shipTexture.loadFromFile("Ship1.png")) {
         std::cerr << "Error loading ship texture" << std::endl;
@@ -158,6 +159,16 @@ int main() {
     Captain captain(captainTexture, gravity, 0.1f);
     captain.setPosition(800, groundHeight - 280 - captain.getSprite().getGlobalBounds().height);
 
+    std::vector<sf::Texture> keyTextures(8);
+    for (int i = 0; i < 8; ++i) {
+        if (!keyTextures[i].loadFromFile("key" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading key texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
+    Key key(keyTextures, 1654, 440);
+
+
     std::vector<sf::RectangleShape> platforms;
     std::vector<sf::Sprite> backgroundElements;
     std::vector<sf::Sprite> spikes;
@@ -206,7 +217,7 @@ int main() {
             for (const auto& spike : spikes) {
                 if (spike.getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
                     hero.kill(); // Bohater natychmiast umiera
-                    hero.setPosition(0, 0); // Resetuje pozycję bohatera
+                    hero.setPosition(100, 0); // Resetuje pozycję bohatera
                     hero.resetHealth(); // Resetuje życie bohatera
                     break; // Przerwanie pętli po kolizji z kolcami
                 }
@@ -216,6 +227,7 @@ int main() {
         if (currentMap == 2) {
             guy1.update(platforms[3], hero.getSprite(), deltaTime);
             guy2.update(platforms[1], hero.getSprite(), deltaTime);
+            key.update(deltaTime);
 
             handleCollisions(guy1, platforms);
             handleCollisions(guy2, platforms);
@@ -236,6 +248,18 @@ int main() {
                     lastDamageTime = currentTime;
                     recentlyDamaged = true;
                 }
+            }
+
+            if (!key.isCollected() && key.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                key.collect();
+                hero.pickUpKey();
+            }
+
+            if (hero.getPosition().y > window.getSize().y) {
+                hero.kill();
+                hero.setPosition(100, 0);
+                hero.resetHealth();
+
             }
         }
 
@@ -274,17 +298,14 @@ int main() {
 
 
         if (heroDamaged && !hero.isAlive()) {
-            hero.setPosition(0, 0); // Resetuj pozycję bohatera przy zerowych życiach
+            hero.setPosition(100, 0); // Resetuj pozycję bohatera przy zerowych życiach
             hero.resetHealth(); // Resetuj życie bohatera
+            hero.setHasKey(false); // Upewnij się, że bohater nie ma klucza
+            key.resetAnimation(1654, 440); // Resetuj animację klucza
         }
 
 
         if (hero.getPosition().x > window.getSize().x && currentMap == 1) {
-            currentMap++;
-            loadMap(currentMap, platforms, spikes, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
-            hero.setPosition(0, hero.getPosition().y);
-        }
-        else if (hero.getPosition().x > window.getSize().x && currentMap == 2) {
             currentMap++;
             loadMap(currentMap, platforms, spikes, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
             hero.setPosition(0, hero.getPosition().y);
@@ -322,6 +343,13 @@ int main() {
             window.draw(element);
         }
 
+        if (hero.getHasKey()) {
+            
+            sf::Sprite keySprite = key.getSprite();
+            keySprite.setPosition(160, 15); // Wybierz odpowiednią pozycję
+            window.draw(keySprite);
+        }
+
         window.draw(hero.getSprite());
         hero.draw(window);
 
@@ -337,9 +365,12 @@ int main() {
         }
 
         if (currentMap == 2) {
-
             window.draw(guy1.getSprite());
             window.draw(guy2.getSprite());
+            if (!key.isCollected()) {
+                key.update(deltaTime); 
+                window.draw(key.getSprite());
+            }
         }
 
         if (currentMap == 3) {

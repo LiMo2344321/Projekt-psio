@@ -12,7 +12,7 @@ public:
     enum class State { Idle, Run, Jump };
 
     Hero(const sf::Texture& texture, float gravity, float moveSpeed, float jumpSpeed)
-        : Postac(gravity), moveSpeed(moveSpeed), jumpSpeed(jumpSpeed), currentTextureIndex(0), elapsedTime(0), state(State::Idle), health(3) {
+        : Postac(gravity), moveSpeed(moveSpeed), jumpSpeed(jumpSpeed), currentTextureIndex(0), elapsedTime(0), state(State::Idle), health(3), hasKey(false) {
         idleTextures.push_back(texture);
         sprite.setTexture(idleTextures[0]);
         sprite.setScale(3.0f, 3.0f); // Skaluje sprite hero
@@ -129,6 +129,19 @@ public:
 
     void kill() {
         health = 0;
+        hasKey = false;
+    }
+
+    void pickUpKey() {
+        hasKey = true;
+    }
+
+    bool getHasKey() {
+        return hasKey;
+    }
+
+    void setHasKey(bool hk) {
+        hasKey = hk;
     }
 
 private:
@@ -144,6 +157,7 @@ private:
     int fps = 20; // Default FPS for animation
     State state;
     int health;
+    bool hasKey;
 
     sf::Texture healthBarTexture;
     sf::Texture heartTexture;

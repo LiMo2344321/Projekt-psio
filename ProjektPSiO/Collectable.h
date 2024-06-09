@@ -27,6 +27,9 @@ public:
 
     void collect() {
         collected = true;
+        if (!textures.empty()) {
+            sprite.setTexture(textures[0]); 
+        }
     }
 
     bool isCollected() const {
@@ -35,6 +38,16 @@ public:
 
     sf::Sprite& getSprite() {
         return sprite;
+    }
+
+    void resetAnimation(float x, float y) {
+        collected = false;
+        currentFrame = 0;
+        elapsedTime = sf::Time::Zero;
+        sprite.setPosition(x,y);
+        if (!textures.empty()) {
+            sprite.setTexture(textures[0]); 
+        }
     }
 
 private:
