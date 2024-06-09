@@ -17,38 +17,34 @@ int main() {
     int groundHeight = window.getSize().y - 200;
     int currentGroundHeight = groundHeight;
 
-    sf::Texture idle1, idle2, idle3, idle4, idle5;
-    idle1.loadFromFile("idle1.png");
-    idle2.loadFromFile("idle2.png");
-    idle3.loadFromFile("idle3.png");
-    idle4.loadFromFile("idle4.png");
-    idle5.loadFromFile("idle5.png");
+    std::vector <sf::Texture> idle(5);
+    for (int i = 0; i < 5; i++) {
+        if (!idle[i].loadFromFile("idle" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading idle texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
 
-    sf::Texture run1, run2, run3, run4, run5, run6;
-    run1.loadFromFile("run1.png");
-    run2.loadFromFile("run2.png");
-    run3.loadFromFile("run3.png");
-    run4.loadFromFile("run4.png");
-    run5.loadFromFile("run5.png");
-    run6.loadFromFile("run6.png");
+    std::vector <sf::Texture> run(6);
+    for (int i = 0; i < 6; i++) {
+        if (!run[i].loadFromFile("run" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading run texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
 
     sf::Texture jump;
     jump.loadFromFile("jump.png");
 
-    Hero hero(idle1, gravity, 0.3f, 1.5f);
-    hero.addIdleTexture(idle1);
-    hero.addIdleTexture(idle2);
-    hero.addIdleTexture(idle3);
-    hero.addIdleTexture(idle4);
-    hero.addIdleTexture(idle5);
+    Hero hero(idle[0], gravity, 0.3f, 1.5f);
 
-    hero.addRunTexture(run1);
-    hero.addRunTexture(run2);
-    hero.addRunTexture(run3);
-    hero.addRunTexture(run4);
-    hero.addRunTexture(run5);
-    hero.addRunTexture(run6);
+    for (int i = 0; i < 5; i++) {
+        hero.addIdleTexture(idle[i]);
+    }
 
+    for (int i = 0; i < 6; i++) {
+        hero.addRunTexture(run[i]);
+    }
     hero.addJumpTexture(jump);
 
     hero.setFps(20);
@@ -111,45 +107,50 @@ int main() {
     Cannon cannon(gravity, cannonballTexture);
     cannon.setPosition(650, groundHeight - cannon.getGlobalBounds().height);
 
-    // Załaduj tekstury animacji strzału
-    sf::Texture cshoot1, cshoot2, cshoot3, cshoot4, cshoot5, cshoot6;
-    cshoot1.loadFromFile("cshoot1.png");
-    cshoot2.loadFromFile("cshoot2.png");
-    cshoot3.loadFromFile("cshoot3.png");
-    cshoot4.loadFromFile("cshoot4.png");
-    cshoot5.loadFromFile("cshoot5.png");
-    cshoot6.loadFromFile("cshoot6.png");
 
-    cannon.addShootTexture(cshoot1);
-    cannon.addShootTexture(cshoot2);
-    cannon.addShootTexture(cshoot3);
-    cannon.addShootTexture(cshoot4);
-    cannon.addShootTexture(cshoot5);
-    cannon.addShootTexture(cshoot6);
+    std::vector <sf::Texture> cshoot(6);
+    for (int i = 0; i < 6; i++) {
+        if (!cshoot[i].loadFromFile("cshoot" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading cshoot texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
+
+    for (int i = 0; i < 6; i++) {
+        cannon.addShootTexture(cshoot[i]);
+    }
 
     Crab crab(crabTexture, gravity, 0.1f);
     crab.setPosition(1050, groundHeight - 480 - crab.getGlobalBounds().height);  // Adjusted for platform3
 
-    std::vector<sf::Texture> idleTextures(6);
-    std::vector<sf::Texture> runTextures(8);
-    for (int i = 0; i < 6; ++i) {
-        if (!idleTextures[i].loadFromFile("guyidle" + std::to_string(i + 1) + ".png")) {
+    std::vector<sf::Texture> bigguyidle(36);
+    std::vector<sf::Texture> bigguyrun(8);
+    std::vector<sf::Texture> bigguyattack(10);
+    for (int i = 0; i < 36; ++i) {
+        if (!bigguyidle[i].loadFromFile("guyidle" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading idle texture " << i + 1 << std::endl;
             return -1;
         }
     }
 
     for (int i = 0; i < 8; ++i) {
-        if (!runTextures[i].loadFromFile("guyrun" + std::to_string(i + 1) + ".png")) {
+        if (!bigguyrun[i].loadFromFile("guyrun" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading run texture " << i + 1 << std::endl;
             return -1;
         }
     }
 
-    BigGuy guy1(idleTextures, runTextures, gravity, 0.2f);
-    BigGuy guy2(idleTextures, runTextures, gravity, 0.2f);
-    guy1.setPosition(802, 250 - guy1.getSprite().getGlobalBounds().height);
-    guy2.setPosition(1302, groundHeight - 396 - guy2.getSprite().getGlobalBounds().height);
+    for (int i = 0; i < 10; ++i) {
+        if (!bigguyattack[i].loadFromFile("bigguyattack" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading attack texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
+
+    BigGuy guy1(bigguyidle, bigguyrun, bigguyattack ,gravity, 0.2f);
+    BigGuy guy2(bigguyidle, bigguyrun, bigguyattack, gravity, 0.2f);
+    guy1.setPosition(1002, 250 - guy1.getSprite().getGlobalBounds().height);
+    guy2.setPosition(1502, groundHeight - 396 - guy2.getSprite().getGlobalBounds().height);
 
     Pirate pirate(pirateTexture, gravity, 0.3f);
     pirate.setPosition(1000, 150 - pirate.getSprite().getGlobalBounds().height);
@@ -164,6 +165,8 @@ int main() {
     loadMap(currentMap, platforms, backgroundElements, spikes, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
 
     sf::Clock clock;
+    bool recentlyDamaged = false;
+    sf::Time lastDamageTime = sf::Time::Zero;
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -196,26 +199,48 @@ int main() {
             //}
         }
 
+        bool heroDamaged = false;
+        sf::Time currentTime = clock.getElapsedTime();
+
         if (currentMap == 1 || currentMap == 3) {
             for (const auto& spike : spikes) {
                 if (spike.getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                    hero.setPosition(0, 0); //przegrana
+                    hero.kill(); // Bohater natychmiast umiera
+                    hero.setPosition(0, 0); // Resetuje pozycję bohatera
+                    hero.resetHealth(); // Resetuje życie bohatera
+                    break; // Przerwanie pętli po kolizji z kolcami
                 }
             }
         }
 
         if (currentMap == 2) {
-            // Aktualizuj pozycje przeciwników BigGuy
             guy1.update(platforms[3], hero.getSprite(), deltaTime);
             guy2.update(platforms[1], hero.getSprite(), deltaTime);
 
             handleCollisions(guy1, platforms);
             handleCollisions(guy2, platforms);
 
-        }        
+            if (guy1.getisAttacking() && guy1.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                    hero.takeDamage(); // Zadanie obrażeń bohaterowi
+                    heroDamaged = true;
+                    lastDamageTime = currentTime;
+                    recentlyDamaged = true;
+                }
+            }
+
+            if (guy2.getisAttacking() && guy2.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                    hero.takeDamage(); // Zadanie obrażeń bohaterowi
+                    heroDamaged = true;
+                    lastDamageTime = currentTime;
+                    recentlyDamaged = true;
+                }
+            }
+        }
 
         if (currentMap == 3) {
-            // Aktualizuj pozycje przeciwników BigGuy
+            
             pirate.update(platforms[1]);            
             handleCollisions(pirate, platforms);       
 
@@ -226,9 +251,17 @@ int main() {
 
 
         for (const auto& cannonball : cannon.getCannonballs()) {
-            if (cannonball.getGlobalBounds().intersects(hero.getGlobalBounds())) {
-                 hero.takeDamage();
-                   
+            if (cannonball.getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                if (recentlyDamaged && (clock.getElapsedTime().asSeconds() - lastDamageTime.asSeconds() > 0.5)) {
+                    recentlyDamaged = false;
+                }
+                if (!recentlyDamaged) {
+                    hero.takeDamage(); // Przegrana, zabierz jedno życie
+                    heroDamaged = true;
+                    lastDamageTime = currentTime;
+                    recentlyDamaged = true;
+                    
+                }
             }
             for (const auto& platform : platforms) {
                 if (cannonball.getGlobalBounds().intersects(platform.getGlobalBounds())) {
@@ -238,11 +271,13 @@ int main() {
             }
         }
 
-        if (currentMap == 2) {
-            if (hero.getPosition().y > window.getSize().y) {
-                hero.setPosition(0, 0); //przegrana
-            }
+
+
+        if (heroDamaged && !hero.isAlive()) {
+            hero.setPosition(0, 0); // Resetuj pozycję bohatera przy zerowych życiach
+            hero.resetHealth(); // Resetuj życie bohatera
         }
+
 
         if (hero.getPosition().x > window.getSize().x && currentMap == 1) {
             currentMap++;

@@ -1,4 +1,3 @@
-// Hero.h
 #ifndef HERO_H
 #define HERO_H
 
@@ -19,7 +18,6 @@ public:
         sprite.setScale(3.0f, 3.0f); // Skaluje sprite hero
         adjustOriginAndScale();
 
-        // Initialize health bar
         if (!healthBarTexture.loadFromFile("healthbar.png")) {
             std::cerr << "Error loading health bar texture" << std::endl;
         }
@@ -28,10 +26,10 @@ public:
         }
 
         healthBar.setTexture(healthBarTexture);
-        healthBar.setPosition(10.0f, 10.0f); // Position health bar in the top-left corner
-        healthBar.setScale(3.0f, 3.0f);
+        healthBar.setPosition(10.0f, 10.0f); 
+        healthBar.setScale(1.0f, 1.0f);
         heart.setTexture(heartTexture);
-        heart.setScale(3.0f, 3.0f); // Scale heart to fit in health bar
+        heart.setScale(1.0f, 1.0f); 
     }
 
     void handleInput(const std::vector<sf::RectangleShape>& platforms, float groundHeight) {
@@ -125,6 +123,14 @@ public:
         return health > 0;
     }
 
+    void resetHealth() {
+        health = 3;
+    }
+
+    void kill() {
+        health = 0;
+    }
+
 private:
     enum class Direction { None, Left, Right };
     Direction direction = Direction::None;
@@ -190,7 +196,7 @@ private:
     void drawHealthBar(sf::RenderWindow& window) {
         window.draw(healthBar);
         for (int i = 0; i < health; ++i) {
-            heart.setPosition(130.0f + i * (heart.getGlobalBounds().width + 12.0f), 78.0f); // Position hearts within health bar
+            heart.setPosition(50.0f + i * (heart.getGlobalBounds().width + 5.0f), 32.0f); // Position hearts within health bar
             window.draw(heart);
         }
     }
@@ -198,4 +204,4 @@ private:
     sf::Clock clock;
 };
 
-#endif // HERO_H
+#endif 

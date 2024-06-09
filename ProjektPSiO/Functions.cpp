@@ -43,8 +43,7 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
 
         float spikeWidth = 32.0f;
         float spikeHeight = 16.0f;
-        float targetHeight = 50.0f;  // Desired height of spikes
-
+        float targetHeight = 50.0f;  
         float scaleX = targetHeight / spikeHeight;
         float startX = 930; 
         float endX = 1800;  
@@ -53,7 +52,7 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
 
         sf::Sprite spikes1;
         spikes1.setTexture(spikeTexture);
-        spikes1.setTextureRect(sf::IntRect(0, 0, (endX - startX) / scaleX, spikeHeight));  // Use scaled width
+        spikes1.setTextureRect(sf::IntRect(0, 0, (endX - startX) / scaleX, spikeHeight));  
         spikes1.setScale(scaleX, scaleX);
         spikes1.setPosition(startX, groundHeight - targetHeight);
         spikes.push_back(spikes1);
@@ -127,7 +126,7 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
         //kolce
         float spikeWidth = 32.0f;
         float spikeHeight = 16.0f;
-        float targetHeight = 50.0f;  // Desired height of spikes
+        float targetHeight = 50.0f;  
 
         float scaleX = targetHeight / spikeHeight;
         float startX = 0;

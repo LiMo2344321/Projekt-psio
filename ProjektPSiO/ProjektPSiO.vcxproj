@@ -146,6 +146,7 @@
     <ClInclude Include="BigGuy.h" />
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="Captain.h" />
+    <ClInclude Include="Collectable.h" />
     <ClInclude Include="Crab.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Hero.h" />

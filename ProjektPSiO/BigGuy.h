@@ -7,8 +7,8 @@
 
 class BigGuy : public Enemy {
 public:
-    BigGuy(const std::vector<sf::Texture>& idleTextures, const std::vector<sf::Texture>& runTextures, float gravity, float speed)
-        : Enemy(gravity), idleTextures(idleTextures), runTextures(runTextures), speed(speed), movingRight(true), detectionRange(200.0f), currentFrame(0), animationTime(sf::seconds(0.1f)), elapsedTime(sf::Time::Zero) {
+    BigGuy(const std::vector<sf::Texture>& idleTextures, const std::vector<sf::Texture>& runTextures, const std::vector<sf::Texture>& attackTextures, float gravity, float speed)
+        : Enemy(gravity), idleTextures(idleTextures), runTextures(runTextures), attackTextures(attackTextures), speed(speed), movingRight(true), detectionRange(200.0f), attackRange(50.0f), currentFrame(0), animationTime(sf::seconds(0.1f)), elapsedTime(sf::Time::Zero), isAttacking(false), attackDuration(sf::seconds(1.0f)), attackElapsedTime(sf::Time::Zero) {
         sprite.setTexture(idleTextures[0]);
         sprite.setScale(2.0f, 2.0f);
     }
@@ -21,18 +21,36 @@ public:
 
         bool moving = false;
 
-        // SprawdŸ, czy postaæ gracza znajduje siê w zasiêgu wykrywania
-        if (std::abs(heroPositionX - bigGuyPositionX) < detectionRange) {
-            // Poruszaj siê w kierunku postaci gracza
-            if (heroPositionX > bigGuyPositionX && (bigGuyPositionX + sprite.getGlobalBounds().width) < platformEndX) {
-                sprite.move(speed, 0);
-                moving = true;
-                movingRight = true;
+        // SprawdŸ, czy BigGuy jest w trakcie ataku
+        if (isAttacking) {
+            attackElapsedTime += deltaTime;
+            if (attackElapsedTime >= attackDuration) {
+                isAttacking = false;
+                attackElapsedTime = sf::Time::Zero;
+                currentFrame = 0;
             }
-            else if (heroPositionX < bigGuyPositionX && bigGuyPositionX > platformStartX) {
-                sprite.move(-speed, 0);
-                moving = true;
-                movingRight = false;
+        }
+        else {
+            // SprawdŸ, czy postaæ gracza znajduje siê w zasiêgu wykrywania
+            if (std::abs(heroPositionX - bigGuyPositionX) < detectionRange) {
+                // SprawdŸ, czy gracz jest w zasiêgu ataku
+                if (std::abs(heroPositionX - bigGuyPositionX) < attackRange) {
+                    isAttacking = true;
+                    currentFrame = 0;
+                }
+                else {
+                    // Poruszaj siê w kierunku postaci gracza
+                    if (heroPositionX > bigGuyPositionX && (bigGuyPositionX + sprite.getGlobalBounds().width) < platformEndX) {
+                        sprite.move(speed, 0);
+                        moving = true;
+                        movingRight = true;
+                    }
+                    else if (heroPositionX < bigGuyPositionX && bigGuyPositionX > platformStartX) {
+                        sprite.move(-speed, 0);
+                        moving = true;
+                        movingRight = false;
+                    }
+                }
             }
         }
 
@@ -46,12 +64,19 @@ public:
 
         sf::FloatRect bounds = sprite.getLocalBounds();
         sprite.setOrigin(bounds.width / 2, 0);
+
         // Aktualizacja animacji
         elapsedTime += deltaTime;
         if (elapsedTime >= animationTime) {
             elapsedTime -= animationTime;
             currentFrame++;
-            if (moving) {
+            if (isAttacking) {
+                if (currentFrame >= attackTextures.size()) {
+                    currentFrame = 0;
+                }
+                sprite.setTexture(attackTextures[currentFrame]);
+            }
+            else if (moving) {
                 if (currentFrame >= runTextures.size()) {
                     currentFrame = 0;
                 }
@@ -80,16 +105,25 @@ public:
         return sprite;
     }
 
+    bool getisAttacking() {
+        return isAttacking;
+    }
+
 private:
     sf::Sprite sprite;
     std::vector<sf::Texture> idleTextures;
     std::vector<sf::Texture> runTextures;
+    std::vector<sf::Texture> attackTextures;
     float speed;
     bool movingRight;
     float detectionRange;
+    float attackRange;
     unsigned int currentFrame;
     sf::Time animationTime;
     sf::Time elapsedTime;
+    bool isAttacking;
+    sf::Time attackDuration;
+    sf::Time attackElapsedTime;
 };
 
 #endif
