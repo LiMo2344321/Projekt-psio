@@ -51,7 +51,7 @@ int main() {
     hero.setFps(20);
     hero.setPosition(100, groundHeight);
 
-    
+
     sf::Texture shipTexture;
     if (!shipTexture.loadFromFile("Ship1.png")) {
         std::cerr << "Error loading ship texture" << std::endl;
@@ -121,8 +121,25 @@ int main() {
         cannon.addShootTexture(cshoot[i]);
     }
 
-    Crab crab(crabTexture, gravity, 0.1f);
-    crab.setPosition(1050, groundHeight - 480 - crab.getGlobalBounds().height);  // Adjusted for platform3
+
+
+    // Load crab run textures
+    std::vector <sf::Texture> crabRun(6);
+    for (int i = 0; i < 6; i++) {
+        if (!crabRun[i].loadFromFile("crabrun" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading crab run texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
+
+    // Initialize crab with gravity, speed, and animation time
+    Crab crab(gravity, 0.03f, 0.2f);
+    crab.setPosition(1050, 329);
+
+    // Add run textures to crab
+    for (int i = 0; i < 6; i++) {
+        crab.addRunTexture(crabRun[i]);
+    }
 
     std::vector<sf::Texture> bigguyidle(36);
     std::vector<sf::Texture> bigguyrun(8);
@@ -148,7 +165,9 @@ int main() {
         }
     }
 
-    BigGuy guy1(bigguyidle, bigguyrun, bigguyattack ,gravity, 0.2f);
+
+
+    BigGuy guy1(bigguyidle, bigguyrun, bigguyattack, gravity, 0.2f);
     BigGuy guy2(bigguyidle, bigguyrun, bigguyattack, gravity, 0.2f);
     guy1.setPosition(1002, 250 - guy1.getSprite().getGlobalBounds().height);
     guy2.setPosition(1502, groundHeight - 396 - guy2.getSprite().getGlobalBounds().height);
@@ -175,6 +194,7 @@ int main() {
     int currentMap = 1;
     loadMap(currentMap, platforms, backgroundElements, spikes, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
 
+    sf::Clock damageClock;
     sf::Clock clock;
     bool recentlyDamaged = false;
     sf::Time lastDamageTime = sf::Time::Zero;
@@ -185,8 +205,11 @@ int main() {
                 window.close();
             }
         }
-
         sf::Time deltaTime = clock.restart();
+        sf::Time currentTime = damageClock.getElapsedTime();  // Zmierz czas od ostatniego resetu
+        if (recentlyDamaged && currentTime.asSeconds() > 1.0f) {  // Reset flagi, jeśli minęła jedna sekunda
+            recentlyDamaged = false;
+        }
 
         if (currentMap == 1) {
             currentGroundHeight = groundHeight;
@@ -203,7 +226,7 @@ int main() {
         handleCollisions(hero, platforms);
 
         if (currentMap == 1) {
-            crab.update(platforms[2]);  // Update crab movement
+            crab.update(platforms[2], deltaTime);  // Update crab movement
             handleCollisions(crab, platforms);
             //if (crab.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
             //    hero.setPosition(0, 0); //przegrana
@@ -211,7 +234,6 @@ int main() {
         }
 
         bool heroDamaged = false;
-        sf::Time currentTime = clock.getElapsedTime();
 
         if (currentMap == 1 || currentMap == 3) {
             for (const auto& spike : spikes) {
@@ -238,6 +260,7 @@ int main() {
                     heroDamaged = true;
                     lastDamageTime = currentTime;
                     recentlyDamaged = true;
+                    damageClock.restart();
                 }
             }
 
@@ -247,6 +270,7 @@ int main() {
                     heroDamaged = true;
                     lastDamageTime = currentTime;
                     recentlyDamaged = true;
+                    damageClock.restart();
                 }
             }
 
@@ -264,9 +288,9 @@ int main() {
         }
 
         if (currentMap == 3) {
-            
-            pirate.update(platforms[1]);            
-            handleCollisions(pirate, platforms);       
+
+            pirate.update(platforms[1]);
+            handleCollisions(pirate, platforms);
 
             captain.update(platforms[5]);
             handleCollisions(captain, platforms);
@@ -284,7 +308,8 @@ int main() {
                     heroDamaged = true;
                     lastDamageTime = currentTime;
                     recentlyDamaged = true;
-                    
+                    damageClock.restart();
+
                 }
             }
             for (const auto& platform : platforms) {
@@ -344,7 +369,7 @@ int main() {
         }
 
         if (hero.getHasKey()) {
-            
+
             sf::Sprite keySprite = key.getSprite();
             keySprite.setPosition(160, 15); // Wybierz odpowiednią pozycję
             window.draw(keySprite);
@@ -368,7 +393,7 @@ int main() {
             window.draw(guy1.getSprite());
             window.draw(guy2.getSprite());
             if (!key.isCollected()) {
-                key.update(deltaTime); 
+                key.update(deltaTime);
                 window.draw(key.getSprite());
             }
         }
