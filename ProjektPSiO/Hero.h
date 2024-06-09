@@ -1,3 +1,4 @@
+// Hero.h
 #ifndef HERO_H
 #define HERO_H
 
@@ -5,69 +6,83 @@
 #include <vector>
 #include <algorithm>
 #include <SFML/Graphics.hpp>
+#include <iostream> // Dodano, aby u¿yæ std::cerr
 
 class Hero : public Postac {
 public:
     enum class State { Idle, Run, Jump };
 
     Hero(const sf::Texture& texture, float gravity, float moveSpeed, float jumpSpeed)
-        : Postac(gravity), moveSpeed(moveSpeed), jumpSpeed(jumpSpeed), currentTextureIndex(0), elapsedTime(0), state(State::Idle) {
+        : Postac(gravity), moveSpeed(moveSpeed), jumpSpeed(jumpSpeed), currentTextureIndex(0), elapsedTime(0), state(State::Idle), health(3) {
         idleTextures.push_back(texture);
         sprite.setTexture(idleTextures[0]);
         sprite.setScale(3.0f, 3.0f); // Skaluje sprite hero
         adjustOriginAndScale();
-    }
 
-   void handleInput(const std::vector<sf::RectangleShape>& platforms, float groundHeight) {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-        velocity.x = moveSpeed;
-        direction = Direction::Right;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) { state = State::Jump; }
-        else {
-            state = State::Run;
+        // Initialize health bar
+        if (!healthBarTexture.loadFromFile("healthbar.png")) {
+            std::cerr << "Error loading health bar texture" << std::endl;
         }
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-        velocity.x = -moveSpeed;
-        direction = Direction::Left;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) { state = State::Jump; }
-        else {
-            state = State::Run;
+        if (!heartTexture.loadFromFile("heart.png")) {
+            std::cerr << "Error loading heart texture" << std::endl;
         }
+
+        healthBar.setTexture(healthBarTexture);
+        healthBar.setPosition(10.0f, 10.0f); // Position health bar in the top-left corner
+        healthBar.setScale(3.0f, 3.0f);
+        heart.setTexture(heartTexture);
+        heart.setScale(3.0f, 3.0f); // Scale heart to fit in health bar
     }
-    else {
-        velocity.x = 0;
-        state = State::Idle;
-    }
 
-    bool onGround = sprite.getPosition().y + sprite.getGlobalBounds().height >= groundHeight;
-    bool onPlatform = false;
-
-    for (const auto& platform : platforms) {
-        sf::FloatRect heroBounds = sprite.getGlobalBounds();
-        sf::FloatRect platformBounds = platform.getGlobalBounds();
-        platformBounds.top -= 1.0f;
-        platformBounds.height += 1.0f;
-
-        if (heroBounds.intersects(platformBounds)) {
-            float heroBottom = heroBounds.top + heroBounds.height;
-            float platformTop = platformBounds.top;
-
-            if (heroBottom > platformTop && heroBottom < platformTop + 10) {
-                onPlatform = true;
-                sprite.setPosition(sprite.getPosition().x, platformTop - heroBounds.height);
-                velocity.y = 0;
-                break;
+    void handleInput(const std::vector<sf::RectangleShape>& platforms, float groundHeight) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            velocity.x = moveSpeed;
+            direction = Direction::Right;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) { state = State::Jump; }
+            else {
+                state = State::Run;
             }
         }
-    }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            velocity.x = -moveSpeed;
+            direction = Direction::Left;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) { state = State::Jump; }
+            else {
+                state = State::Run;
+            }
+        }
+        else {
+            velocity.x = 0;
+            state = State::Idle;
+        }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && (onGround || onPlatform)) {
-        velocity.y = -jumpSpeed;
-        state = State::Jump; // Ustaw stan na skok
-    }
-}
+        bool onGround = sprite.getPosition().y + sprite.getGlobalBounds().height >= groundHeight;
+        bool onPlatform = false;
 
+        for (const auto& platform : platforms) {
+            sf::FloatRect heroBounds = sprite.getGlobalBounds();
+            sf::FloatRect platformBounds = platform.getGlobalBounds();
+            platformBounds.top -= 1.0f;
+            platformBounds.height += 1.0f;
+
+            if (heroBounds.intersects(platformBounds)) {
+                float heroBottom = heroBounds.top + heroBounds.height;
+                float platformTop = platformBounds.top;
+
+                if (heroBottom > platformTop && heroBottom < platformTop + 10.0f) {
+                    onPlatform = true;
+                    sprite.setPosition(sprite.getPosition().x, platformTop - heroBounds.height);
+                    velocity.y = 0;
+                    break;
+                }
+            }
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && (onGround || onPlatform)) {
+            velocity.y = -jumpSpeed;
+            state = State::Jump; // Ustaw stan na skok
+        }
+    }
 
     void update(float groundHeight) override {
         applyGravity(groundHeight);
@@ -91,6 +106,25 @@ public:
         this->fps = fps;
     }
 
+    void draw(sf::RenderWindow& window) {
+        window.draw(sprite);
+        drawHealthBar(window);
+    }
+
+    void takeDamage() {
+        if (health > 0) {
+            health--;
+        }
+    }
+
+    int getHealth() const {
+        return health;
+    }
+
+    bool isAlive() const {
+        return health > 0;
+    }
+
 private:
     enum class Direction { None, Left, Right };
     Direction direction = Direction::None;
@@ -103,6 +137,12 @@ private:
     float elapsedTime;
     int fps = 20; // Default FPS for animation
     State state;
+    int health;
+
+    sf::Texture healthBarTexture;
+    sf::Texture heartTexture;
+    sf::Sprite healthBar;
+    sf::Sprite heart;
 
     void updateAnimation() {
         elapsedTime += clock.restart().asSeconds();
@@ -144,6 +184,14 @@ private:
         else {
             sprite.setOrigin(halfWidth, 0); // Origin w œrodku sprite'a
             sprite.setScale(3.0f, 3.0f); // Skaluje w prawo
+        }
+    }
+
+    void drawHealthBar(sf::RenderWindow& window) {
+        window.draw(healthBar);
+        for (int i = 0; i < health; ++i) {
+            heart.setPosition(130.0f + i * (heart.getGlobalBounds().width + 12.0f), 78.0f); // Position hearts within health bar
+            window.draw(heart);
         }
     }
 

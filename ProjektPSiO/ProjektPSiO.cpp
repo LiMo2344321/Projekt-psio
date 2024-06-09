@@ -227,7 +227,8 @@ int main() {
 
         for (const auto& cannonball : cannon.getCannonballs()) {
             if (cannonball.getGlobalBounds().intersects(hero.getGlobalBounds())) {
-                hero.setPosition(0, 0); //przegrana
+                 hero.takeDamage();
+                   
             }
             for (const auto& platform : platforms) {
                 if (cannonball.getGlobalBounds().intersects(platform.getGlobalBounds())) {
@@ -287,6 +288,7 @@ int main() {
         }
 
         window.draw(hero.getSprite());
+        hero.draw(window);
 
         if (currentMap == 1) {
             window.draw(crab.getSprite());
