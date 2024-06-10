@@ -69,6 +69,16 @@ public:
     bool getisAttacking() {
         return state == State::Attacking;
     }
+    void reset() {
+        movingRight = true;
+        state = Idle;
+        currentFrame = 0;
+        stateClock.restart();
+        animationClock.restart();
+        sprite.setTexture(idleTextures[0]);
+        sprite.setScale(1.8f, 1.8f);
+        sprite.setOrigin(sprite.getGlobalBounds().width / 2, 0);
+    }
 
 private:
     std::vector<sf::Texture> idleTextures;

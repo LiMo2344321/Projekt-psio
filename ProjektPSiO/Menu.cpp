@@ -16,17 +16,24 @@ Menu::Menu(float width, float height) {
     if (!biggerButtonTexture.loadFromFile("menu/biggerbutton.png")) {
         // Handle error
     }
+    if (!restartButtonTexture.loadFromFile("menu/biggerbutton.png")) { // Zmienione na bigbutton.png
+        // Handle error
+    }
 
     // Initialize buttons
     sf::Sprite continueButton(biggerButtonTexture); // Use biggerButtonTexture for continue button
     sf::Sprite quitButton(buttonTexture);
+    sf::Sprite restartButton(restartButtonTexture); // Zmienione na restartButtonTexture
     continueButton.setScale(8.0f, 8.0f); // Scale the buttons
     quitButton.setScale(8.0f, 8.0f);     // Scale the buttons
+    restartButton.setScale(8.0f, 8.0f);   // Skalowanie przycisku restartu
     continueButton.setPosition(745, 440);
-    quitButton.setPosition(800, 600);
+    quitButton.setPosition(800, 680);
+    restartButton.setPosition(745, 560); // Pozycja przycisku restartu
 
     buttons.push_back(continueButton);
     buttons.push_back(quitButton);
+    buttons.push_back(restartButton); // Dodanie przycisku restartu
 
     // Load and set the title texture
     if (!menuTitleTexture.loadFromFile("menu/menu.png")) {
@@ -54,6 +61,15 @@ Menu::Menu(float width, float height) {
     quitTextSprite.setPosition(quitButton.getPosition().x + (quitButton.getGlobalBounds().width - quitTextSprite.getGlobalBounds().width) / 2,
         quitButton.getPosition().y + (quitButton.getGlobalBounds().height - quitTextSprite.getGlobalBounds().height) / 2.6);
 
+    // Load and set the restart button text texture
+    if (!restartTextTexture.loadFromFile("menu/restart.png")) { // Nowy texture dla napisu restart
+        // Handle error
+    }
+    restartTextSprite.setTexture(restartTextTexture);
+    restartTextSprite.setScale(4.0f, 4.0f); // Scale the restart text sprite
+    restartTextSprite.setPosition(restartButton.getPosition().x + (restartButton.getGlobalBounds().width - restartTextSprite.getGlobalBounds().width) / 2,
+        restartButton.getPosition().y + (restartButton.getGlobalBounds().height - restartTextSprite.getGlobalBounds().height) / 2.6);
+
     selectedItemIndex = 0;
 }
 
@@ -65,6 +81,7 @@ void Menu::draw(sf::RenderWindow& window) {
     }
     window.draw(continueTextSprite);
     window.draw(quitTextSprite);
+    window.draw(restartTextSprite); // Narysuj tekst na przycisku restartu
 }
 
 bool Menu::isMouseOver(const sf::Vector2i& mousePos, int index) const {

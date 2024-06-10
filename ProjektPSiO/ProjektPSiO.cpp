@@ -1,4 +1,5 @@
 ﻿#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <vector>
 #include "Functions.h"
@@ -67,6 +68,27 @@ int main() {
     hero.setFps(20);
     hero.setPosition(100, groundHeight);
 
+    sf::Texture pillarTexture;
+    if (!pillarTexture.loadFromFile("pillar.png")) {
+        std::cerr << "Error loading pillar texture" << std::endl;
+        return -1;
+    }
+    
+    sf::Sprite pillarSprite;
+    pillarSprite.setTexture(pillarTexture);
+    pillarSprite.setPosition(193, groundHeight - 150);
+    pillarSprite.setScale(3.3f, 5.0f);
+
+    sf::Texture groundTexture;
+    if (!groundTexture.loadFromFile("ground.png")) {
+        std::cerr << "Error loading ground texture" << std::endl;
+        return -1;
+    }
+
+    sf::Sprite groundSprite;
+    groundSprite.setTexture(groundTexture);
+    groundSprite.setPosition(0, groundHeight);
+    groundSprite.setScale(8.0f, 7.0f);
 
     sf::Texture shipTexture;
     if (!shipTexture.loadFromFile("Ship1.png")) {
@@ -272,6 +294,7 @@ int main() {
     }
 
 
+
     Collectable heart1(heartTextures, 930, 155);
     Collectable heart2(heartTextures, 30, 355);
 
@@ -289,6 +312,18 @@ int main() {
     bool recentlyinflictedDamage = false;
     sf::Time lastDamageTime = sf::Time::Zero;
     sf::Time lastInflictedDamageTime = sf::Time::Zero;
+
+    sf::Music backgroundMusic;
+    if (!backgroundMusic.openFromFile("backgroundmusic.wav")) {
+        std::cerr << "Error loading music" << std::endl;
+        return -1;
+    }
+    backgroundMusic.setLoop(true); // Loop the music
+    backgroundMusic.play();
+    float volume = 10.0f; // Initial volume (50%)
+    backgroundMusic.setVolume(volume);
+
+
 
     while (window.isOpen()) {
         sf::Event event;
@@ -312,6 +347,11 @@ int main() {
                                 else if (i == 1) {
                                     // Quit
                                     window.close();
+                                }
+                                else if (i == 2) {
+                               
+                                    resetGame(hero, crab, guy1, guy2, pirate, captain, key, heart1, heart2, platforms, spikes, backgroundElements, currentMap, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
+                                    isMenuOpen = false;
                                 }
                             }
                         }
@@ -548,6 +588,8 @@ int main() {
                     window.draw(crab.getSprite());
                 }
                 window.draw(floor);
+                window.draw(groundSprite);
+                window.draw(pillarSprite);
                 window.draw(cannon.getSprite());
                 if (!heart1.isCollected()) {
                     heart1.update(deltaTime);

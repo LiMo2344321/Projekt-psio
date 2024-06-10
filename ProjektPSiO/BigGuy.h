@@ -108,6 +108,14 @@ public:
     bool getisAttacking() {
         return isAttacking;
     }
+    void reset() {
+        movingRight = true;
+        currentFrame = 0;
+        elapsedTime = sf::Time::Zero;
+        isAttacking = false;
+        attackElapsedTime = sf::Time::Zero;
+        sprite.setTexture(idleTextures[0]);
+    }
 
 private:
     sf::Sprite sprite;

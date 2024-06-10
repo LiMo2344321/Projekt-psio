@@ -24,9 +24,13 @@ private:
     sf::Texture menuTitleTexture;
     sf::Texture continueTexture;
     sf::Texture quitTexture;
+    sf::Texture restartButtonTexture; // Zmienione na restartButtonTexture
+    sf::Texture restartTextTexture; // Nowy texture dla napisu restart
     sf::Sprite menuTitleSprite;
     sf::Sprite continueTextSprite;
     sf::Sprite quitTextSprite;
+    sf::Sprite restartButtonSprite; // Zmienione na restartButtonSprite
+    sf::Sprite restartTextSprite; // Nowy sprite dla napisu restart
     std::vector<sf::Sprite> buttons;
 };
 

@@ -166,6 +166,22 @@ public:
         return deathElapsedTime;
     }
 
+    void reset() {
+        movingRight = true;
+        currentFrame = 0;
+        elapsedTime = sf::Time::Zero;
+        isAnticipating = false;
+        anticipationElapsedTime = sf::Time::Zero;
+        isAttacking = false;
+        attackElapsedTime = sf::Time::Zero;
+        cooldownElapsedTime = sf::Time::Zero;
+        isHit = false;
+        hitElapsedTime = sf::Time::Zero;
+        isDead = false;
+        deathElapsedTime = sf::Time::Zero;
+        sprite.setTexture(walkTextures[0]);
+    }
+
 private:
     sf::Sprite sprite;
     std::vector<sf::Texture> walkTextures;

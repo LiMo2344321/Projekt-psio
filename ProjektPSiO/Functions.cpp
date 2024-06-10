@@ -1,7 +1,13 @@
 #include "Functions.h"
 #include "Hero.h"
+#include "Cannon.h"
+#include "Crab.h"
+#include "BigGuy.h"
+#include "Pirate.h"
+#include "Captain.h"
+#include "Collectable.h"
 
-void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& backgroundElements, std::vector<sf::Sprite>& spikes, int groundHeight, sf::Texture& shipTexture, sf::Texture& mastTexture, sf::Texture& flagTexture, sf::Texture& spikeTexture) {
+void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& backgroundElements, std::vector<sf::Sprite>& spikes, int groundHeight,sf::Texture& shipTexture, sf::Texture& mastTexture, sf::Texture& flagTexture, sf::Texture& spikeTexture) {
     platforms.clear();
     backgroundElements.clear();
     spikes.clear();
@@ -56,6 +62,7 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
         spikes1.setScale(scaleX, scaleX);
         spikes1.setPosition(startX, groundHeight - targetHeight);
         spikes.push_back(spikes1);
+
 
     }
     else if (mapIndex == 2) {
@@ -140,8 +147,10 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
         spikes2.setScale(scaleX, scaleX);
         spikes2.setPosition(startX, groundHeight - targetHeight);
         spikes.push_back(spikes2);
+        
     }
 }
+
 
 void handleCollisions(Postac& character, const std::vector<sf::RectangleShape>& platforms) {
     for (const auto& platform : platforms) {
@@ -178,4 +187,28 @@ void handleCollisions(Postac& character, const std::vector<sf::RectangleShape>& 
         }
     }
 }
+
+void resetGame(Hero& hero, Crab& crab, BigGuy& guy1, BigGuy& guy2, Pirate& pirate, Captain& captain, Collectable& key, Collectable& heart1, Collectable& heart2, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& spikes, std::vector<sf::Sprite>& backgroundElements, int& currentMap, int groundHeight, sf::Texture& shipTexture, sf::Texture& mastTexture, sf::Texture& flagTexture, sf::Texture& spikeTexture) {
+    // Ustawienie mapy na pocz¹tkow¹
+    currentMap = 1;
+
+    // Resetowanie stanu bohatera
+    hero.setPosition(100, groundHeight);
+    hero.resetHealth();
+    hero.setHasKey(false);
+
+    // Resetowanie stanu wrogów i przedmiotów
+    crab.reset();
+    guy1.reset();
+    guy2.reset();
+    pirate.reset();
+    captain.reset();
+    key.resetAnimation(1654, 440);
+    heart1.resetAnimation(930, 155);
+    heart2.resetAnimation(30, 355);
+
+    // Za³adowanie pocz¹tkowej mapy
+    loadMap(currentMap, platforms, backgroundElements, spikes, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
+}
+
 

@@ -145,6 +145,30 @@ public:
     sf::Time getDeathElapsedTime() {
         return deathElapsedTime;
     }
+    void reset() {
+        movingRight = true;
+        detectionRange = 250.0f;
+        attackRange = 20.0f;
+        currentFrame = 0;
+        animationTime = sf::seconds(0.1f);
+        elapsedTime = sf::Time::Zero;
+        isAttacking = false;
+        attackDuration = sf::seconds(1.0f);
+        attackElapsedTime = sf::Time::Zero;
+        attackCooldown = sf::seconds(2.0f);
+        cooldownElapsedTime = sf::Time::Zero;
+        isHit = false;
+        hitDuration = sf::seconds(0.5f);
+        hitElapsedTime = sf::Time::Zero;
+        isDead = false;
+        deathDisplayTime = sf::seconds(1.0f);
+        deathElapsedTime = sf::Time::Zero;
+        health = 5; // Reset health to initial value
+        sprite.setTexture(walkTextures[0]);
+        sprite.setScale(1.8f, 1.8f);
+        sf::FloatRect bounds = sprite.getLocalBounds();
+        sprite.setOrigin(bounds.width / 2, 0);
+    }
 
 private:
     sf::Sprite sprite;
