@@ -158,6 +158,10 @@ public:
         hasKey = true;
     }
 
+    void dropKey() {
+        hasKey = false;
+    }
+
     bool getHasKey() {
         return hasKey;
     }
@@ -169,6 +173,7 @@ public:
     bool isAttacking() {
         return state == State::Attack;
     }
+
 private:
     enum class Direction { None, Left, Right };
     Direction direction = Direction::None;

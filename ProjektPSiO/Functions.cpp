@@ -145,7 +145,7 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
         spikes2.setTexture(spikeTexture);
         spikes2.setTextureRect(sf::IntRect(0, 0, (endX - startX) / scaleX, spikeHeight));  
         spikes2.setScale(scaleX, scaleX);
-        spikes2.setPosition(startX, groundHeight - targetHeight);
+        spikes2.setPosition(0, groundHeight - 50);
         spikes.push_back(spikes2);
         
     }
@@ -210,5 +210,18 @@ void resetGame(Hero& hero, Crab& crab, BigGuy& guy1, BigGuy& guy2, Pirate& pirat
     // Za³adowanie pocz¹tkowej mapy
     loadMap(currentMap, platforms, backgroundElements, spikes, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
 }
+
+bool isHeroInFront(const sf::Sprite& enemy, const sf::Sprite& hero) {
+    float enemyLeft = enemy.getGlobalBounds().left;
+    float enemyWidth = enemy.getGlobalBounds().width;
+    float enemyRight = enemyLeft + enemyWidth;
+
+    float heroLeft = hero.getGlobalBounds().left;
+    float heroRight = heroLeft + hero.getGlobalBounds().width;
+
+    return (heroLeft >= enemyLeft && heroLeft <= enemyLeft + enemyWidth / 2) ||
+        (heroRight >= enemyLeft && heroRight <= enemyLeft + enemyWidth / 2);
+}
+
 
 

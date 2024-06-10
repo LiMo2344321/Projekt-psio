@@ -7,13 +7,29 @@
 
 class BigGuy : public Enemy {
 public:
-    BigGuy(const std::vector<sf::Texture>& idleTextures, const std::vector<sf::Texture>& runTextures, const std::vector<sf::Texture>& attackTextures, float gravity, float speed)
-        : Enemy(gravity, 6), idleTextures(idleTextures), runTextures(runTextures), attackTextures(attackTextures), speed(speed), movingRight(true), detectionRange(250.0f), attackRange(20.0f), currentFrame(0), animationTime(sf::seconds(0.1f)), elapsedTime(sf::Time::Zero), isAttacking(false), attackDuration(sf::seconds(1.0f)), attackElapsedTime(sf::Time::Zero) {
+    BigGuy(const std::vector<sf::Texture>& idleTextures, const std::vector<sf::Texture>& runTextures,
+        const std::vector<sf::Texture>& attackTextures, const sf::Texture& hitTexture, const sf::Texture& dieTexture,
+        float gravity, float speed)
+        : Enemy(gravity, 6), idleTextures(idleTextures), runTextures(runTextures),
+        attackTextures(attackTextures), hitTexture(hitTexture), dieTexture(dieTexture), speed(speed),
+        movingRight(true), detectionRange(250.0f), attackRange(20.0f), currentFrame(0), animationTime(sf::seconds(0.1f)),
+        elapsedTime(sf::Time::Zero), isAttacking(false), attackDuration(sf::seconds(1.0f)), attackElapsedTime(sf::Time::Zero),
+        isHit(false), hitDuration(sf::seconds(0.5f)), hitElapsedTime(sf::Time::Zero), isDead(false),
+        deathDisplayTime(sf::seconds(1.0f)), deathElapsedTime(sf::Time::Zero), isPreAttacking(false),
+        preAttackDuration(sf::seconds(0.5f)), preAttackElapsedTime(sf::Time::Zero) {
         sprite.setTexture(idleTextures[0]);
         sprite.setScale(2.0f, 2.0f);
     }
 
     void update(const sf::RectangleShape& platform, const sf::Sprite& heroSprite, sf::Time deltaTime) {
+        if (isDead) {
+            deathElapsedTime += deltaTime;
+            if (deathElapsedTime < deathDisplayTime) {
+                sprite.setTexture(dieTexture);
+            }
+            return;
+        }
+
         float heroPositionX = heroSprite.getPosition().x;
         float bigGuyPositionX = sprite.getPosition().x;
         float platformStartX = platform.getPosition().x;
@@ -21,7 +37,33 @@ public:
 
         bool moving = false;
 
-        
+        if (isHit) {
+            hitElapsedTime += deltaTime;
+            if (hitElapsedTime >= hitDuration) {
+                isHit = false;
+                hitElapsedTime = sf::Time::Zero;
+                currentFrame = 0;
+            }
+            else {
+                sprite.setTexture(hitTexture);
+                return;
+            }
+        }
+
+        if (isPreAttacking) {
+            preAttackElapsedTime += deltaTime;
+            if (preAttackElapsedTime >= preAttackDuration) {
+                isPreAttacking = false;
+                isAttacking = true;
+                preAttackElapsedTime = sf::Time::Zero;
+                currentFrame = 0;
+            }
+            else {
+                sprite.setTexture(idleTextures[currentFrame]); // Keeping pre-attack texture same as idle texture
+                return;
+            }
+        }
+
         if (isAttacking) {
             attackElapsedTime += deltaTime;
             if (attackElapsedTime >= attackDuration) {
@@ -31,15 +73,12 @@ public:
             }
         }
         else {
-            
             if (std::abs(heroPositionX - bigGuyPositionX) < detectionRange) {
-                
                 if (std::abs(heroPositionX - bigGuyPositionX) < attackRange) {
-                    isAttacking = true;
+                    isPreAttacking = true;
                     currentFrame = 0;
                 }
                 else {
-                    
                     if (heroPositionX > bigGuyPositionX && (bigGuyPositionX + sprite.getGlobalBounds().width) < platformEndX) {
                         sprite.move(speed, 0);
                         moving = true;
@@ -54,7 +93,6 @@ public:
             }
         }
 
-       
         if (sprite.getPosition().x < platformStartX) {
             sprite.setPosition(platformStartX, sprite.getPosition().y);
         }
@@ -65,7 +103,6 @@ public:
         sf::FloatRect bounds = sprite.getLocalBounds();
         sprite.setOrigin(bounds.width / 2, 0);
 
-        
         elapsedTime += deltaTime;
         if (elapsedTime >= animationTime) {
             elapsedTime -= animationTime;
@@ -105,16 +142,57 @@ public:
         return sprite;
     }
 
-    bool getisAttacking() {
+    bool getIsAttacking() const {
         return isAttacking;
     }
+
+    void takeDamage(int damage) {
+        health -= damage;
+        if (health <= 0) {
+            isDead = true;
+            sprite.setTexture(dieTexture);
+            deathElapsedTime = sf::Time::Zero;
+        }
+        else {
+            isHit = true;
+            hitElapsedTime = sf::Time::Zero;
+            sprite.setTexture(hitTexture);
+        }
+    }
+
+    bool isAlive() const {
+        return !isDead;
+    }
+
+    sf::Time getDeathElapsedTime() {
+        return deathElapsedTime;
+    }
+
     void reset() {
         movingRight = true;
+        detectionRange = 250.0f;
+        attackRange = 20.0f;
         currentFrame = 0;
+        animationTime = sf::seconds(0.1f);
         elapsedTime = sf::Time::Zero;
         isAttacking = false;
+        attackDuration = sf::seconds(1.0f);
         attackElapsedTime = sf::Time::Zero;
+        isHit = false;
+        hitDuration = sf::seconds(0.5f);
+        hitElapsedTime = sf::Time::Zero;
+        isDead = false;
+        deathDisplayTime = sf::seconds(1.0f);
+        deathElapsedTime = sf::Time::Zero;
+        isPreAttacking = false;
+        preAttackDuration = sf::seconds(0.5f);
+        preAttackElapsedTime = sf::Time::Zero;
+        health = 6; // Reset health to initial value
         sprite.setTexture(idleTextures[0]);
+        sprite.setScale(2.0f, 2.0f);
+        sf::FloatRect bounds = sprite.getLocalBounds();
+        sprite.setOrigin(bounds.width / 2, 0);
+        
     }
 
 private:
@@ -122,6 +200,8 @@ private:
     std::vector<sf::Texture> idleTextures;
     std::vector<sf::Texture> runTextures;
     std::vector<sf::Texture> attackTextures;
+    sf::Texture hitTexture;
+    sf::Texture dieTexture;
     float speed;
     bool movingRight;
     float detectionRange;
@@ -132,6 +212,15 @@ private:
     bool isAttacking;
     sf::Time attackDuration;
     sf::Time attackElapsedTime;
+    bool isHit;
+    sf::Time hitDuration;
+    sf::Time hitElapsedTime;
+    bool isDead;
+    sf::Time deathDisplayTime;
+    sf::Time deathElapsedTime;
+    bool isPreAttacking;
+    sf::Time preAttackDuration;
+    sf::Time preAttackElapsedTime;
 };
 
 #endif

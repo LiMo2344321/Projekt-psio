@@ -1,18 +1,67 @@
-﻿  ProjektPSiO.cpp
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(64,27): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(97,59): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(97,59): warning C4244:         with
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(97,59): warning C4244:         [
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(97,59): warning C4244:             T=unsigned int
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(97,59): warning C4244:         ]
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(97,59): warning C4244:         and
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(97,59): warning C4244:         [
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(97,59): warning C4244:             T=float
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(97,59): warning C4244:         ]
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(99,26): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(319,37): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(320,21): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(530,27): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+﻿  Functions.cpp
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(19,49): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(24,49): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(45,50): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(61,76): warning C4244: "argument": konwersja z "float" do "T", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(61,76): warning C4244:         with
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(61,76): warning C4244:         [
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(61,76): warning C4244:             T=int
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(61,76): warning C4244:         ]
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(61,66): warning C4244: "argument": konwersja z "float" do "T", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(61,66): warning C4244:         with
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(61,66): warning C4244:         [
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(61,66): warning C4244:             T=int
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(61,66): warning C4244:         ]
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(73,47): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(79,49): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(86,50): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(98,45): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(146,76): warning C4244: "argument": konwersja z "float" do "T", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(146,76): warning C4244:         with
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(146,76): warning C4244:         [
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(146,76): warning C4244:             T=int
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(146,76): warning C4244:         ]
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(146,66): warning C4244: "argument": konwersja z "float" do "T", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(146,66): warning C4244:         with
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(146,66): warning C4244:         [
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(146,66): warning C4244:             T=int
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(146,66): warning C4244:         ]
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(148,45): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\Functions.cpp(196,27): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+  ProjektPSiO.cpp
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,51): warning C4244: "argument": konwersja z "T" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,51): warning C4244:         with
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,51): warning C4244:         [
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,51): warning C4244:             T=unsigned int
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,51): warning C4244:         ]
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,31): warning C4244: "argument": konwersja z "T" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,31): warning C4244:         with
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,31): warning C4244:         [
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,31): warning C4244:             T=unsigned int
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(25,31): warning C4244:         ]
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(70,27): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(80,48): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(91,33): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(124,59): warning C4244: "argument": konwersja z "T" do "T", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(124,59): warning C4244:         with
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(124,59): warning C4244:         [
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(124,59): warning C4244:             T=unsigned int
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(124,59): warning C4244:         ]
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(124,59): warning C4244:         and
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(124,59): warning C4244:         [
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(124,59): warning C4244:             T=float
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(124,59): warning C4244:         ]
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(126,26): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(140,16): warning C4244: "inicjowanie": konwersja z "T" do "int", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(140,16): warning C4244:         with
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(140,16): warning C4244:         [
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(140,16): warning C4244:             T=float
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(140,16): warning C4244:         ]
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(141,41): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(420,41): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(421,25): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\ProjektPSiO.cpp(690,31): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+  Generowanie kodu...
   ProjektPSiO.vcxproj -> C:\Users\48723\Documents\GitHub\Projekt-psio\ProjektPSiO\x64\Debug\ProjektPSiO.exe
   'pwsh.exe' is not recognized as an internal or external command,
   operable program or batch file.

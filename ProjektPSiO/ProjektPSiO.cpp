@@ -11,6 +11,7 @@
 #include "Captain.h"
 #include "Collectable.h"
 #include "Menu.h"
+#include "Chest.h"
 
 
 int main() {
@@ -20,12 +21,12 @@ int main() {
     int groundHeight = window.getSize().y - 200;
     int currentGroundHeight = groundHeight;
 
-    bool isMenuOpen = false; // Flag to indicate if the menu is open
-    Menu menu(window.getSize().x, window.getSize().y); // Create menu object
+    bool isMenuOpen = false; 
+    Menu menu(window.getSize().x, window.getSize().y); 
 
     std::vector <sf::Texture> idle(5);
     for (int i = 0; i < 5; i++) {
-        if (!idle[i].loadFromFile("idle" + std::to_string(i + 1) + ".png")) {
+        if (!idle[i].loadFromFile("Hero/idle" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading idle texture " << i + 1 << std::endl;
             return -1;
         }
@@ -33,18 +34,18 @@ int main() {
 
     std::vector <sf::Texture> run(6);
     for (int i = 0; i < 6; i++) {
-        if (!run[i].loadFromFile("run" + std::to_string(i + 1) + ".png")) {
+        if (!run[i].loadFromFile("Hero/run" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading run texture " << i + 1 << std::endl;
             return -1;
         }
     }
 
     sf::Texture jump;
-    jump.loadFromFile("jump.png");
+    jump.loadFromFile("Hero/jump.png");
 
     std::vector <sf::Texture> attack(3);
     for (int i = 0; i < 3; i++) {
-        if (!attack[i].loadFromFile("attack" + std::to_string(i + 1) + ".png")) {
+        if (!attack[i].loadFromFile("Hero/attack" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading attack texture " << i + 1 << std::endl;
             return -1;
         }
@@ -69,7 +70,7 @@ int main() {
     hero.setPosition(100, groundHeight);
 
     sf::Texture pillarTexture;
-    if (!pillarTexture.loadFromFile("pillar.png")) {
+    if (!pillarTexture.loadFromFile("Map/pillar.png")) {
         std::cerr << "Error loading pillar texture" << std::endl;
         return -1;
     }
@@ -80,7 +81,7 @@ int main() {
     pillarSprite.setScale(3.3f, 5.0f);
 
     sf::Texture groundTexture;
-    if (!groundTexture.loadFromFile("ground.png")) {
+    if (!groundTexture.loadFromFile("Map/ground.png")) {
         std::cerr << "Error loading ground texture" << std::endl;
         return -1;
     }
@@ -97,7 +98,7 @@ int main() {
     }
 
     sf::Texture mastTexture;
-    if (!mastTexture.loadFromFile("Maszt.png")) {
+    if (!mastTexture.loadFromFile("Map/Maszt.png")) {
         std::cerr << "Error loading mast texture" << std::endl;
         return -1;
     }
@@ -124,6 +125,20 @@ int main() {
     floor.setFillColor(sf::Color::Green);
     floor.setPosition(0, groundHeight);
 
+    //skrzynia
+    sf::Texture closedChestTexture;
+    closedChestTexture.loadFromFile("Chest/chestclosed.png");
+    std::vector<sf::Texture> openChestTextures(8);
+    for (int i = 0; i < 8; ++i) {
+        if (!openChestTextures[i].loadFromFile("Chest/chestunlocked" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading chest texture" << std::endl;
+            return -1;
+        }
+    }
+
+    Chest chest(closedChestTexture, openChestTextures, 1650 , 0);
+    int chesty = groundHeight - chest.getSprite().getGlobalBounds().height;
+    chest.getSprite().setPosition(1650, chesty);
     //armata
     Cannon cannon(gravity, cannonballTexture);
     cannon.setPosition(650, groundHeight - cannon.getGlobalBounds().height);
@@ -180,7 +195,7 @@ int main() {
         }
   
 
-    Crab crab(crabRun, crabAttack, crabAnticipation, crabHit, crabDie, gravity, 0.1f);
+    Crab crab(crabRun, crabAnticipation, crabAttack , crabHit, crabDie, gravity, 0.1f);
     crab.setPosition(1050, 329);
 
 
@@ -208,10 +223,20 @@ int main() {
         }
     }
 
+    sf::Texture bigguyHit;
+    if (!bigguyHit.loadFromFile("bigguyhit.png")) {
+        std::cerr << "Error loading big guy hit texture " << std::endl;
+        return -1;
+    }
 
+    sf::Texture bigguyDie;
+    if (!bigguyDie.loadFromFile("bigguydie.png")) {
+        std::cerr << "Error loading big guy die texture " << std::endl;
+        return -1;
+    }
 
-    BigGuy guy1(bigguyidle, bigguyrun, bigguyattack, gravity, 0.2f);
-    BigGuy guy2(bigguyidle, bigguyrun, bigguyattack, gravity, 0.2f);
+    BigGuy guy1(bigguyidle, bigguyrun, bigguyattack, bigguyHit, bigguyDie, gravity, 0.2f);
+    BigGuy guy2(bigguyidle, bigguyrun, bigguyattack, bigguyHit, bigguyDie, gravity, 0.2f);
     guy1.setPosition(1002, 250 - guy1.getSprite().getGlobalBounds().height);
     guy2.setPosition(1502, groundHeight - 396 - guy2.getSprite().getGlobalBounds().height);
 
@@ -239,7 +264,18 @@ int main() {
         }
     }
 
-    Pirate pirate(pirateidle, piraterun, pirateattack, gravity, 0.5f);
+    sf::Texture piratehit;
+    if (!piratehit.loadFromFile("piratehit.png")) {
+        std::cerr << "Error loading piratehit texture " << std::endl;
+        return -1;
+    }
+    sf::Texture piratedie;
+    if (!piratedie.loadFromFile("piratedie.png")) {
+        std::cerr << "Error loading piratediedie texture " << std::endl;
+        return -1;
+    }
+
+    Pirate pirate(pirateidle, piraterun, pirateattack,piratehit,piratedie, gravity, 0.5f);
     pirate.setPosition(1000, 150 - pirate.getSprite().getGlobalBounds().height);
 
     //kapitan
@@ -305,6 +341,16 @@ int main() {
     int currentMap = 1;
     loadMap(currentMap, platforms, backgroundElements, spikes, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
 
+    sf::Music backgroundMusic;
+    if (!backgroundMusic.openFromFile("backgroundmusic.wav")) {
+        std::cerr << "Error loading music" << std::endl;
+        return -1;
+    }
+    backgroundMusic.setLoop(true);
+    backgroundMusic.play();
+    float volume = 10.0f;
+    backgroundMusic.setVolume(volume);
+
     sf::Clock damageClock;
     sf::Clock damageClock2;
     sf::Clock clock;
@@ -312,17 +358,7 @@ int main() {
     bool recentlyinflictedDamage = false;
     sf::Time lastDamageTime = sf::Time::Zero;
     sf::Time lastInflictedDamageTime = sf::Time::Zero;
-
-    sf::Music backgroundMusic;
-    if (!backgroundMusic.openFromFile("backgroundmusic.wav")) {
-        std::cerr << "Error loading music" << std::endl;
-        return -1;
-    }
-    backgroundMusic.setLoop(true); // Loop the music
-    backgroundMusic.play();
-    float volume = 10.0f; // Initial volume (50%)
-    backgroundMusic.setVolume(volume);
-
+    
 
 
     while (window.isOpen()) {
@@ -332,7 +368,7 @@ int main() {
                 window.close();
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-                isMenuOpen = !isMenuOpen; // Toggle menu
+                isMenuOpen = !isMenuOpen;
             }
             if (isMenuOpen) {
                 if (event.type == sf::Event::MouseButtonPressed) {
@@ -340,12 +376,10 @@ int main() {
                         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
                         for (int i = 0; i < menu.getNumberOfItems(); i++) {
                             if (menu.isMouseOver(mousePos, i)) {
-                                if (i == 0) {
-                                    // Continue
+                                if (i == 0) {                                    
                                     isMenuOpen = false;
                                 }
-                                else if (i == 1) {
-                                    // Quit
+                                else if (i == 1) {                                    
                                     window.close();
                                 }
                                 else if (i == 2) {
@@ -360,8 +394,7 @@ int main() {
             }
         }
 
-        if (!isMenuOpen) {
-            // Game logic and rendering
+        if (!isMenuOpen) {            
             sf::Time deltaTime = clock.restart();
             sf::Time currentTime = damageClock.getElapsedTime();
             sf::Time currentTime2 = damageClock2.getElapsedTime();
@@ -437,29 +470,51 @@ int main() {
                 handleCollisions(guy1, platforms);
                 handleCollisions(guy2, platforms);
 
-                if (guy1.getisAttacking() && guy1.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                    if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
-                        hero.takeDamage();
-                        heroDamaged = true;
-                        lastDamageTime = currentTime;
-                        recentlyDamaged = true;
-                        damageClock.restart();
+                if (guy1.getIsAttacking() && guy1.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                    if (isHeroInFront(guy1.getSprite(), hero.getSprite())) {
+                        if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                            hero.takeDamage();
+                            heroDamaged = true;
+                            lastDamageTime = currentTime;
+                            recentlyDamaged = true;
+                            damageClock.restart();
+                        }
                     }
                 }
 
-                if (guy2.getisAttacking() && guy2.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                    if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
-                        hero.takeDamage();
-                        heroDamaged = true;
-                        lastDamageTime = currentTime;
-                        recentlyDamaged = true;
-                        damageClock.restart();
+                if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(guy1.getSprite().getGlobalBounds())) {
+                    if (!recentlyinflictedDamage) {
+                        guy1.takeDamage(1);
+                        lastInflictedDamageTime = currentTime2;
+                        recentlyinflictedDamage = true;
+                        damageClock2.restart();
+                    }
+                }
+
+                if (guy2.getIsAttacking() && guy2.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                    if (isHeroInFront(guy2.getSprite(), hero.getSprite())) {
+                        if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                            hero.takeDamage();
+                            heroDamaged = true;
+                            lastDamageTime = currentTime;
+                            recentlyDamaged = true;
+                            damageClock.restart();
+                        }
+                    }
+                }
+
+                if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(guy2.getSprite().getGlobalBounds())) {
+                    if (!recentlyinflictedDamage) {
+                        guy2.takeDamage(1);
+                        lastInflictedDamageTime = currentTime2;
+                        recentlyinflictedDamage = true;
+                        damageClock2.restart();
                     }
                 }
 
                 if (!key.isCollected() && key.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
                     key.collect();
-                    hero.pickUpKey();
+                    hero.pickUpKey();                    
                 }
 
                 if (hero.getPosition().y > window.getSize().y) {
@@ -469,27 +524,43 @@ int main() {
                 }
             }
 
-            if (currentMap == 3) {
-                pirate.update(platforms[1], hero.getSprite());
+            if (currentMap == 3) {                
+                pirate.update(platforms[5], hero.getSprite(), deltaTime);
                 handleCollisions(pirate, platforms);
-                if (pirate.getisAttacking() && pirate.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                    hero.takeDamage();
-                    heroDamaged = true;
-                    lastDamageTime = currentTime;
-                    recentlyDamaged = true;
-                    damageClock.restart();
+
+                if (pirate.getIsAttacking() && pirate.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                    if (isHeroInFront(pirate.getSprite(), hero.getSprite())) {
+                        if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                            hero.takeDamage();
+                            heroDamaged = true;
+                            lastDamageTime = currentTime;
+                            recentlyDamaged = true;
+                            damageClock.restart();
+                        }
+                    }
+                }
+
+                if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(pirate.getSprite().getGlobalBounds())) {
+                    if (!recentlyinflictedDamage) {
+                        pirate.takeDamage(1);
+                        lastInflictedDamageTime = currentTime2;
+                        recentlyinflictedDamage = true;
+                        damageClock2.restart();
+                    }
                 }
 
                 captain.update(platforms[5], hero.getSprite(), deltaTime);
                 handleCollisions(captain, platforms);
 
-                if (captain.getisAttacking() && captain.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                    if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
-                        hero.takeDamage();
-                        heroDamaged = true;
-                        lastDamageTime = currentTime;
-                        recentlyDamaged = true;
-                        damageClock.restart();
+                if (captain.getIsAttacking() && captain.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                    if (isHeroInFront(captain.getSprite(), hero.getSprite())) {
+                        if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                            hero.takeDamage();
+                            heroDamaged = true;
+                            lastDamageTime = currentTime;
+                            recentlyDamaged = true;
+                            damageClock.restart();
+                        }
                     }
                 }
 
@@ -506,6 +577,15 @@ int main() {
                     heart2.collect();
                     hero.addHealth(window);
                 }
+
+                chest.update(deltaTime);
+                if (hero.getHasKey() && hero.getSprite().getGlobalBounds().intersects(chest.getSprite().getGlobalBounds())) {
+                    chest.open();
+                    hero.dropKey();
+                    std::cout << "Wygrana" << std::endl;        
+
+                }
+
             }
 
             for (const auto& cannonball : cannon.getCannonballs()) {
@@ -534,6 +614,12 @@ int main() {
                 hero.resetHealth();
                 hero.setHasKey(false);
                 key.resetAnimation(1654, 440);
+            }
+
+            if (hero.getPosition().y == groundHeight && hero.getPosition().x >= 0 && hero.getPosition().x <= 950 && currentMap == 3) {
+                hero.kill();
+                hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, hero.getPosition().y);
+                hero.resetHealth();
             }
 
             if (hero.getPosition().x > window.getSize().x && currentMap == 1) {
@@ -580,6 +666,9 @@ int main() {
                 window.draw(keySprite);
             }
 
+            if (currentMap == 3) {
+                window.draw(chest.getSprite());
+            }
             window.draw(hero.getSprite());
             hero.draw(window);
 
@@ -602,9 +691,14 @@ int main() {
                 handleCollisions(cannon, platforms);
             }
 
-            if (currentMap == 2) {
-                window.draw(guy1.getSprite());
-                window.draw(guy2.getSprite());
+            if (currentMap == 2) {             
+                
+                if (guy1.isAlive() || guy1.getDeathElapsedTime() < sf::seconds(1.0f)) {
+                    window.draw(guy1.getSprite());
+                }
+                if (guy2.isAlive() || guy2.getDeathElapsedTime() < sf::seconds(1.0f)) {
+                    window.draw(guy2.getSprite());
+                }
                 if (!key.isCollected()) {
                     key.update(deltaTime);
                     window.draw(key.getSprite());
@@ -612,8 +706,11 @@ int main() {
             }
 
             if (currentMap == 3) {
+                
                 window.draw(floor);
-                window.draw(pirate.getSprite());
+                if (pirate.isAlive() || pirate.getDeathElapsedTime() < sf::seconds(1.0f)) {
+                    window.draw(pirate.getSprite());
+                }
                 if (captain.isAlive() || captain.getDeathElapsedTime() < sf::seconds(1.0f)) {
                     window.draw(captain.getSprite());
                 }
@@ -625,7 +722,7 @@ int main() {
         }
 
         if (isMenuOpen) {
-            menu.draw(window); // Draw the menu on top of the game
+            menu.draw(window); 
         }
 
         window.display();

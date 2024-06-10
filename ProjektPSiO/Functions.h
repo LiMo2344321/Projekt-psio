@@ -16,4 +16,7 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
 void handleCollisions(Postac& character, const std::vector<sf::RectangleShape>& platforms);
 
 void resetGame(Hero& hero, Crab& crab, BigGuy& guy1, BigGuy& guy2, Pirate& pirate, Captain& captain, Collectable& key, Collectable& heart1, Collectable& heart2, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& spikes, std::vector<sf::Sprite>& backgroundElements, int& currentMap, int groundHeight, sf::Texture& shipTexture, sf::Texture& mastTexture, sf::Texture& flagTexture, sf::Texture& spikeTexture);
+
+bool isHeroInFront(const sf::Sprite& enemy, const sf::Sprite& hero);
 #endif 
+

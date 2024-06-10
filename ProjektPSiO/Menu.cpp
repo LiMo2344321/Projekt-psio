@@ -36,7 +36,7 @@ Menu::Menu(float width, float height) {
     buttons.push_back(restartButton); // Dodanie przycisku restartu
 
     // Load and set the title texture
-    if (!menuTitleTexture.loadFromFile("menu/menu.png")) {
+    if (!menuTitleTexture.loadFromFile("Menu/menu.png")) {
         // Handle error
     }
     menuTitleSprite.setTexture(menuTitleTexture);
@@ -44,7 +44,7 @@ Menu::Menu(float width, float height) {
     menuTitleSprite.setPosition(800, 300); // Position at the top
 
     // Load and set the continue button text texture
-    if (!continueTexture.loadFromFile("menu/continue.png")) {
+    if (!continueTexture.loadFromFile("Menu/continue.png")) {
         // Handle error
     }
     continueTextSprite.setTexture(continueTexture);
@@ -53,7 +53,7 @@ Menu::Menu(float width, float height) {
         continueButton.getPosition().y + (continueButton.getGlobalBounds().height - continueTextSprite.getGlobalBounds().height) / 2.6);
 
     // Load and set the quit button text texture
-    if (!quitTexture.loadFromFile("menu/quit.png")) {
+    if (!quitTexture.loadFromFile("Menu/quit.png")) {
         // Handle error
     }
     quitTextSprite.setTexture(quitTexture);
@@ -62,7 +62,7 @@ Menu::Menu(float width, float height) {
         quitButton.getPosition().y + (quitButton.getGlobalBounds().height - quitTextSprite.getGlobalBounds().height) / 2.6);
 
     // Load and set the restart button text texture
-    if (!restartTextTexture.loadFromFile("menu/restart.png")) { // Nowy texture dla napisu restart
+    if (!restartTextTexture.loadFromFile("Menu/restart.png")) { // Nowy texture dla napisu restart
         // Handle error
     }
     restartTextSprite.setTexture(restartTextTexture);

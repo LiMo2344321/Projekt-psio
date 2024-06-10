@@ -15,7 +15,8 @@ public:
         elapsedTime(sf::Time::Zero), isAttacking(false), attackDuration(sf::seconds(1.0f)),
         attackElapsedTime(sf::Time::Zero), attackCooldown(sf::seconds(2.0f)),
         cooldownElapsedTime(sf::Time::Zero), isHit(false), isDead(false), hitDuration(sf::seconds(0.5f)),
-        hitElapsedTime(sf::Time::Zero), deathDisplayTime(sf::seconds(1.0f)), deathElapsedTime(sf::Time::Zero) {
+        hitElapsedTime(sf::Time::Zero), deathDisplayTime(sf::seconds(1.0f)), deathElapsedTime(sf::Time::Zero),
+        isPreAttacking(false), preAttackDuration(sf::seconds(0.5f)), preAttackElapsedTime(sf::Time::Zero) {
         sprite.setTexture(walkTextures[0]);
         sprite.setScale(1.8f, 1.8f);
     }
@@ -49,6 +50,20 @@ public:
             }
         }
 
+        if (isPreAttacking) {
+            preAttackElapsedTime += deltaTime;
+            if (preAttackElapsedTime >= preAttackDuration) {
+                isPreAttacking = false;
+                isAttacking = true;
+                preAttackElapsedTime = sf::Time::Zero;
+                currentFrame = 0;
+            }
+            else {
+                sprite.setTexture(walkTextures[currentFrame]); // Keeping pre-attack texture same as walk texture
+                return;
+            }
+        }
+
         if (isAttacking) {
             attackElapsedTime += deltaTime;
             if (attackElapsedTime >= attackDuration) {
@@ -59,13 +74,13 @@ public:
         }
         else if (cooldownElapsedTime >= attackCooldown && std::abs(heroPositionX - captainPositionX) < detectionRange) {
             if (std::abs(heroPositionX - captainPositionX) < attackRange) {
-                isAttacking = true;
+                isPreAttacking = true;
                 currentFrame = 0;
                 cooldownElapsedTime = sf::Time::Zero;
             }
         }
 
-        if (!isAttacking) {
+        if (!isAttacking && !isPreAttacking) {
             if (movingRight) {
                 sprite.move(speed, 0);
                 if (sprite.getPosition().x + sprite.getGlobalBounds().width > platformEndX) {
@@ -145,6 +160,7 @@ public:
     sf::Time getDeathElapsedTime() {
         return deathElapsedTime;
     }
+
     void reset() {
         movingRight = true;
         detectionRange = 250.0f;
@@ -163,6 +179,9 @@ public:
         isDead = false;
         deathDisplayTime = sf::seconds(1.0f);
         deathElapsedTime = sf::Time::Zero;
+        isPreAttacking = false;
+        preAttackDuration = sf::seconds(0.5f);
+        preAttackElapsedTime = sf::Time::Zero;
         health = 5; // Reset health to initial value
         sprite.setTexture(walkTextures[0]);
         sprite.setScale(1.8f, 1.8f);
@@ -194,6 +213,9 @@ private:
     bool isDead;
     sf::Time deathDisplayTime;
     sf::Time deathElapsedTime;
+    bool isPreAttacking;
+    sf::Time preAttackDuration;
+    sf::Time preAttackElapsedTime;
 };
 
 #endif
