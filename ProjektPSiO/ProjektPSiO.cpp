@@ -192,7 +192,7 @@ int main() {
         }
     }
 
-    Pirate pirate(pirateidle,piraterun,pirateattack, gravity, 0.3f);
+    Pirate pirate(pirateidle ,piraterun,pirateattack, gravity, 0.5f);
     pirate.setPosition(1000, 150 - pirate.getSprite().getGlobalBounds().height);
 
     Captain captain(captainTexture, gravity, 0.1f);
@@ -336,7 +336,7 @@ int main() {
 
 
         if (currentMap == 3) {
-            pirate.update(platforms[1], hero.getSprite(), deltaTime);
+            pirate.update(platforms[1], hero.getSprite());
             handleCollisions(pirate, platforms);
             if (pirate.getisAttacking() && pirate.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
                 hero.takeDamage();

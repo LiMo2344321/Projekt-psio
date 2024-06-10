@@ -11,6 +11,10 @@
       "RelativeMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|solutionrelative:Pirate.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Crab.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|solutionrelative:Crab.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Captain.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|solutionrelative:Captain.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -21,10 +25,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\BigGuy.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|solutionrelative:BigGuy.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Crab.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|solutionrelative:Crab.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B658B7D9-8E88-4D3F-9C58-0B0F152E085C}|ProjektPSiO.vcxproj|C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Enemy.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -90,7 +90,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Captain.h",
               "DocumentMoniker": "C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Captain.h",
               "RelativeDocumentMoniker": "Captain.h",
@@ -108,13 +108,14 @@
               "RelativeDocumentMoniker": "Pirate.h",
               "ToolTip": "C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Pirate.h",
               "RelativeToolTip": "Pirate.h",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAwBYAAAAZAAAA",
+              "ViewState": "AQIAACcAAAAAAAAAAAAAAAwAAADkAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-06-09T10:36:31.547Z"
+              "WhenOpened": "2024-06-09T10:36:31.547Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "BigGuy.h",
               "DocumentMoniker": "C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\BigGuy.h",
               "RelativeDocumentMoniker": "BigGuy.h",
@@ -138,15 +139,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "Crab.h",
               "DocumentMoniker": "C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Crab.h",
               "RelativeDocumentMoniker": "Crab.h",
               "ToolTip": "C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Crab.h",
               "RelativeToolTip": "Crab.h",
-              "ViewState": "AQIAAGYAAAAAAAAAAAAAAEEAAABSAAAA",
+              "ViewState": "AQIAABQAAAAAAAAAAAAAwGcAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-06-07T20:19:10.745Z"
+              "WhenOpened": "2024-06-07T20:19:10.745Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -162,7 +164,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Postac.h",
               "DocumentMoniker": "C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\Postac.h",
               "RelativeDocumentMoniker": "Postac.h",
@@ -216,7 +218,7 @@
               "RelativeDocumentMoniker": "ProjektPSiO.cpp",
               "ToolTip": "C:\\Users\\48723\\Documents\\GitHub\\Projekt-psio\\ProjektPSiO\\ProjektPSiO.cpp",
               "RelativeToolTip": "ProjektPSiO.cpp",
-              "ViewState": "AQIAAMUBAAAAAAAAAAAAAF4BAAAAAAAA",
+              "ViewState": "AQIAAEsBAAAAAAAAAAAAAMIAAABCAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-06-03T19:28:37.983Z",
               "EditorCaption": ""

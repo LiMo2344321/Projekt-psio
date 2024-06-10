@@ -27,38 +27,33 @@ public:
                 currentFrame = 0;
             }
         }
-        else {
-            if (std::abs(heroPositionX - crabPositionX) < 250.0f) {
-                if (std::abs(heroPositionX - crabPositionX) < 20.0f) {
-                    isAttacking = true;
-                    currentFrame = 0;
-                }
-                else {
-                    if (heroPositionX > crabPositionX) {
-                        movingRight = true;
-                        sprite.move(speed, 0);
-                    }
-                    else if (heroPositionX < crabPositionX) {
-                        movingRight = false;
-                        sprite.move(-speed, 0);
-                    }
-                }
-            }
-            else {
-                if (movingRight) {
-                    sprite.move(speed, 0);
-                    if (sprite.getPosition().x + sprite.getGlobalBounds().width > platformEndX) {
-                        movingRight = false;
-                    }
-                }
-                else {
-                    sprite.move(-speed, 0);
-                    if (sprite.getPosition().x < platformStartX) {
-                        movingRight = true;
-                    }
-                }
+        else if (std::abs(heroPositionX - crabPositionX) < 20.0f)
+        {
+            isAttacking = true;
+            currentFrame = 0;
+        }
+        else if (crabPositionX < platformStartX) {
+            movingRight = true;
+            sprite.move(speed, 0);
+        }
+        else if (crabPositionX > platformEndX) {
+            movingRight = false;
+            sprite.move(-speed, 0);
+        }
+        else if (movingRight) {
+            sprite.move(speed, 0);
+            if (sprite.getPosition().x + sprite.getGlobalBounds().width > platformEndX) {
+                movingRight = false;
             }
         }
+        else {
+            sprite.move(-speed, 0);
+            if (sprite.getPosition().x < platformStartX) {
+                movingRight = true;
+            }
+        }
+
+
 
         if (sprite.getPosition().x < platformStartX) {
             sprite.setPosition(platformStartX, sprite.getPosition().y);
