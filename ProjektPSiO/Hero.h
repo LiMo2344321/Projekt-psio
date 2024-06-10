@@ -119,6 +119,13 @@ public:
         return health;
     }
 
+    void addHealth(sf::RenderWindow& window) {
+        if (health < 3) {
+            health++;
+            drawHealthBar(window);
+        }
+    }
+
     bool isAlive() const {
         return health > 0;
     }
@@ -144,6 +151,7 @@ public:
         hasKey = hk;
     }
 
+
 private:
     enum class Direction { None, Left, Right };
     Direction direction = Direction::None;
@@ -154,7 +162,7 @@ private:
     float jumpSpeed;
     size_t currentTextureIndex;
     float elapsedTime;
-    int fps = 20; // Default FPS for animation
+    int fps = 20; 
     State state;
     int health;
     bool hasKey;
@@ -198,19 +206,19 @@ private:
     void adjustOriginAndScale() {
         float halfWidth = sprite.getLocalBounds().width / 2.0f;
         if (direction == Direction::Left) {
-            sprite.setOrigin(halfWidth, 0); // Origin w œrodku sprite'a
-            sprite.setScale(-3.0f, 3.0f); // Skaluje w lewo
+            sprite.setOrigin(halfWidth, 0); 
+            sprite.setScale(-3.0f, 3.0f); 
         }
         else {
-            sprite.setOrigin(halfWidth, 0); // Origin w œrodku sprite'a
-            sprite.setScale(3.0f, 3.0f); // Skaluje w prawo
+            sprite.setOrigin(halfWidth, 0); 
+            sprite.setScale(3.0f, 3.0f); 
         }
     }
 
     void drawHealthBar(sf::RenderWindow& window) {
         window.draw(healthBar);
         for (int i = 0; i < health; ++i) {
-            heart.setPosition(50.0f + i * (heart.getGlobalBounds().width + 5.0f), 32.0f); // Position hearts within health bar
+            heart.setPosition(50.0f + i * (heart.getGlobalBounds().width + 5.0f), 32.0f); 
             window.draw(heart);
         }
     }

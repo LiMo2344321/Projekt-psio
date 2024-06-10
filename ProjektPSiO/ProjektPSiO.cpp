@@ -8,7 +8,7 @@
 #include "BigGuy.h"
 #include "Pirate.h"
 #include "Captain.h"
-#include "Key.h"
+#include "Collectable.h"
 
 
 int main() {
@@ -76,12 +76,6 @@ int main() {
         return -1;
     }
 
-    sf::Texture crabTexture;
-    if (!crabTexture.loadFromFile("crabidle.png")) {
-        std::cerr << "Error loading crab texture" << std::endl;
-        return -1;
-    }
-
     sf::Texture spikeTexture;
     if (!spikeTexture.loadFromFile("Spikes.png")) {
         std::cerr << "Error loading spike texture" << std::endl;
@@ -123,7 +117,6 @@ int main() {
 
 
 
-    // Load crab run textures
     std::vector <sf::Texture> crabRun(6);
     for (int i = 0; i < 6; i++) {
         if (!crabRun[i].loadFromFile("crabrun" + std::to_string(i + 1) + ".png")) {
@@ -132,14 +125,17 @@ int main() {
         }
     }
 
-    // Initialize crab with gravity, speed, and animation time
-    Crab crab(gravity, 0.03f, 0.2f);
+    std::vector <sf::Texture> crabAttack(4);
+    for (int i = 0; i < 4; i++) {
+        if (!crabAttack[i].loadFromFile("crabattack" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading crab run texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
+
+    Crab crab(crabRun, crabAttack, gravity, 0.03f);
     crab.setPosition(1050, 329);
 
-    // Add run textures to crab
-    for (int i = 0; i < 6; i++) {
-        crab.addRunTexture(crabRun[i]);
-    }
 
     std::vector<sf::Texture> bigguyidle(36);
     std::vector<sf::Texture> bigguyrun(8);
@@ -185,7 +181,21 @@ int main() {
             return -1;
         }
     }
-    Key key(keyTextures, 1654, 440);
+
+    Collectable key(keyTextures, 1654, 440);
+
+
+    std::vector <sf::Texture> heartTextures(22);
+    for (int i = 0; i < 22; ++i) {
+        if (!heartTextures[i].loadFromFile("heart" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading heart texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
+
+
+    Collectable heart1(heartTextures, 930, 155);
+    Collectable heart2(heartTextures, 30, 355);
 
 
     std::vector<sf::RectangleShape> platforms;
@@ -206,8 +216,8 @@ int main() {
             }
         }
         sf::Time deltaTime = clock.restart();
-        sf::Time currentTime = damageClock.getElapsedTime();  // Zmierz czas od ostatniego resetu
-        if (recentlyDamaged && currentTime.asSeconds() > 1.0f) {  // Reset flagi, jeśli minęła jedna sekunda
+        sf::Time currentTime = damageClock.getElapsedTime();  
+        if (recentlyDamaged && currentTime.asSeconds() > 1.0f) { 
             recentlyDamaged = false;
         }
 
@@ -224,24 +234,37 @@ int main() {
         hero.handleInput(platforms, currentGroundHeight);
         hero.update(currentGroundHeight);
         handleCollisions(hero, platforms);
-
-        if (currentMap == 1) {
-            crab.update(platforms[2], deltaTime);  // Update crab movement
-            handleCollisions(crab, platforms);
-            //if (crab.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-            //    hero.setPosition(0, 0); //przegrana
-            //}
-        }
-
         bool heroDamaged = false;
 
+        if (currentMap == 1) {
+            crab.update(platforms[2], hero.getSprite(), deltaTime);  
+            handleCollisions(crab, platforms);
+            if (crab.getisAttacking() && crab.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                    hero.takeDamage();
+                    heroDamaged = true;
+                    lastDamageTime = currentTime;
+                    recentlyDamaged = true;
+                    damageClock.restart();
+                }
+            }
+
+            if (!heart1.isCollected() && heart1.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds()) && hero.getHealth() < 3) {
+                heart1.collect();
+                hero.addHealth(window);
+                
+            }
+
+        }
+
+        
         if (currentMap == 1 || currentMap == 3) {
             for (const auto& spike : spikes) {
                 if (spike.getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                    hero.kill(); // Bohater natychmiast umiera
-                    hero.setPosition(100, 0); // Resetuje pozycję bohatera
-                    hero.resetHealth(); // Resetuje życie bohatera
-                    break; // Przerwanie pętli po kolizji z kolcami
+                    hero.kill(); 
+                    hero.setPosition(100, 0); 
+                    hero.resetHealth(); 
+                   
                 }
             }
         }
@@ -256,7 +279,7 @@ int main() {
 
             if (guy1.getisAttacking() && guy1.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
                 if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
-                    hero.takeDamage(); // Zadanie obrażeń bohaterowi
+                    hero.takeDamage(); 
                     heroDamaged = true;
                     lastDamageTime = currentTime;
                     recentlyDamaged = true;
@@ -266,7 +289,7 @@ int main() {
 
             if (guy2.getisAttacking() && guy2.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
                 if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
-                    hero.takeDamage(); // Zadanie obrażeń bohaterowi
+                    hero.takeDamage();
                     heroDamaged = true;
                     lastDamageTime = currentTime;
                     recentlyDamaged = true;
@@ -295,6 +318,12 @@ int main() {
             captain.update(platforms[5]);
             handleCollisions(captain, platforms);
 
+            if (!heart2.isCollected() && heart2.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds()) && hero.getHealth() < 3) {
+                heart2.collect();
+                hero.addHealth(window);
+
+            }
+
         }
 
 
@@ -304,7 +333,7 @@ int main() {
                     recentlyDamaged = false;
                 }
                 if (!recentlyDamaged) {
-                    hero.takeDamage(); // Przegrana, zabierz jedno życie
+                    hero.takeDamage(); 
                     heroDamaged = true;
                     lastDamageTime = currentTime;
                     recentlyDamaged = true;
@@ -323,10 +352,10 @@ int main() {
 
 
         if (heroDamaged && !hero.isAlive()) {
-            hero.setPosition(100, 0); // Resetuj pozycję bohatera przy zerowych życiach
-            hero.resetHealth(); // Resetuj życie bohatera
-            hero.setHasKey(false); // Upewnij się, że bohater nie ma klucza
-            key.resetAnimation(1654, 440); // Resetuj animację klucza
+            hero.setPosition(100, 0); 
+            hero.resetHealth(); 
+            hero.setHasKey(false); 
+            key.resetAnimation(1654, 440); 
         }
 
 
@@ -382,6 +411,10 @@ int main() {
             window.draw(crab.getSprite());
             window.draw(floor);
             window.draw(cannon.getSprite());
+            if (!heart1.isCollected()) {
+                heart1.update(deltaTime);
+                window.draw(heart1.getSprite());
+            }
             for (const auto& cannonball : cannon.getCannonballs()) {
                 window.draw(cannonball.getSprite());
             }
@@ -402,6 +435,10 @@ int main() {
             window.draw(floor);
             window.draw(pirate.getSprite());
             window.draw(captain.getSprite());
+            if (!heart2.isCollected()) {
+                heart2.update(deltaTime);
+                window.draw(heart2.getSprite());
+            }
         }
 
         window.display();

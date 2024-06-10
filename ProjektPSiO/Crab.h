@@ -2,53 +2,123 @@
 #define CRAB_H
 
 #include "Enemy.h"
+#include <SFML/Graphics.hpp>
 #include <vector>
 
 class Crab : public Enemy {
 public:
-    Crab(float gravity, float speed, float animationTime)
-        : Enemy(gravity), speed(speed), movingRight(true), animationTime(animationTime), currentFrame(0) {
+    Crab(const std::vector<sf::Texture>& runTextures, const std::vector<sf::Texture>& attackTextures, float gravity, float speed)
+        : Enemy(gravity), runTextures(runTextures), attackTextures(attackTextures), speed(speed), movingRight(true), animationTime(sf::seconds(0.2f)), currentFrame(0), elapsedTime(sf::Time::Zero), isAttacking(false), attackDuration(sf::seconds(1.0f)), attackElapsedTime(sf::Time::Zero) {
+        sprite.setTexture(runTextures[0]);
         sprite.setScale(3.0f, 3.0f);
     }
 
-    void addRunTexture(const sf::Texture& texture) {
-        runTextures.push_back(texture);
-    }
+    void update(const sf::RectangleShape& platform, const sf::Sprite& hero, sf::Time deltaTime) {
+        float heroPositionX = hero.getPosition().x;
+        float crabPositionX = sprite.getPosition().x;
+        float platformStartX = platform.getPosition().x;
+        float platformEndX = platform.getPosition().x + platform.getSize().x;
 
-    void update(const sf::RectangleShape& platform, sf::Time deltaTime) {
-        animate(deltaTime);
-
-        if (movingRight) {
-            sprite.move(speed, 0);
-            if (sprite.getPosition().x + sprite.getGlobalBounds().width > platform.getPosition().x + platform.getSize().x) {
-                movingRight = false;
+        if (isAttacking) {
+            attackElapsedTime += deltaTime;
+            if (attackElapsedTime >= attackDuration) {
+                isAttacking = false;
+                attackElapsedTime = sf::Time::Zero;
+                currentFrame = 0;
             }
         }
         else {
-            sprite.move(-speed, 0);
-            if (sprite.getPosition().x < platform.getPosition().x) {
-                movingRight = true;
+            if (std::abs(heroPositionX - crabPositionX) < 250.0f) {
+                if (std::abs(heroPositionX - crabPositionX) < 20.0f) {
+                    isAttacking = true;
+                    currentFrame = 0;
+                }
+                else {
+                    if (heroPositionX > crabPositionX) {
+                        movingRight = true;
+                        sprite.move(speed, 0);
+                    }
+                    else if (heroPositionX < crabPositionX) {
+                        movingRight = false;
+                        sprite.move(-speed, 0);
+                    }
+                }
+            }
+            else {
+                if (movingRight) {
+                    sprite.move(speed, 0);
+                    if (sprite.getPosition().x + sprite.getGlobalBounds().width > platformEndX) {
+                        movingRight = false;
+                    }
+                }
+                else {
+                    sprite.move(-speed, 0);
+                    if (sprite.getPosition().x < platformStartX) {
+                        movingRight = true;
+                    }
+                }
+            }
+        }
+
+        if (sprite.getPosition().x < platformStartX) {
+            sprite.setPosition(platformStartX, sprite.getPosition().y);
+        }
+        if (sprite.getPosition().x + sprite.getGlobalBounds().width > platformEndX) {
+            sprite.setPosition(platformEndX - sprite.getGlobalBounds().width, sprite.getPosition().y);
+        }
+
+        sf::FloatRect bounds = sprite.getLocalBounds();
+        sprite.setOrigin(bounds.width / 2, 0);
+
+        elapsedTime += deltaTime;
+        if (elapsedTime >= animationTime) {
+            elapsedTime -= animationTime;
+            currentFrame++;
+            if (isAttacking) {
+                if (currentFrame >= attackTextures.size()) {
+                    currentFrame = 0;
+                }
+                sprite.setTexture(attackTextures[currentFrame]);
+            }
+            else {
+                if (currentFrame >= runTextures.size()) {
+                    currentFrame = 0;
+                }
+                sprite.setTexture(runTextures[currentFrame]);
+            }
+            if (movingRight) {
+                sprite.setScale(3.0f, 3.0f);
+            }
+            else {
+                sprite.setScale(-3.0f, 3.0f);
             }
         }
     }
 
+    void setPosition(float x, float y) {
+        sprite.setPosition(x, y);
+    }
+
+    sf::Sprite& getSprite() {
+        return sprite;
+    }
+
+    bool getisAttacking() {
+        return isAttacking;
+    }
+
 private:
+    sf::Sprite sprite;
+    std::vector<sf::Texture> runTextures;
+    std::vector<sf::Texture> attackTextures;
     float speed;
     bool movingRight;
-    float animationTime;
-    int currentFrame;
-    std::vector<sf::Texture> runTextures;
+    unsigned int currentFrame;
+    sf::Time animationTime;
     sf::Time elapsedTime;
-
-    void animate(sf::Time deltaTime) {
-        elapsedTime += deltaTime;
-
-        if (elapsedTime.asSeconds() >= animationTime) {
-            elapsedTime = sf::Time::Zero;
-            currentFrame = (currentFrame + 1) % runTextures.size();
-            sprite.setTexture(runTextures[currentFrame]);
-        }
-    }
+    bool isAttacking;
+    sf::Time attackDuration;
+    sf::Time attackElapsedTime;
 };
 
-#endif // CRAB_H
+#endif

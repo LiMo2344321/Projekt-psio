@@ -8,7 +8,7 @@
 class BigGuy : public Enemy {
 public:
     BigGuy(const std::vector<sf::Texture>& idleTextures, const std::vector<sf::Texture>& runTextures, const std::vector<sf::Texture>& attackTextures, float gravity, float speed)
-        : Enemy(gravity), idleTextures(idleTextures), runTextures(runTextures), attackTextures(attackTextures), speed(speed), movingRight(true), detectionRange(200.0f), attackRange(50.0f), currentFrame(0), animationTime(sf::seconds(0.1f)), elapsedTime(sf::Time::Zero), isAttacking(false), attackDuration(sf::seconds(1.0f)), attackElapsedTime(sf::Time::Zero) {
+        : Enemy(gravity), idleTextures(idleTextures), runTextures(runTextures), attackTextures(attackTextures), speed(speed), movingRight(true), detectionRange(250.0f), attackRange(20.0f), currentFrame(0), animationTime(sf::seconds(0.1f)), elapsedTime(sf::Time::Zero), isAttacking(false), attackDuration(sf::seconds(1.0f)), attackElapsedTime(sf::Time::Zero) {
         sprite.setTexture(idleTextures[0]);
         sprite.setScale(2.0f, 2.0f);
     }
@@ -21,7 +21,7 @@ public:
 
         bool moving = false;
 
-        // SprawdŸ, czy BigGuy jest w trakcie ataku
+        
         if (isAttacking) {
             attackElapsedTime += deltaTime;
             if (attackElapsedTime >= attackDuration) {
@@ -31,15 +31,15 @@ public:
             }
         }
         else {
-            // SprawdŸ, czy postaæ gracza znajduje siê w zasiêgu wykrywania
+            
             if (std::abs(heroPositionX - bigGuyPositionX) < detectionRange) {
-                // SprawdŸ, czy gracz jest w zasiêgu ataku
+                
                 if (std::abs(heroPositionX - bigGuyPositionX) < attackRange) {
                     isAttacking = true;
                     currentFrame = 0;
                 }
                 else {
-                    // Poruszaj siê w kierunku postaci gracza
+                    
                     if (heroPositionX > bigGuyPositionX && (bigGuyPositionX + sprite.getGlobalBounds().width) < platformEndX) {
                         sprite.move(speed, 0);
                         moving = true;
@@ -54,7 +54,7 @@ public:
             }
         }
 
-        // Upewnij siê, ¿e BigGuy nie spada z platformy
+       
         if (sprite.getPosition().x < platformStartX) {
             sprite.setPosition(platformStartX, sprite.getPosition().y);
         }
@@ -65,7 +65,7 @@ public:
         sf::FloatRect bounds = sprite.getLocalBounds();
         sprite.setOrigin(bounds.width / 2, 0);
 
-        // Aktualizacja animacji
+        
         elapsedTime += deltaTime;
         if (elapsedTime >= animationTime) {
             elapsedTime -= animationTime;
