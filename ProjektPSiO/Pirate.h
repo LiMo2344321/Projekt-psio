@@ -10,7 +10,7 @@ public:
     enum State { Idle, Running, Attacking };
 
     Pirate(const std::vector<sf::Texture>& idleTextures, const std::vector<sf::Texture>& runTextures, const std::vector<sf::Texture>& attackTextures, float gravity, float speed)
-        : Enemy(gravity), idleTextures(idleTextures), runTextures(runTextures), attackTextures(attackTextures), speed(speed), movingRight(true), state(Idle), currentFrame(0), frameTime(sf::seconds(0.1f)), runTime(sf::seconds(0.4f)), attackTime(sf::seconds(1.0f)) {
+        : Enemy(gravity, 3), idleTextures(idleTextures), runTextures(runTextures), attackTextures(attackTextures), speed(speed), movingRight(true), state(Idle), currentFrame(0), frameTime(sf::seconds(0.1f)), runTime(sf::seconds(0.4f)), attackTime(sf::seconds(1.0f)) {
         sprite.setTexture(idleTextures[0]);
         sprite.setScale(1.8f, 1.8f);
         sprite.setOrigin(sprite.getGlobalBounds().width / 2, 0); 

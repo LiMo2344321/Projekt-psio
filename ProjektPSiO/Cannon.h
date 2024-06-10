@@ -40,7 +40,7 @@ private:
 class Cannon : public Enemy {
 public:
     Cannon(float gravity, const sf::Texture& cannonballTexture)
-        : Enemy(gravity), cannonballTexture(cannonballTexture), currentMap(1), currentTextureIndex(0), stepsSinceLastSpriteChange(0), shooting(false) {
+        : Enemy(gravity, 10), cannonballTexture(cannonballTexture), currentMap(1), currentTextureIndex(0), stepsSinceLastSpriteChange(0), shooting(false) {
         if (!texture.loadFromFile("cannonidle.png")) {
             std::cerr << "Error loading cannon texture" << std::endl;
         }
