@@ -12,6 +12,7 @@
 #include "Collectable.h"
 #include "Menu.h"
 #include "Chest.h"
+#include "DeathMenu.h"
 
 
 int main() {
@@ -21,8 +22,10 @@ int main() {
     int groundHeight = window.getSize().y - 200;
     int currentGroundHeight = groundHeight;
 
+    bool isherodead = false;
     bool isMenuOpen = false; 
     Menu menu(window.getSize().x, window.getSize().y); 
+    DeathMenu deathMenu(window.getSize().x, window.getSize().y);
 
     std::vector <sf::Texture> idle(5);
     for (int i = 0; i < 5; i++) {
@@ -397,6 +400,9 @@ int main() {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 isMenuOpen = !isMenuOpen;
             }
+            if (!hero.isAlive()) {
+                deathMenu.draw(window);
+            }
             if (isMenuOpen) {
                 if (event.type == sf::Event::MouseButtonPressed) {
                     if (event.mouseButton.button == sf::Mouse::Left) {
@@ -419,87 +425,226 @@ int main() {
                     }
                 }
             }
+            if (isherodead) {
+                if (event.type == sf::Event::MouseButtonPressed) {
+                    if (event.mouseButton.button == sf::Mouse::Left) {
+                        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                        int buttonIndex = deathMenu.handleMouseClick(mousePos);
+                        if (buttonIndex == 0) {
+                            // Reset Game
+                            resetGame(hero, crab, guy1, guy2, pirate, captain, key, heart1, heart2, platforms, spikes, backgroundElements, currentMap, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
+                            isherodead = false;
+                        }
+                        else if (buttonIndex == 1) {
+                            // Quit
+                            window.close();
+                        }
+                    }
+                }
+            }
         }
 
-        if (!isMenuOpen) {            
-            sf::Time deltaTime = clock.restart();
-            sf::Time currentTime = damageClock.getElapsedTime();
-            sf::Time currentTime2 = damageClock2.getElapsedTime();
+        if (!isMenuOpen) {
+            if (!isherodead) {
+                sf::Time deltaTime = clock.restart();
+                sf::Time currentTime = damageClock.getElapsedTime();
+                sf::Time currentTime2 = damageClock2.getElapsedTime();
 
-            if (recentlyinflictedDamage && currentTime2.asSeconds() > 1.0f) {
-                recentlyinflictedDamage = false;
-            }
+                if (recentlyinflictedDamage && currentTime2.asSeconds() > 1.0f) {
+                    recentlyinflictedDamage = false;
+                }
 
-            if (recentlyDamaged && currentTime.asSeconds() > 1.0f) {
-                recentlyDamaged = false;
-            }
+                if (recentlyDamaged && currentTime.asSeconds() > 1.0f) {
+                    recentlyDamaged = false;
+                }
 
-            if (currentMap == 1) {
-                currentGroundHeight = groundHeight;
-            }
-            else if (currentMap == 2) {
-                currentGroundHeight = window.getSize().y + 200;
-            }
-            else if (currentMap == 3) {
-                currentGroundHeight = groundHeight;
-            }
+                if (currentMap == 1) {
+                    currentGroundHeight = groundHeight;
+                }
+                else if (currentMap == 2) {
+                    currentGroundHeight = window.getSize().y + 200;
+                }
+                else if (currentMap == 3) {
+                    currentGroundHeight = groundHeight;
+                }
 
-            hero.handleInput(platforms, currentGroundHeight);
-            hero.update(currentGroundHeight);
-            handleCollisions(hero, platforms);
-            bool heroDamaged = false;
+                hero.handleInput(platforms, currentGroundHeight);
+                hero.update(currentGroundHeight);
+                handleCollisions(hero, platforms);
+                bool heroDamaged = false;
 
-            if (currentMap == 1) {
-                if (crab.isAlive()) {
-                    crab.update(platforms[2], hero.getSprite(), deltaTime);
-                    handleCollisions(crab, platforms);
-                    if (crab.getisAttacking() && crab.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                        if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
-                            hero.takeDamage();
-                            heroDamaged = true;
-                            lastDamageTime = currentTime;
-                            recentlyDamaged = true;
-                            damageClock.restart();
+                if (currentMap == 1) {
+                    if (crab.isAlive()) {
+                        crab.update(platforms[2], hero.getSprite(), deltaTime);
+                        handleCollisions(crab, platforms);
+                        if (crab.getisAttacking() && crab.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                            if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                                hero.takeDamage();
+                                heroDamaged = true;
+                                lastDamageTime = currentTime;
+                                recentlyDamaged = true;
+                                damageClock.restart();
+                            }
+                        }
+                    }
+
+                    if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(crab.getSprite().getGlobalBounds())) {
+                        if (!recentlyinflictedDamage) {
+                            crab.takeDamage(1);
+                            lastInflictedDamageTime = currentTime2;
+                            recentlyinflictedDamage = true;
+                            damageClock2.restart();
+                        }
+                    }
+
+                    if (!heart1.isCollected() && heart1.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds()) && hero.getHealth() < 3) {
+                        heart1.collect();
+                        hero.addHealth(window);
+                    }
+                }
+
+                if (currentMap == 1 || currentMap == 3) {
+                    for (const auto& spike : spikes) {
+                        if (spike.getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                            hero.kill();
+                            hero.setPosition(100, 0);
+                            hero.resetHealth();
                         }
                     }
                 }
 
-                if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(crab.getSprite().getGlobalBounds())) {
-                    if (!recentlyinflictedDamage) {
-                        crab.takeDamage(1);
-                        lastInflictedDamageTime = currentTime2;
-                        recentlyinflictedDamage = true;
-                        damageClock2.restart();
+                if (currentMap == 2) {
+                    guy1.update(platforms[3], hero.getSprite(), deltaTime);
+                    guy2.update(platforms[1], hero.getSprite(), deltaTime);
+                    key.update(deltaTime);
+
+                    handleCollisions(guy1, platforms);
+                    handleCollisions(guy2, platforms);
+
+                    if (guy1.getIsAttacking() && guy1.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                        if (isHeroInFront(guy1.getSprite(), hero.getSprite())) {
+                            if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                                hero.takeDamage();
+                                heroDamaged = true;
+                                lastDamageTime = currentTime;
+                                recentlyDamaged = true;
+                                damageClock.restart();
+                            }
+                        }
                     }
-                }
 
-                if (!heart1.isCollected() && heart1.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds()) && hero.getHealth() < 3) {
-                    heart1.collect();
-                    hero.addHealth(window);
-                }
-            }
+                    if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(guy1.getSprite().getGlobalBounds())) {
+                        if (!recentlyinflictedDamage) {
+                            guy1.takeDamage(1);
+                            lastInflictedDamageTime = currentTime2;
+                            recentlyinflictedDamage = true;
+                            damageClock2.restart();
+                        }
+                    }
 
-            if (currentMap == 1 || currentMap == 3) {
-                for (const auto& spike : spikes) {
-                    if (spike.getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                    if (guy2.getIsAttacking() && guy2.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                        if (isHeroInFront(guy2.getSprite(), hero.getSprite())) {
+                            if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                                hero.takeDamage();
+                                heroDamaged = true;
+                                lastDamageTime = currentTime;
+                                recentlyDamaged = true;
+                                damageClock.restart();
+                            }
+                        }
+                    }
+
+                    if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(guy2.getSprite().getGlobalBounds())) {
+                        if (!recentlyinflictedDamage) {
+                            guy2.takeDamage(1);
+                            lastInflictedDamageTime = currentTime2;
+                            recentlyinflictedDamage = true;
+                            damageClock2.restart();
+                        }
+                    }
+
+                    if (!key.isCollected() && key.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                        key.collect();
+                        hero.pickUpKey();
+                    }
+
+                    if (hero.getPosition().y > window.getSize().y) {
                         hero.kill();
                         hero.setPosition(100, 0);
                         hero.resetHealth();
                     }
                 }
-            }
 
-            if (currentMap == 2) {
-                guy1.update(platforms[3], hero.getSprite(), deltaTime);
-                guy2.update(platforms[1], hero.getSprite(), deltaTime);
-                key.update(deltaTime);
+                if (currentMap == 3) {
+                    pirate.update(platforms[5], hero.getSprite(), deltaTime);
+                    handleCollisions(pirate, platforms);
 
-                handleCollisions(guy1, platforms);
-                handleCollisions(guy2, platforms);
+                    if (pirate.getIsAttacking() && pirate.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                        if (isHeroInFront(pirate.getSprite(), hero.getSprite())) {
+                            if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                                hero.takeDamage();
+                                heroDamaged = true;
+                                lastDamageTime = currentTime;
+                                recentlyDamaged = true;
+                                damageClock.restart();
+                            }
+                        }
+                    }
 
-                if (guy1.getIsAttacking() && guy1.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                    if (isHeroInFront(guy1.getSprite(), hero.getSprite())) {
-                        if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                    if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(pirate.getSprite().getGlobalBounds())) {
+                        if (!recentlyinflictedDamage) {
+                            pirate.takeDamage(1);
+                            lastInflictedDamageTime = currentTime2;
+                            recentlyinflictedDamage = true;
+                            damageClock2.restart();
+                        }
+                    }
+
+                    captain.update(platforms[5], hero.getSprite(), deltaTime);
+                    handleCollisions(captain, platforms);
+
+                    if (captain.getIsAttacking() && captain.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                        if (isHeroInFront(captain.getSprite(), hero.getSprite())) {
+                            if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                                hero.takeDamage();
+                                heroDamaged = true;
+                                lastDamageTime = currentTime;
+                                recentlyDamaged = true;
+                                damageClock.restart();
+                            }
+                        }
+                    }
+
+                    if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(captain.getSprite().getGlobalBounds())) {
+                        if (!recentlyinflictedDamage) {
+                            captain.takeDamage(1);
+                            lastInflictedDamageTime = currentTime2;
+                            recentlyinflictedDamage = true;
+                            damageClock2.restart();
+                        }
+                    }
+
+                    if (!heart2.isCollected() && heart2.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds()) && hero.getHealth() < 3) {
+                        heart2.collect();
+                        hero.addHealth(window);
+                    }
+
+                    chest.update(deltaTime);
+                    if (hero.getHasKey() && hero.getSprite().getGlobalBounds().intersects(chest.getSprite().getGlobalBounds())) {
+                        chest.open();
+                        hero.dropKey();
+                        std::cout << "Wygrana" << std::endl;
+
+                    }
+
+                }
+
+                for (const auto& cannonball : cannon.getCannonballs()) {
+                    if (cannonball.getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                        if (recentlyDamaged && (clock.getElapsedTime().asSeconds() - lastDamageTime.asSeconds() > 0.5)) {
+                            recentlyDamaged = false;
+                        }
+                        if (!recentlyDamaged) {
                             hero.takeDamage();
                             heroDamaged = true;
                             lastDamageTime = currentTime;
@@ -507,264 +652,146 @@ int main() {
                             damageClock.restart();
                         }
                     }
-                }
-
-                if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(guy1.getSprite().getGlobalBounds())) {
-                    if (!recentlyinflictedDamage) {
-                        guy1.takeDamage(1);
-                        lastInflictedDamageTime = currentTime2;
-                        recentlyinflictedDamage = true;
-                        damageClock2.restart();
-                    }
-                }
-
-                if (guy2.getIsAttacking() && guy2.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                    if (isHeroInFront(guy2.getSprite(), hero.getSprite())) {
-                        if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
-                            hero.takeDamage();
-                            heroDamaged = true;
-                            lastDamageTime = currentTime;
-                            recentlyDamaged = true;
-                            damageClock.restart();
+                    for (const auto& platform : platforms) {
+                        if (cannonball.getGlobalBounds().intersects(platform.getGlobalBounds())) {
+                            cannon.getCannonballs().erase(std::remove(cannon.getCannonballs().begin(), cannon.getCannonballs().end(), cannonball), cannon.getCannonballs().end());
+                            break;
                         }
                     }
                 }
 
-                if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(guy2.getSprite().getGlobalBounds())) {
-                    if (!recentlyinflictedDamage) {
-                        guy2.takeDamage(1);
-                        lastInflictedDamageTime = currentTime2;
-                        recentlyinflictedDamage = true;
-                        damageClock2.restart();
-                    }
+                if (heroDamaged && !hero.isAlive()) {
+                    isherodead = true;
+                    hero.setHasKey(false);
+                    key.resetAnimation(1654, 440);
                 }
 
-                if (!key.isCollected() && key.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                    key.collect();
-                    hero.pickUpKey();                    
-                }
-
-                if (hero.getPosition().y > window.getSize().y) {
+                if (hero.getPosition().y == groundHeight && hero.getPosition().x >= 0 && hero.getPosition().x <= 950 && currentMap == 3) {
                     hero.kill();
-                    hero.setPosition(100, 0);
+                    hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, hero.getPosition().y);
                     hero.resetHealth();
                 }
-            }
 
-            if (currentMap == 3) {                
-                pirate.update(platforms[5], hero.getSprite(), deltaTime);
-                handleCollisions(pirate, platforms);
-
-                if (pirate.getIsAttacking() && pirate.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                    if (isHeroInFront(pirate.getSprite(), hero.getSprite())) {
-                        if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
-                            hero.takeDamage();
-                            heroDamaged = true;
-                            lastDamageTime = currentTime;
-                            recentlyDamaged = true;
-                            damageClock.restart();
-                        }
-                    }
+                if (hero.getPosition().x > window.getSize().x && currentMap == 1) {
+                    currentMap++;
+                    loadMap(currentMap, platforms, spikes, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
+                    hero.setPosition(0, hero.getPosition().y);
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && currentMap == 2 && hero.getPosition().x > 1024 && hero.getPosition().x < 1204) {
+                    currentMap = 3;
+                    loadMap(currentMap, platforms, spikes, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
+                    hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, 0);
                 }
 
-                if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(pirate.getSprite().getGlobalBounds())) {
-                    if (!recentlyinflictedDamage) {
-                        pirate.takeDamage(1);
-                        lastInflictedDamageTime = currentTime2;
-                        recentlyinflictedDamage = true;
-                        damageClock2.restart();
-                    }
+                if (currentMap == 1 && hero.getPosition().x < 0) {
+                    hero.setPosition(0, hero.getPosition().y);
+                }
+                else if ((currentMap == 2 || currentMap == 3) && hero.getPosition().x < 0) {
+                    hero.setPosition(0, hero.getPosition().y);
+                }
+                else if (currentMap == 2 && hero.getPosition().x + hero.getGlobalBounds().width > window.getSize().x) {
+                    hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, hero.getPosition().y);
+                }
+                else if (currentMap == 3 && hero.getPosition().x + hero.getGlobalBounds().width > window.getSize().x) {
+                    hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, hero.getPosition().y);
                 }
 
-                captain.update(platforms[5], hero.getSprite(), deltaTime);
-                handleCollisions(captain, platforms);
+                //okno - rysowanie
+                window.clear(sf::Color(0, 240, 255));
+                sf::Vector2u windowSize = window.getSize();
 
-                if (captain.getIsAttacking() && captain.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                    if (isHeroInFront(captain.getSprite(), hero.getSprite())) {
-                        if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
-                            hero.takeDamage();
-                            heroDamaged = true;
-                            lastDamageTime = currentTime;
-                            recentlyDamaged = true;
-                            damageClock.restart();
-                        }
-                    }
+                if (currentMap == 1) {
+                    sf::Vector2u textureSize = backgroundsprite1.getTexture()->getSize();
+                    backgroundsprite1.setScale(
+                        static_cast<float>(windowSize.x) / textureSize.x,
+                        static_cast<float>(windowSize.y) / textureSize.y
+                    );
+                    window.draw(backgroundsprite1);
+                }
+                else if (currentMap == 2) {
+                    sf::Vector2u textureSize = backgroundsprite2.getTexture()->getSize();
+                    backgroundsprite2.setScale(
+                        static_cast<float>(windowSize.x) / textureSize.x,
+                        static_cast<float>(windowSize.y) / textureSize.y
+                    );
+                    window.draw(backgroundsprite2);
                 }
 
-                if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(captain.getSprite().getGlobalBounds())) {
-                    if (!recentlyinflictedDamage) {
-                        captain.takeDamage(1);
-                        lastInflictedDamageTime = currentTime2;
-                        recentlyinflictedDamage = true;
-                        damageClock2.restart();
-                    }
-                }
-
-                if (!heart2.isCollected() && heart2.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds()) && hero.getHealth() < 3) {
-                    heart2.collect();
-                    hero.addHealth(window);
-                }
-
-                chest.update(deltaTime);
-                if (hero.getHasKey() && hero.getSprite().getGlobalBounds().intersects(chest.getSprite().getGlobalBounds())) {
-                    chest.open();
-                    hero.dropKey();
-                    std::cout << "Wygrana" << std::endl;        
-
-                }
-
-            }
-
-            for (const auto& cannonball : cannon.getCannonballs()) {
-                if (cannonball.getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
-                    if (recentlyDamaged && (clock.getElapsedTime().asSeconds() - lastDamageTime.asSeconds() > 0.5)) {
-                        recentlyDamaged = false;
-                    }
-                    if (!recentlyDamaged) {
-                        hero.takeDamage();
-                        heroDamaged = true;
-                        lastDamageTime = currentTime;
-                        recentlyDamaged = true;
-                        damageClock.restart();
-                    }
-                }
                 for (const auto& platform : platforms) {
-                    if (cannonball.getGlobalBounds().intersects(platform.getGlobalBounds())) {
-                        cannon.getCannonballs().erase(std::remove(cannon.getCannonballs().begin(), cannon.getCannonballs().end(), cannonball), cannon.getCannonballs().end());
-                        break;
+                    window.draw(platform);
+                }
+
+                for (const auto& spike : spikes) {
+                    window.draw(spike);
+                }
+
+                for (const auto& element : backgroundElements) {
+                    window.draw(element);
+                }
+
+                if (hero.getHasKey()) {
+                    sf::Sprite keySprite = key.getSprite();
+                    keySprite.setPosition(160, 15);
+                    window.draw(keySprite);
+                }
+
+                if (currentMap == 3) {
+                    window.draw(chest.getSprite());
+                }
+                window.draw(hero.getSprite());
+                hero.draw(window);
+
+                if (currentMap == 1) {
+                    if (crab.isAlive() || crab.getDeathElapsedTime() < sf::seconds(1.0f)) {
+                        window.draw(crab.getSprite());
+                    }
+                    window.draw(floor);
+                    window.draw(groundSprite);
+                    window.draw(pillarSprite);
+                    window.draw(cannon.getSprite());
+                    if (!heart1.isCollected()) {
+                        heart1.update(deltaTime);
+                        window.draw(heart1.getSprite());
+                    }
+                    for (const auto& cannonball : cannon.getCannonballs()) {
+                        window.draw(cannonball.getSprite());
+                    }
+                    cannon.update(currentGroundHeight);
+                    handleCollisions(cannon, platforms);
+                }
+
+                if (currentMap == 2) {
+
+                    if (guy1.isAlive() || guy1.getDeathElapsedTime() < sf::seconds(1.0f)) {
+                        window.draw(guy1.getSprite());
+                    }
+                    if (guy2.isAlive() || guy2.getDeathElapsedTime() < sf::seconds(1.0f)) {
+                        window.draw(guy2.getSprite());
+                    }
+                    if (!key.isCollected()) {
+                        key.update(deltaTime);
+                        window.draw(key.getSprite());
+                    }
+                }
+
+                if (currentMap == 3) {
+
+                    window.draw(floor);
+                    if (pirate.isAlive() || pirate.getDeathElapsedTime() < sf::seconds(1.0f)) {
+                        window.draw(pirate.getSprite());
+                    }
+                    if (captain.isAlive() || captain.getDeathElapsedTime() < sf::seconds(1.0f)) {
+                        window.draw(captain.getSprite());
+                    }
+                    if (!heart2.isCollected()) {
+                        heart2.update(deltaTime);
+                        window.draw(heart2.getSprite());
                     }
                 }
             }
-
-            if (heroDamaged && !hero.isAlive()) {
-                hero.setPosition(100, 0);
-                hero.resetHealth();
-                hero.setHasKey(false);
-                key.resetAnimation(1654, 440);
-            }
-
-            if (hero.getPosition().y == groundHeight && hero.getPosition().x >= 0 && hero.getPosition().x <= 950 && currentMap == 3) {
-                hero.kill();
-                hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, hero.getPosition().y);
-                hero.resetHealth();
-            }
-
-            if (hero.getPosition().x > window.getSize().x && currentMap == 1) {
-                currentMap++;
-                loadMap(currentMap, platforms, spikes, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
-                hero.setPosition(0, hero.getPosition().y);
-            }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && currentMap == 2 && hero.getPosition().x > 1024 && hero.getPosition().x < 1204) {
-                currentMap = 3;
-                loadMap(currentMap, platforms, spikes, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
-                hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, 0);
-            }
-
-            if (currentMap == 1 && hero.getPosition().x < 0) {
-                hero.setPosition(0, hero.getPosition().y);
-            }
-            else if ((currentMap == 2 || currentMap == 3) && hero.getPosition().x < 0) {
-                hero.setPosition(0, hero.getPosition().y);
-            }
-            else if (currentMap == 2 && hero.getPosition().x + hero.getGlobalBounds().width > window.getSize().x) {
-                hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, hero.getPosition().y);
-            }
-            else if (currentMap == 3 && hero.getPosition().x + hero.getGlobalBounds().width > window.getSize().x) {
-                hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, hero.getPosition().y);
-            }
-
-            //okno - rysowanie
-            window.clear(sf::Color(0, 240, 255));
-            sf::Vector2u windowSize = window.getSize();
-
-            if (currentMap == 1) {
-                sf::Vector2u textureSize = backgroundsprite1.getTexture()->getSize();
-                backgroundsprite1.setScale(
-                    static_cast<float>(windowSize.x) / textureSize.x,
-                    static_cast<float>(windowSize.y) / textureSize.y
-                );
-                window.draw(backgroundsprite1);
-            }
-            else if (currentMap == 2) {
-                sf::Vector2u textureSize = backgroundsprite2.getTexture()->getSize();
-                backgroundsprite2.setScale(
-                    static_cast<float>(windowSize.x) / textureSize.x,
-                    static_cast<float>(windowSize.y) / textureSize.y
-                );
-                window.draw(backgroundsprite2);
-            }
-
-            for (const auto& platform : platforms) {
-                window.draw(platform);
-            }
-
-            for (const auto& spike : spikes) {
-                window.draw(spike);
-            }
-
-            for (const auto& element : backgroundElements) {
-                window.draw(element);
-            }
-
-            if (hero.getHasKey()) {
-                sf::Sprite keySprite = key.getSprite();
-                keySprite.setPosition(160, 15);
-                window.draw(keySprite);
-            }
-
-            if (currentMap == 3) {
-                window.draw(chest.getSprite());
-            }
-            window.draw(hero.getSprite());
-            hero.draw(window);
-
-            if (currentMap == 1) {
-                if (crab.isAlive() || crab.getDeathElapsedTime() < sf::seconds(1.0f)) {
-                    window.draw(crab.getSprite());
-                }
-                window.draw(floor);
-                window.draw(groundSprite);
-                window.draw(pillarSprite);
-                window.draw(cannon.getSprite());
-                if (!heart1.isCollected()) {
-                    heart1.update(deltaTime);
-                    window.draw(heart1.getSprite());
-                }
-                for (const auto& cannonball : cannon.getCannonballs()) {
-                    window.draw(cannonball.getSprite());
-                }
-                cannon.update(currentGroundHeight);
-                handleCollisions(cannon, platforms);
-            }
-
-            if (currentMap == 2) {             
-                
-                if (guy1.isAlive() || guy1.getDeathElapsedTime() < sf::seconds(1.0f)) {
-                    window.draw(guy1.getSprite());
-                }
-                if (guy2.isAlive() || guy2.getDeathElapsedTime() < sf::seconds(1.0f)) {
-                    window.draw(guy2.getSprite());
-                }
-                if (!key.isCollected()) {
-                    key.update(deltaTime);
-                    window.draw(key.getSprite());
-                }
-            }
-
-            if (currentMap == 3) {
-                
-                window.draw(floor);
-                if (pirate.isAlive() || pirate.getDeathElapsedTime() < sf::seconds(1.0f)) {
-                    window.draw(pirate.getSprite());
-                }
-                if (captain.isAlive() || captain.getDeathElapsedTime() < sf::seconds(1.0f)) {
-                    window.draw(captain.getSprite());
-                }
-                if (!heart2.isCollected()) {
-                    heart2.update(deltaTime);
-                    window.draw(heart2.getSprite());
-                }
-            }
+        }
+        if (isherodead) {
+            deathMenu.draw(window);
         }
 
         if (isMenuOpen) {

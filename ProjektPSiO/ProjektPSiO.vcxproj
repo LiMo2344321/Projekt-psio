@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DeathMenu.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="ProjektPSiO.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Chest.h" />
     <ClInclude Include="Collectable.h" />
     <ClInclude Include="Crab.h" />
+    <ClInclude Include="DeathMenu.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Functions.h" />
