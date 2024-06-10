@@ -82,19 +82,6 @@ int main() {
         return -1;
     }
 
-    sf::Texture pirateTexture;
-    if (!pirateTexture.loadFromFile("pirate.png")) {
-        std::cerr << "Error loading pirate texture" << std::endl;
-        return -1;
-    }
-
-    sf::Texture captainTexture;
-    if (!captainTexture.loadFromFile("captain.png")) {
-        std::cerr << "Error loading captain texture" << std::endl;
-        return -1;
-    }
-
-
     sf::RectangleShape floor(sf::Vector2f(window.getSize().x, 200));
     floor.setFillColor(sf::Color::Green);
     floor.setPosition(0, groundHeight);
@@ -195,7 +182,24 @@ int main() {
     Pirate pirate(pirateidle ,piraterun,pirateattack, gravity, 0.5f);
     pirate.setPosition(1000, 150 - pirate.getSprite().getGlobalBounds().height);
 
-    Captain captain(captainTexture, gravity, 0.1f);
+
+    std::vector <sf::Texture> captainrun(14);
+    for (int i = 0; i < 14; ++i) {
+        if (!captainrun[i].loadFromFile("captainrun" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading captainrun texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
+
+    std::vector <sf::Texture> captainattack(7);
+    for (int i = 0; i < 7; ++i) {
+        if (!captainattack[i].loadFromFile("captainattack" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading captainattack texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
+
+    Captain captain(captainrun,captainattack, gravity, 0.1f);
     captain.setPosition(800, groundHeight - 280 - captain.getSprite().getGlobalBounds().height);
 
     std::vector<sf::Texture> keyTextures(8);
@@ -346,8 +350,18 @@ int main() {
                 damageClock.restart();
             }
 
-            captain.update(platforms[5]);
+            captain.update(platforms[5], hero.getSprite(), deltaTime);
             handleCollisions(captain, platforms);
+
+            if (captain.getisAttacking() && captain.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                if (!recentlyDamaged || (currentTime - lastDamageTime > sf::seconds(1.0f))) {
+                    hero.takeDamage();
+                    heroDamaged = true;
+                    lastDamageTime = currentTime;
+                    recentlyDamaged = true;
+                    damageClock.restart();
+                }
+            }
 
             if (!heart2.isCollected() && heart2.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds()) && hero.getHealth() < 3) {
                 heart2.collect();
