@@ -168,7 +168,31 @@ int main() {
     guy1.setPosition(1002, 250 - guy1.getSprite().getGlobalBounds().height);
     guy2.setPosition(1502, groundHeight - 396 - guy2.getSprite().getGlobalBounds().height);
 
-    Pirate pirate(pirateTexture, gravity, 0.3f);
+
+    std::vector <sf::Texture> pirateattack(12);
+    for (int i = 0; i < 12; ++i) {
+        if (!pirateattack[i].loadFromFile("pirateattack" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading pirate attack texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
+    std::vector <sf::Texture> pirateidle(34);
+    for (int i = 0; i < 34; ++i) {
+        if (!pirateidle[i].loadFromFile("pirateidle" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading pirateidle texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
+
+    std::vector <sf::Texture> piraterun(14);
+    for (int i = 0; i < 14; ++i) {
+        if (!piraterun[i].loadFromFile("piraterun" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading piraterun texture " << i + 1 << std::endl;
+            return -1;
+        }
+    }
+
+    Pirate pirate(pirateidle,piraterun,pirateattack, gravity, 0.3f);
     pirate.setPosition(1000, 150 - pirate.getSprite().getGlobalBounds().height);
 
     Captain captain(captainTexture, gravity, 0.1f);
@@ -310,10 +334,17 @@ int main() {
             }
         }
 
-        if (currentMap == 3) {
 
-            pirate.update(platforms[1]);
+        if (currentMap == 3) {
+            pirate.update(platforms[1], hero.getSprite(), deltaTime);
             handleCollisions(pirate, platforms);
+            if (pirate.getisAttacking() && pirate.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
+                hero.takeDamage();
+                heroDamaged = true;
+                lastDamageTime = currentTime;
+                recentlyDamaged = true;
+                damageClock.restart();
+            }
 
             captain.update(platforms[5]);
             handleCollisions(captain, platforms);
@@ -321,11 +352,8 @@ int main() {
             if (!heart2.isCollected() && heart2.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds()) && hero.getHealth() < 3) {
                 heart2.collect();
                 hero.addHealth(window);
-
             }
-
         }
-
 
         for (const auto& cannonball : cannon.getCannonballs()) {
             if (cannonball.getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
@@ -400,7 +428,7 @@ int main() {
         if (hero.getHasKey()) {
 
             sf::Sprite keySprite = key.getSprite();
-            keySprite.setPosition(160, 15); // Wybierz odpowiednią pozycję
+            keySprite.setPosition(160, 15); 
             window.draw(keySprite);
         }
 
