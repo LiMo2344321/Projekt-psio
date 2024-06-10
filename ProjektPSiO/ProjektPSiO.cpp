@@ -141,21 +141,18 @@ int main() {
         }
     }
 
-    std::vector <sf::Texture> crabHit(4);
-    for (int i = 0; i < 4; i++) {
-        if (!crabHit[i].loadFromFile("crabhit" + std::to_string(i + 1) + ".png")) {
-            std::cerr << "Error loading crab hit texture " << i + 1 << std::endl;
-            return -1;
-        }
+    sf::Texture crabHit;
+    if (!crabHit.loadFromFile("crabhit.png")) {
+        std::cerr << "Error loading crab hit texture " << std::endl;
+        return -1;
     }
 
-    std::vector <sf::Texture> crabDie(5);
-    for (int i = 0; i < 5; i++) {
-        if (!crabDie[i].loadFromFile("crabdie.png")) {
+  sf::Texture crabDie;
+        if (!crabDie.loadFromFile("crabdie.png")) {
             std::cerr << "Error loading crab die texture " << std::endl;
             return -1;
         }
-    }
+  
 
     Crab crab(crabRun, crabAttack, crabAnticipation, crabHit, crabDie, gravity, 0.1f);
     crab.setPosition(1050, 329);
@@ -325,7 +322,7 @@ int main() {
         bool heroDamaged = false;
 
         if (currentMap == 1) {
-            if (crab.isCrabAlive()) {
+            if (crab.isAlive()) {
                 crab.update(platforms[2], hero.getSprite(), deltaTime);
                 handleCollisions(crab, platforms);
                 if (crab.getisAttacking() && crab.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds())) {
@@ -340,7 +337,12 @@ int main() {
             }
 
             if (hero.isAttacking() && hero.getSprite().getGlobalBounds().intersects(crab.getSprite().getGlobalBounds())) {
-                crab.takeDamage(1);
+                if (!recentlyinflictedDamage) {
+                    crab.takeDamage(1);
+                    lastInflictedDamageTime = currentTime2;
+                    recentlyinflictedDamage = true;
+                    damageClock2.restart();
+                }
             }
 
             if (!heart1.isCollected() && heart1.getSprite().getGlobalBounds().intersects(hero.getSprite().getGlobalBounds()) && hero.getHealth() < 3) {
@@ -514,7 +516,7 @@ int main() {
         hero.draw(window);
 
         if (currentMap == 1) {
-            if (crab.isCrabAlive()) { 
+            if (crab.isAlive() || crab.getDeathElapsedTime() < sf::seconds(1.0f)) {
                 window.draw(crab.getSprite()); }
             window.draw(floor);
             window.draw(cannon.getSprite());
