@@ -69,6 +69,33 @@ int main() {
     hero.setFps(20);
     hero.setPosition(100, groundHeight);
 
+    sf::Texture backgroundTexture1;
+    sf::Texture backgroundTexture2;
+    //sf::Texture backgroundTexture3;
+
+    if (!backgroundTexture1.loadFromFile("Map/background1.png")) {
+        std::cerr << "Error loading background1.png" << std::endl;
+        return -1;
+    }
+
+    if (!backgroundTexture2.loadFromFile("Map/background2.png")) {
+        std::cerr << "Error loading background2.png" << std::endl;
+        return -1;
+    }
+
+    //if (!backgroundTexture3.loadFromFile("Map/background3tile.png")) {
+    //      std::cerr << "Error loading background3tile.png" << std::endl;
+    //      return -1;
+    //}
+    //backgroundTexture3.setRepeated(true);
+
+    sf::Sprite backgroundsprite1;
+    backgroundsprite1.setTexture(backgroundTexture1);
+    sf::Sprite backgroundsprite2;
+    backgroundsprite2.setTexture(backgroundTexture2);
+   // sf::Sprite backgroundsprite3;
+   // backgroundsprite3.setTexture(backgroundTexture3);
+
     sf::Texture pillarTexture;
     if (!pillarTexture.loadFromFile("Map/pillar.png")) {
         std::cerr << "Error loading pillar texture" << std::endl;
@@ -646,7 +673,26 @@ int main() {
                 hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, hero.getPosition().y);
             }
 
+            //okno - rysowanie
             window.clear(sf::Color(0, 240, 255));
+            sf::Vector2u windowSize = window.getSize();
+
+            if (currentMap == 1) {
+                sf::Vector2u textureSize = backgroundsprite1.getTexture()->getSize();
+                backgroundsprite1.setScale(
+                    static_cast<float>(windowSize.x) / textureSize.x,
+                    static_cast<float>(windowSize.y) / textureSize.y
+                );
+                window.draw(backgroundsprite1);
+            }
+            else if (currentMap == 2) {
+                sf::Vector2u textureSize = backgroundsprite2.getTexture()->getSize();
+                backgroundsprite2.setScale(
+                    static_cast<float>(windowSize.x) / textureSize.x,
+                    static_cast<float>(windowSize.y) / textureSize.y
+                );
+                window.draw(backgroundsprite2);
+            }
 
             for (const auto& platform : platforms) {
                 window.draw(platform);
