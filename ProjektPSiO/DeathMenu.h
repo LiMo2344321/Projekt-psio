@@ -30,4 +30,4 @@ private:
     std::vector<sf::Sprite> buttons;
 };
 
-#endif // DEATHMENU_H
+#endif 

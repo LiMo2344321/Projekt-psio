@@ -67,7 +67,7 @@ protected:
     }
 
     void adjustOrigin() {
-        sprite.setOrigin(sprite.getLocalBounds().width / 2.0f, 0);  // Origin w œrodku sprite'a
+        sprite.setOrigin(sprite.getLocalBounds().width / 2.0f, 0);  
     }
 };
 

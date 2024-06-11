@@ -179,7 +179,7 @@ private:
     std::vector<sf::Texture> runTextures;
     std::vector<sf::Texture> idleTextures;
     std::vector<sf::Texture> jumpTextures;
-    std::vector<sf::Texture> attackTextures; // Tekstury ataku
+    std::vector<sf::Texture> attackTextures; 
     float moveSpeed;
     float jumpSpeed;
     size_t currentTextureIndex;
@@ -227,10 +227,10 @@ private:
                     sprite.setTexture(attackTextures[currentTextureIndex]);
                     if (currentTextureIndex == attackTextures.size() - 1) {
                         if (state == State::Attack) {
-                            state = State::Idle; // Po zakoñczeniu animacji ataku, przejdŸ do stanu Idle
+                            state = State::Idle; 
                         }
                         else if (state == State::RunAttack) {
-                            state = State::Run; // Po zakoñczeniu animacji ataku, wróæ do biegania
+                            state = State::Run; 
                         }
                     }
                 }

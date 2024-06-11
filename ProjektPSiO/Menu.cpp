@@ -1,72 +1,70 @@
 #include "Menu.h"
+#include <iostream>
 
 Menu::Menu(float width, float height) {
-    // Load menu background
     if (!menuBackgroundTexture.loadFromFile("menu/menuboard.png")) {
-        // Handle error
+        std::cout << "Error loading menuboard texture" << std::endl;
     }
     menuBackground.setTexture(menuBackgroundTexture);
-    menuBackground.setScale(8.0f, 8.0f); // Scale the menu background
+    menuBackground.setScale(8.0f, 8.0f); 
     menuBackground.setPosition(width / 2 - menuBackground.getGlobalBounds().width / 2, height / 2 - menuBackground.getGlobalBounds().height / 2);
-
-    // Load button textures
+      
     if (!buttonTexture.loadFromFile("menu/bigbutton.png")) {
-        // Handle error
+        std::cout << "Error loading bigbutton texture" << std::endl;
     }
     if (!biggerButtonTexture.loadFromFile("menu/biggerbutton.png")) {
-        // Handle error
+        std::cout << "Error loading biggerbutton texture" << std::endl;
     }
-    if (!restartButtonTexture.loadFromFile("menu/biggerbutton.png")) { // Zmienione na bigbutton.png
-        // Handle error
+    if (!restartButtonTexture.loadFromFile("menu/biggerbutton.png")) { 
+        std::cout << "Error loading biggerbutton texture" << std::endl;
     }
 
-    // Initialize buttons
-    sf::Sprite continueButton(biggerButtonTexture); // Use biggerButtonTexture for continue button
+    
+    sf::Sprite continueButton(biggerButtonTexture); 
     sf::Sprite quitButton(buttonTexture);
-    sf::Sprite restartButton(restartButtonTexture); // Zmienione na restartButtonTexture
-    continueButton.setScale(8.0f, 8.0f); // Scale the buttons
-    quitButton.setScale(8.0f, 8.0f);     // Scale the buttons
-    restartButton.setScale(8.0f, 8.0f);   // Skalowanie przycisku restartu
+    sf::Sprite restartButton(restartButtonTexture); 
+    continueButton.setScale(8.0f, 8.0f); 
+    quitButton.setScale(8.0f, 8.0f);     
+    restartButton.setScale(8.0f, 8.0f);   
     continueButton.setPosition(745, 440);
     quitButton.setPosition(800, 680);
-    restartButton.setPosition(745, 560); // Pozycja przycisku restartu
+    restartButton.setPosition(745, 560); 
 
     buttons.push_back(continueButton);
     buttons.push_back(quitButton);
-    buttons.push_back(restartButton); // Dodanie przycisku restartu
+    buttons.push_back(restartButton); 
 
-    // Load and set the title texture
+    
     if (!menuTitleTexture.loadFromFile("Menu/menu.png")) {
-        // Handle error
+        std::cout << "Error loading menu texture" << std::endl;
     }
     menuTitleSprite.setTexture(menuTitleTexture);
-    menuTitleSprite.setScale(8.0f, 8.0f); // Scale the title sprite
-    menuTitleSprite.setPosition(800, 300); // Position at the top
+    menuTitleSprite.setScale(8.0f, 8.0f); 
+    menuTitleSprite.setPosition(800, 300); 
 
-    // Load and set the continue button text texture
+    
     if (!continueTexture.loadFromFile("Menu/continue.png")) {
-        // Handle error
+        std::cout << "Error loading continue texture" << std::endl;
     }
     continueTextSprite.setTexture(continueTexture);
-    continueTextSprite.setScale(4.0f, 4.0f); // Scale the continue text sprite
+    continueTextSprite.setScale(4.0f, 4.0f); 
     continueTextSprite.setPosition(continueButton.getPosition().x + (continueButton.getGlobalBounds().width - continueTextSprite.getGlobalBounds().width) / 2,
         continueButton.getPosition().y + (continueButton.getGlobalBounds().height - continueTextSprite.getGlobalBounds().height) / 2.6);
 
-    // Load and set the quit button text texture
+    
     if (!quitTexture.loadFromFile("Menu/quit.png")) {
-        // Handle error
+        std::cout << "Error loading quit texture" << std::endl;
     }
     quitTextSprite.setTexture(quitTexture);
-    quitTextSprite.setScale(4.0f, 4.0f); // Scale the quit text sprite
+    quitTextSprite.setScale(4.0f, 4.0f); 
     quitTextSprite.setPosition(quitButton.getPosition().x + (quitButton.getGlobalBounds().width - quitTextSprite.getGlobalBounds().width) / 2,
         quitButton.getPosition().y + (quitButton.getGlobalBounds().height - quitTextSprite.getGlobalBounds().height) / 2.6);
-
-    // Load and set the restart button text texture
-    if (!restartTextTexture.loadFromFile("Menu/restart.png")) { // Nowy texture dla napisu restart
-        // Handle error
+        
+    if (!restartTextTexture.loadFromFile("Menu/restart.png")) { 
+        std::cout << "Error loading restart texture" << std::endl;
     }
     restartTextSprite.setTexture(restartTextTexture);
-    restartTextSprite.setScale(4.0f, 4.0f); // Scale the restart text sprite
+    restartTextSprite.setScale(4.0f, 4.0f); 
     restartTextSprite.setPosition(restartButton.getPosition().x + (restartButton.getGlobalBounds().width - restartTextSprite.getGlobalBounds().width) / 2,
         restartButton.getPosition().y + (restartButton.getGlobalBounds().height - restartTextSprite.getGlobalBounds().height) / 2.6);
 
@@ -81,7 +79,7 @@ void Menu::draw(sf::RenderWindow& window) {
     }
     window.draw(continueTextSprite);
     window.draw(quitTextSprite);
-    window.draw(restartTextSprite); // Narysuj tekst na przycisku restartu
+    window.draw(restartTextSprite); 
 }
 
 bool Menu::isMouseOver(const sf::Vector2i& mousePos, int index) const {

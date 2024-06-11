@@ -124,7 +124,7 @@ public:
         sprite.setTexture(idleTextures[0]);
         sprite.setScale(1.8f, 1.8f);
         sprite.setOrigin(sprite.getGlobalBounds().width / 2, 0);
-        health = 3; // Reset health to initial value
+        health = 3; 
         hitElapsedTime = sf::Time::Zero;
         deathElapsedTime = sf::Time::Zero;
     }

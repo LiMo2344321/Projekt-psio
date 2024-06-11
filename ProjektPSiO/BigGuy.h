@@ -59,7 +59,7 @@ public:
                 currentFrame = 0;
             }
             else {
-                sprite.setTexture(idleTextures[currentFrame]); // Keeping pre-attack texture same as idle texture
+                sprite.setTexture(idleTextures[currentFrame]); 
                 return;
             }
         }
@@ -187,7 +187,7 @@ public:
         isPreAttacking = false;
         preAttackDuration = sf::seconds(0.5f);
         preAttackElapsedTime = sf::Time::Zero;
-        health = 6; // Reset health to initial value
+        health = 6; 
         sprite.setTexture(idleTextures[0]);
         sprite.setScale(2.0f, 2.0f);
         sf::FloatRect bounds = sprite.getLocalBounds();

@@ -130,25 +130,6 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
         platform6.setTexture(&level3textures[5]);
         platform6.setPosition(800, 600);
         platforms.push_back(platform6);
-
-        //kolce
-        float spikeWidth = 32.0f;
-        float spikeHeight = 16.0f;
-        float targetHeight = 50.0f;
-
-        float scaleX = targetHeight / spikeHeight;
-        float startX = 0;
-        float endX = 950;
-
-        spikeTexture.setRepeated(true);
-
-        sf::Sprite spikes2;
-        spikes2.setTexture(spikeTexture);
-        spikes2.setTextureRect(sf::IntRect(0, 0, (endX - startX) / scaleX, spikeHeight));
-        spikes2.setScale(scaleX, scaleX);
-        spikes2.setPosition(0, groundHeight - 50);
-        spikes.push_back(spikes2);
-
     }
 }
 
@@ -191,15 +172,12 @@ void handleCollisions(Postac& character, const std::vector<sf::RectangleShape>& 
 }
 
 void resetGame(Hero& hero, Crab& crab, BigGuy& guy1, BigGuy& guy2, Pirate& pirate, Captain& captain, Collectable& key, Collectable& heart1, Collectable& heart2, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& spikes, std::vector<sf::Sprite>& backgroundElements, int& currentMap, int groundHeight, sf::Texture& spikeTexture, std::vector <sf::Texture>& level1textures, std::vector <sf::Texture>& level2textures, std::vector <sf::Texture>& level3textures, Chest& chest) {
-    // Ustawienie mapy na pocz¹tkow¹
     currentMap = 1;
-
-    // Resetowanie stanu bohatera
+    
     hero.setPosition(100, groundHeight);
     hero.resetHealth();
     hero.setHasKey(false);
-
-    // Resetowanie stanu wrogów i przedmiotów
+    
     crab.reset();
     guy1.reset();
     guy2.reset();
@@ -208,8 +186,7 @@ void resetGame(Hero& hero, Crab& crab, BigGuy& guy1, BigGuy& guy2, Pirate& pirat
     key.resetAnimation(1654, 440);
     heart1.resetAnimation(930, 155);
     heart2.resetAnimation(30, 355);
-
-    // Za³adowanie pocz¹tkowej mapy
+    
     loadMap(currentMap, platforms, backgroundElements, spikes, groundHeight, spikeTexture, level1textures, level2textures, level3textures);
     chest.reset();
 }

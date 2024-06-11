@@ -1,53 +1,52 @@
 #include "DeathMenu.h"
+#include <iostream>
 
 DeathMenu::DeathMenu(float width, float height) {
-    // Load menu background (optional)
     if (!menuBackgroundTexture.loadFromFile("menu/menuboard.png")) {
-        // Handle error
+        std::cout << "Error loading menuboard texture" << std::endl;
     }
     menuBackground.setTexture(menuBackgroundTexture);
-    menuBackground.setScale(8.0f, 8.0f); // Scale the menu background
+    menuBackground.setScale(8.0f, 8.0f); 
     menuBackground.setPosition(width / 2 - menuBackground.getGlobalBounds().width / 2, height / 2 - menuBackground.getGlobalBounds().height / 2);
 
-    // Load button textures
+  
     if (!buttonTexture.loadFromFile("menu/bigbutton.png")) {
-        // Handle error
+        std::cout << "Error loading bigbutton texture" << std::endl;
     }
 
-    // Initialize buttons
+   
     sf::Sprite restartButton(buttonTexture);
     sf::Sprite quitButton(buttonTexture);
     restartButton.setScale(8.0f, 8.0f);
     quitButton.setScale(8.0f, 8.0f);
-    restartButton.setPosition(800, 440); // Adjust position as needed
-    quitButton.setPosition(800, 560);    // Adjust position as needed
+    restartButton.setPosition(800, 440); 
+    quitButton.setPosition(800, 560);   
 
     buttons.push_back(restartButton);
     buttons.push_back(quitButton);
-
-    // Load and set the "You Died" title texture
+   
     if (!youDiedTexture.loadFromFile("menu/youdied.png")) {
-        // Handle error
+        std::cout << "Error loading youdied texture" << std::endl;
     }
     youDiedSprite.setTexture(youDiedTexture);
-    youDiedSprite.setScale(8.0f, 8.0f); // Scale the title sprite
-    youDiedSprite.setPosition(640, 300); // Position at the top
+    youDiedSprite.setScale(8.0f, 8.0f); 
+    youDiedSprite.setPosition(640, 300); 
 
-    // Load and set the restart button text texture
+    
     if (!restartTexture.loadFromFile("menu/restart.png")) {
-        // Handle error
+        std::cout << "Error loading menurestart texture" << std::endl;
     }
     restartTextSprite.setTexture(restartTexture);
-    restartTextSprite.setScale(4.0f, 4.0f); // Scale the restart text sprite
+    restartTextSprite.setScale(4.0f, 4.0f); 
     restartTextSprite.setPosition(restartButton.getPosition().x + (restartButton.getGlobalBounds().width - restartTextSprite.getGlobalBounds().width) / 2,
         restartButton.getPosition().y + (restartButton.getGlobalBounds().height - restartTextSprite.getGlobalBounds().height) / 2.6);
 
-    // Load and set the quit button text texture
+    
     if (!quitTexture.loadFromFile("menu/quit.png")) {
-        // Handle error
+        std::cout << "Error loading menuquit texture" << std::endl;
     }
     quitTextSprite.setTexture(quitTexture);
-    quitTextSprite.setScale(4.0f, 4.0f); // Scale the quit text sprite
+    quitTextSprite.setScale(4.0f, 4.0f); 
     quitTextSprite.setPosition(quitButton.getPosition().x + (quitButton.getGlobalBounds().width - quitTextSprite.getGlobalBounds().width) / 2,
         quitButton.getPosition().y + (quitButton.getGlobalBounds().height - quitTextSprite.getGlobalBounds().height) / 2.6);
 
@@ -95,8 +94,8 @@ int DeathMenu::getNumberOfItems() const {
 int DeathMenu::handleMouseClick(const sf::Vector2i& mousePos) {
     for (int i = 0; i < buttons.size(); i++) {
         if (isMouseOver(mousePos, i)) {
-            return i;  // Return the index of the clicked button
+            return i;  
         }
     }
-    return -1;  // Return -1 if no button was clicked
+    return -1;  
 }
