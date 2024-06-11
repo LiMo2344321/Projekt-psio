@@ -18,10 +18,10 @@ public:
         sprite.setScale(3.0f, 3.0f);
         adjustOriginAndScale();
 
-        if (!healthBarTexture.loadFromFile("healthbar.png")) {
+        if (!healthBarTexture.loadFromFile("Healthbar/healthbar.png")) {
             std::cerr << "Error loading health bar texture" << std::endl;
         }
-        if (!heartTexture.loadFromFile("heart.png")) {
+        if (!heartTexture.loadFromFile("Healthbar/heart.png")) {
             std::cerr << "Error loading heart texture" << std::endl;
         }
 

@@ -146,19 +146,12 @@ int main() {
     floor3.setTexture(&ground3Texture);
     floor3.setPosition(0, groundHeight);
 
-    sf::Texture cannonballTexture;
-    if (!cannonballTexture.loadFromFile("cball.png")) {
-        std::cerr << "Error loading cannonball texture" << std::endl;
-        return -1;
-    }
 
     sf::Texture spikeTexture;
-    if (!spikeTexture.loadFromFile("Spikes.png")) {
+    if (!spikeTexture.loadFromFile("Map/Spikes.png")) {
         std::cerr << "Error loading spike texture" << std::endl;
         return -1;
     }
-
-
 
     //skrzynia
     sf::Texture closedChestTexture;
@@ -174,14 +167,21 @@ int main() {
     Chest chest(closedChestTexture, openChestTextures, 1650, 0);
     int chesty = groundHeight - chest.getSprite().getGlobalBounds().height;
     chest.getSprite().setPosition(1650, chesty);
+
     //armata
+    sf::Texture cannonballTexture;
+    if (!cannonballTexture.loadFromFile("Cannon/cball.png")) {
+        std::cerr << "Error loading cannonball texture" << std::endl;
+        return -1;
+    }
+
     Cannon cannon(gravity, cannonballTexture);
     cannon.setPosition(650, groundHeight - cannon.getGlobalBounds().height);
 
 
     std::vector <sf::Texture> cshoot(6);
     for (int i = 0; i < 6; i++) {
-        if (!cshoot[i].loadFromFile("cshoot" + std::to_string(i + 1) + ".png")) {
+        if (!cshoot[i].loadFromFile("Cannon/cshoot" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading cshoot texture " << i + 1 << std::endl;
             return -1;
         }
@@ -195,7 +195,7 @@ int main() {
     //krab
     std::vector <sf::Texture> crabRun(6);
     for (int i = 0; i < 6; i++) {
-        if (!crabRun[i].loadFromFile("crabrun" + std::to_string(i + 1) + ".png")) {
+        if (!crabRun[i].loadFromFile("Crab/crabrun" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading crab run texture " << i + 1 << std::endl;
             return -1;
         }
@@ -203,7 +203,7 @@ int main() {
 
     std::vector <sf::Texture> crabAttack(4);
     for (int i = 0; i < 4; i++) {
-        if (!crabAttack[i].loadFromFile("crabattack" + std::to_string(i + 1) + ".png")) {
+        if (!crabAttack[i].loadFromFile("Crab/crabattack" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading crab run texture " << i + 1 << std::endl;
             return -1;
         }
@@ -211,20 +211,20 @@ int main() {
 
     std::vector <sf::Texture> crabAnticipation(3);
     for (int i = 0; i < 3; i++) {
-        if (!crabAnticipation[i].loadFromFile("crabanticipation" + std::to_string(i + 1) + ".png")) {
+        if (!crabAnticipation[i].loadFromFile("Crab/crabanticipation" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading crab anticipation texture " << i + 1 << std::endl;
             return -1;
         }
     }
 
     sf::Texture crabHit;
-    if (!crabHit.loadFromFile("crabhit.png")) {
+    if (!crabHit.loadFromFile("Crab/crabhit.png")) {
         std::cerr << "Error loading crab hit texture " << std::endl;
         return -1;
     }
 
     sf::Texture crabDie;
-    if (!crabDie.loadFromFile("crabdie.png")) {
+    if (!crabDie.loadFromFile("Crab/crabdie.png")) {
         std::cerr << "Error loading crab die texture " << std::endl;
         return -1;
     }
@@ -233,39 +233,39 @@ int main() {
     Crab crab(crabRun, crabAnticipation, crabAttack, crabHit, crabDie, gravity, 0.1f);
     crab.setPosition(1050, 329);
 
-
+    //big guy
     std::vector<sf::Texture> bigguyidle(36);
     std::vector<sf::Texture> bigguyrun(8);
     std::vector<sf::Texture> bigguyattack(10);
     for (int i = 0; i < 36; ++i) {
-        if (!bigguyidle[i].loadFromFile("guyidle" + std::to_string(i + 1) + ".png")) {
+        if (!bigguyidle[i].loadFromFile("Big Guy/guyidle" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading idle texture " << i + 1 << std::endl;
             return -1;
         }
     }
 
     for (int i = 0; i < 8; ++i) {
-        if (!bigguyrun[i].loadFromFile("guyrun" + std::to_string(i + 1) + ".png")) {
+        if (!bigguyrun[i].loadFromFile("Big Guy/guyrun" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading run texture " << i + 1 << std::endl;
             return -1;
         }
     }
 
     for (int i = 0; i < 10; ++i) {
-        if (!bigguyattack[i].loadFromFile("bigguyattack" + std::to_string(i + 1) + ".png")) {
+        if (!bigguyattack[i].loadFromFile("Big Guy/bigguyattack" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading attack texture " << i + 1 << std::endl;
             return -1;
         }
     }
 
     sf::Texture bigguyHit;
-    if (!bigguyHit.loadFromFile("bigguyhit.png")) {
+    if (!bigguyHit.loadFromFile("Big Guy/bigguyhit.png")) {
         std::cerr << "Error loading big guy hit texture " << std::endl;
         return -1;
     }
 
     sf::Texture bigguyDie;
-    if (!bigguyDie.loadFromFile("bigguydie.png")) {
+    if (!bigguyDie.loadFromFile("Big Guy/bigguydie.png")) {
         std::cerr << "Error loading big guy die texture " << std::endl;
         return -1;
     }
@@ -276,16 +276,17 @@ int main() {
     guy2.setPosition(1502, groundHeight - 396 - guy2.getSprite().getGlobalBounds().height);
 
 
+    //pirat
     std::vector <sf::Texture> pirateattack(12);
     for (int i = 0; i < 12; ++i) {
-        if (!pirateattack[i].loadFromFile("pirateattack" + std::to_string(i + 1) + ".png")) {
+        if (!pirateattack[i].loadFromFile("Pirate/pirateattack" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading pirate attack texture " << i + 1 << std::endl;
             return -1;
         }
     }
     std::vector <sf::Texture> pirateidle(34);
     for (int i = 0; i < 34; ++i) {
-        if (!pirateidle[i].loadFromFile("pirateidle" + std::to_string(i + 1) + ".png")) {
+        if (!pirateidle[i].loadFromFile("Pirate/pirateidle" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading pirateidle texture " << i + 1 << std::endl;
             return -1;
         }
@@ -293,19 +294,19 @@ int main() {
 
     std::vector <sf::Texture> piraterun(14);
     for (int i = 0; i < 14; ++i) {
-        if (!piraterun[i].loadFromFile("piraterun" + std::to_string(i + 1) + ".png")) {
+        if (!piraterun[i].loadFromFile("Pirate/piraterun" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading piraterun texture " << i + 1 << std::endl;
             return -1;
         }
     }
 
     sf::Texture piratehit;
-    if (!piratehit.loadFromFile("piratehit.png")) {
+    if (!piratehit.loadFromFile("Pirate/piratehit.png")) {
         std::cerr << "Error loading piratehit texture " << std::endl;
         return -1;
     }
     sf::Texture piratedie;
-    if (!piratedie.loadFromFile("piratedie.png")) {
+    if (!piratedie.loadFromFile("Pirate/piratedie.png")) {
         std::cerr << "Error loading piratediedie texture " << std::endl;
         return -1;
     }
@@ -316,7 +317,7 @@ int main() {
     //kapitan
     std::vector <sf::Texture> captainrun(14);
     for (int i = 0; i < 14; ++i) {
-        if (!captainrun[i].loadFromFile("captainrun" + std::to_string(i + 1) + ".png")) {
+        if (!captainrun[i].loadFromFile("Captain/captainrun" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading captainrun texture " << i + 1 << std::endl;
             return -1;
         }
@@ -324,19 +325,19 @@ int main() {
 
     std::vector <sf::Texture> captainattack(7);
     for (int i = 0; i < 7; ++i) {
-        if (!captainattack[i].loadFromFile("captainattack" + std::to_string(i + 1) + ".png")) {
+        if (!captainattack[i].loadFromFile("Captain/captainattack" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading captainattack texture " << i + 1 << std::endl;
             return -1;
         }
     }
 
     sf::Texture captainhit;
-    if (!captainhit.loadFromFile("captainhit.png")) {
+    if (!captainhit.loadFromFile("Captain/captainhit.png")) {
         std::cerr << "Error loading captainhit texture " << std::endl;
         return -1;
     }
     sf::Texture captaindie;
-    if (!captaindie.loadFromFile("captaindie.png")) {
+    if (!captaindie.loadFromFile("Captain/captaindie.png")) {
         std::cerr << "Error loading captaindie texture " << std::endl;
         return -1;
     }
@@ -347,7 +348,7 @@ int main() {
 
     std::vector<sf::Texture> keyTextures(8);
     for (int i = 0; i < 8; ++i) {
-        if (!keyTextures[i].loadFromFile("key" + std::to_string(i + 1) + ".png")) {
+        if (!keyTextures[i].loadFromFile("Items/key" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading key texture " << i + 1 << std::endl;
             return -1;
         }
@@ -358,7 +359,7 @@ int main() {
 
     std::vector <sf::Texture> heartTextures(22);
     for (int i = 0; i < 22; ++i) {
-        if (!heartTextures[i].loadFromFile("heart" + std::to_string(i + 1) + ".png")) {
+        if (!heartTextures[i].loadFromFile("Items/heart" + std::to_string(i + 1) + ".png")) {
             std::cerr << "Error loading heart texture " << i + 1 << std::endl;
             return -1;
         }
