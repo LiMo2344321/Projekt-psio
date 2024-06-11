@@ -811,7 +811,7 @@ int main() {
                 }
             }
         }
-        if (iswon) {
+        if (iswon) {            
             WinMenu.draw(window);
         }
         if (isherodead) {

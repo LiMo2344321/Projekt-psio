@@ -166,6 +166,7 @@ public:
         return deathElapsedTime;
     }
 
+
     void reset() {
         movingRight = true;
         currentFrame = 0;
@@ -178,6 +179,7 @@ public:
         isHit = false;
         hitElapsedTime = sf::Time::Zero;
         isDead = false;
+        health = 2;
         deathElapsedTime = sf::Time::Zero;
         sprite.setTexture(walkTextures[0]);
     }
