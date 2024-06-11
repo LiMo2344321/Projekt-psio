@@ -77,7 +77,7 @@ int main() {
 
     sf::Texture backgroundTexture1;
     sf::Texture backgroundTexture2;
-    //sf::Texture backgroundTexture3;
+    sf::Texture backgroundTexture3;
 
     if (!backgroundTexture1.loadFromFile("Map/background1.png")) {
         std::cerr << "Error loading background1.png" << std::endl;
@@ -89,29 +89,42 @@ int main() {
         return -1;
     }
 
-    //if (!backgroundTexture3.loadFromFile("Map/background3tile.png")) {
-    //      std::cerr << "Error loading background3tile.png" << std::endl;
-    //      return -1;
-    //}
-    //backgroundTexture3.setRepeated(true);
+    if (!backgroundTexture3.loadFromFile("Map/background3tile.png")) {
+        std::cerr << "Error loading background3tile.png" << std::endl;
+        return -1;
+    }
+    backgroundTexture3.setRepeated(true);
+
 
     sf::Sprite backgroundsprite1;
     backgroundsprite1.setTexture(backgroundTexture1);
     sf::Sprite backgroundsprite2;
     backgroundsprite2.setTexture(backgroundTexture2);
-   // sf::Sprite backgroundsprite3;
-   // backgroundsprite3.setTexture(backgroundTexture3);
+    sf::Sprite backgroundsprite3;
+    backgroundsprite3.setTexture(backgroundTexture3);
+    backgroundsprite3.setScale(2.0f, 2.0f);
 
-    sf::Texture pillarTexture;
-    if (!pillarTexture.loadFromFile("Map/pillar.png")) {
-        std::cerr << "Error loading pillar texture" << std::endl;
-        return -1;
+
+    std::vector <sf::Texture> level1textures(6);
+    for (int i = 0; i < 6; i++) {
+        if (!level1textures[i].loadFromFile("Map/level1" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading level1 texture" << std::endl;
+        }
     }
-    
-    sf::Sprite pillarSprite;
-    pillarSprite.setTexture(pillarTexture);
-    pillarSprite.setPosition(193, groundHeight - 150);
-    pillarSprite.setScale(3.3f, 5.0f);
+
+    std::vector <sf::Texture> level2textures(5);
+    for (int i = 0; i < 5; i++) {
+        if (!level2textures[i].loadFromFile("Map/level2" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading level2 texture" << std::endl;
+        }
+    }
+
+    std::vector <sf::Texture> level3textures(6);
+    for (int i = 0; i < 6; i++) {
+        if (!level3textures[i].loadFromFile("Map/level3" + std::to_string(i + 1) + ".png")) {
+            std::cerr << "Error loading level3 texture" << std::endl;
+        }
+    }
 
     sf::Texture groundTexture;
     if (!groundTexture.loadFromFile("Map/ground.png")) {
@@ -119,28 +132,19 @@ int main() {
         return -1;
     }
 
-    sf::Sprite groundSprite;
-    groundSprite.setTexture(groundTexture);
-    groundSprite.setPosition(0, groundHeight);
-    groundSprite.setScale(8.0f, 7.0f);
-
-    sf::Texture shipTexture;
-    if (!shipTexture.loadFromFile("Ship1.png")) {
-        std::cerr << "Error loading ship texture" << std::endl;
+    sf::Texture ground3Texture;
+    if (!ground3Texture.loadFromFile("Map/ground3.png")) {
+        std::cerr << "Error loading ground3 texture" << std::endl;
         return -1;
     }
 
-    sf::Texture mastTexture;
-    if (!mastTexture.loadFromFile("Map/Maszt.png")) {
-        std::cerr << "Error loading mast texture" << std::endl;
-        return -1;
-    }
+    sf::RectangleShape floor1(sf::Vector2f(window.getSize().x, 200));
+    floor1.setTexture(&groundTexture);
+    floor1.setPosition(0, groundHeight);
 
-    sf::Texture flagTexture;
-    if (!flagTexture.loadFromFile("Flag1.png")) {
-        std::cerr << "Error loading flag texture" << std::endl;
-        return -1;
-    }
+    sf::RectangleShape floor3(sf::Vector2f(window.getSize().x, 200));
+    floor3.setTexture(&ground3Texture);
+    floor3.setPosition(0, groundHeight);
 
     sf::Texture cannonballTexture;
     if (!cannonballTexture.loadFromFile("cball.png")) {
@@ -154,9 +158,7 @@ int main() {
         return -1;
     }
 
-    sf::RectangleShape floor(sf::Vector2f(window.getSize().x, 200));
-    floor.setFillColor(sf::Color::Green);
-    floor.setPosition(0, groundHeight);
+
 
     //skrzynia
     sf::Texture closedChestTexture;
@@ -169,7 +171,7 @@ int main() {
         }
     }
 
-    Chest chest(closedChestTexture, openChestTextures, 1650 , 0);
+    Chest chest(closedChestTexture, openChestTextures, 1650, 0);
     int chesty = groundHeight - chest.getSprite().getGlobalBounds().height;
     chest.getSprite().setPosition(1650, chesty);
     //armata
@@ -221,14 +223,14 @@ int main() {
         return -1;
     }
 
-  sf::Texture crabDie;
-        if (!crabDie.loadFromFile("crabdie.png")) {
-            std::cerr << "Error loading crab die texture " << std::endl;
-            return -1;
-        }
-  
+    sf::Texture crabDie;
+    if (!crabDie.loadFromFile("crabdie.png")) {
+        std::cerr << "Error loading crab die texture " << std::endl;
+        return -1;
+    }
 
-    Crab crab(crabRun, crabAnticipation, crabAttack , crabHit, crabDie, gravity, 0.1f);
+
+    Crab crab(crabRun, crabAnticipation, crabAttack, crabHit, crabDie, gravity, 0.1f);
     crab.setPosition(1050, 329);
 
 
@@ -308,7 +310,7 @@ int main() {
         return -1;
     }
 
-    Pirate pirate(pirateidle, piraterun, pirateattack,piratehit,piratedie, gravity, 0.5f);
+    Pirate pirate(pirateidle, piraterun, pirateattack, piratehit, piratedie, gravity, 0.5f);
     pirate.setPosition(1000, 150 - pirate.getSprite().getGlobalBounds().height);
 
     //kapitan
@@ -333,7 +335,7 @@ int main() {
         std::cerr << "Error loading captainhit texture " << std::endl;
         return -1;
     }
-    sf::Texture captaindie; 
+    sf::Texture captaindie;
     if (!captaindie.loadFromFile("captaindie.png")) {
         std::cerr << "Error loading captaindie texture " << std::endl;
         return -1;
@@ -372,7 +374,8 @@ int main() {
     std::vector<sf::Sprite> backgroundElements;
     std::vector<sf::Sprite> spikes;
     int currentMap = 1;
-    loadMap(currentMap, platforms, backgroundElements, spikes, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
+    loadMap(currentMap, platforms, backgroundElements, spikes, groundHeight, spikeTexture, level1textures, level2textures, level3textures);
+
 
     sf::Music backgroundMusic;
     if (!backgroundMusic.openFromFile("backgroundmusic.wav")) {
@@ -420,7 +423,7 @@ int main() {
                                 }
                                 else if (i == 2) {
                                
-                                    resetGame(hero, crab, guy1, guy2, pirate, captain, key, heart1, heart2, platforms, spikes, backgroundElements, currentMap, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture, chest);
+                                    resetGame(hero, crab, guy1, guy2, pirate, captain, key, heart1, heart2, platforms, spikes, backgroundElements, currentMap, groundHeight, spikeTexture,level1textures,level2textures, level3textures, chest);
                                     isMenuOpen = false;
                                 }
                             }
@@ -435,7 +438,7 @@ int main() {
                         int buttonIndex = deathMenu.handleMouseClick(mousePos);
                         if (buttonIndex == 0) {
                             // Reset Game
-                            resetGame(hero, crab, guy1, guy2, pirate, captain, key, heart1, heart2, platforms, spikes, backgroundElements, currentMap, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture, chest);
+                            resetGame(hero, crab, guy1, guy2, pirate, captain, key, heart1, heart2, platforms, spikes, backgroundElements, currentMap, groundHeight, spikeTexture, level1textures, level2textures, level3textures,  chest);
                             isherodead = false;
                         }
                         else if (buttonIndex == 1) {
@@ -452,7 +455,7 @@ int main() {
                         int buttonIndex = WinMenu.handleMouseClick(mousePos);
                         if (buttonIndex == 0) {
                             // Reset Game
-                            resetGame(hero, crab, guy1, guy2, pirate, captain, key, heart1, heart2, platforms, spikes, backgroundElements, currentMap, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture, chest);
+                            resetGame(hero, crab, guy1, guy2, pirate, captain, key, heart1, heart2, platforms, spikes, backgroundElements, currentMap, groundHeight, spikeTexture, level1textures, level2textures, level3textures, chest);
                             iswon = false;
                         }
                         else if (buttonIndex == 1) {
@@ -651,8 +654,7 @@ int main() {
                         chest.update(deltaTime);
                         if (hero.getHasKey() && hero.getSprite().getGlobalBounds().intersects(chest.getSprite().getGlobalBounds())) {
                             chest.open();
-                            hero.dropKey();
-                            std::cout << "Wygrana" << std::endl;
+                            hero.dropKey();                            
 
                         }
 
@@ -688,12 +690,12 @@ int main() {
 
                     if (hero.getPosition().x > window.getSize().x && currentMap == 1) {
                         currentMap++;
-                        loadMap(currentMap, platforms, spikes, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
+                        loadMap(currentMap, platforms, spikes, backgroundElements, groundHeight, spikeTexture, level1textures, level2textures, level3textures);
                         hero.setPosition(0, hero.getPosition().y);
                     }
                     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && currentMap == 2 && hero.getPosition().x > 1024 && hero.getPosition().x < 1204) {
                         currentMap = 3;
-                        loadMap(currentMap, platforms, spikes, backgroundElements, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
+                        loadMap(currentMap, platforms, spikes, backgroundElements, groundHeight, spikeTexture, level1textures, level2textures, level3textures);
                         hero.setPosition(window.getSize().x - hero.getGlobalBounds().width, 0);
                     }
 
@@ -730,6 +732,11 @@ int main() {
                         );
                         window.draw(backgroundsprite2);
                     }
+                    else if (currentMap == 3) {
+                        backgroundsprite3.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
+                        window.draw(backgroundsprite3);
+
+                    }
 
                     for (const auto& platform : platforms) {
                         window.draw(platform);
@@ -759,9 +766,7 @@ int main() {
                         if (crab.isAlive() || crab.getDeathElapsedTime() < sf::seconds(1.0f)) {
                             window.draw(crab.getSprite());
                         }
-                        window.draw(floor);
-                        window.draw(groundSprite);
-                        window.draw(pillarSprite);
+                        window.draw(floor1);
                         window.draw(cannon.getSprite());
                         if (!heart1.isCollected()) {
                             heart1.update(deltaTime);
@@ -790,7 +795,7 @@ int main() {
 
                     if (currentMap == 3) {
 
-                        window.draw(floor);
+                        window.draw(floor3);
                         if (pirate.isAlive() || pirate.getDeathElapsedTime() < sf::seconds(1.0f)) {
                             window.draw(pirate.getSprite());
                         }
@@ -816,7 +821,7 @@ int main() {
             menu.draw(window); 
         }
 
-        window.display();
+        window.display(); 
     }
 
     return 0;

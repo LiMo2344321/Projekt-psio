@@ -8,7 +8,7 @@
 #include "Collectable.h"
 #include "Chest.h"
 
-void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& backgroundElements, std::vector<sf::Sprite>& spikes, int groundHeight,sf::Texture& shipTexture, sf::Texture& mastTexture, sf::Texture& flagTexture, sf::Texture& spikeTexture) {
+void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& backgroundElements, std::vector<sf::Sprite>& spikes, int groundHeight, sf::Texture& spikeTexture, std::vector <sf::Texture>& level1textures, std::vector <sf::Texture>& level2textures, std::vector <sf::Texture>& level3textures) {
     platforms.clear();
     backgroundElements.clear();
     spikes.clear();
@@ -16,33 +16,33 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
     if (mapIndex == 1) {
         //level1
         sf::RectangleShape platform1(sf::Vector2f(200, 150));
-        platform1.setFillColor(sf::Color::Red);
+        platform1.setTexture(&level1textures[0]);
         platform1.setPosition(200, groundHeight - 150);
         platforms.push_back(platform1);
 
         sf::RectangleShape platform2(sf::Vector2f(180, 250));
-        platform2.setFillColor(sf::Color::Red);
+        platform2.setTexture(&level1textures[1]);
         platform2.setPosition(750, groundHeight - 250);
         platforms.push_back(platform2);
 
         sf::RectangleShape platform3(sf::Vector2f(300, 50));
-        platform3.setFillColor(sf::Color::Red);
+        platform3.setTexture(&level1textures[2]);
         platform3.setPosition(1100, 400);
         platforms.push_back(platform3);
 
         sf::RectangleShape platform4(sf::Vector2f(300, 50));
-        platform4.setFillColor(sf::Color::Red);
+        platform4.setTexture(&level1textures[3]);
         platform4.setPosition(1400, 700);
         platforms.push_back(platform4);
 
         sf::RectangleShape platform5(sf::Vector2f(100, 50));
-        platform5.setFillColor(sf::Color::Red);
+        platform5.setTexture(&level1textures[4]);
         platform5.setPosition(900, 200);
         platforms.push_back(platform5);
 
         //port
         sf::RectangleShape platform6(sf::Vector2f(180, 200));
-        platform6.setFillColor(sf::Color::Red);
+        platform6.setTexture(&level1textures[5]);
         platform6.setPosition(1800, groundHeight - 200);
         platforms.push_back(platform6);
 
@@ -50,16 +50,16 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
 
         float spikeWidth = 32.0f;
         float spikeHeight = 16.0f;
-        float targetHeight = 50.0f;  
+        float targetHeight = 50.0f;
         float scaleX = targetHeight / spikeHeight;
-        float startX = 930; 
-        float endX = 1800;  
+        float startX = 930;
+        float endX = 1800;
 
         spikeTexture.setRepeated(true);
 
         sf::Sprite spikes1;
         spikes1.setTexture(spikeTexture);
-        spikes1.setTextureRect(sf::IntRect(0, 0, (endX - startX) / scaleX, spikeHeight));  
+        spikes1.setTextureRect(sf::IntRect(0, 0, (endX - startX) / scaleX, spikeHeight));
         spikes1.setScale(scaleX, scaleX);
         spikes1.setPosition(startX, groundHeight - targetHeight);
         spikes.push_back(spikes1);
@@ -70,71 +70,71 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
         //level2
         // port
         sf::RectangleShape platform1(sf::Vector2f(180, 400));
-        platform1.setFillColor(sf::Color::Red);
+        platform1.setTexture(&level2textures[0]);
         platform1.setPosition(0, groundHeight - 200);
         platforms.push_back(platform1);
 
         // statek
         sf::RectangleShape platform2(sf::Vector2f(1404, 396));
-        platform2.setTexture(&shipTexture);
-        platform2.setPosition(300, groundHeight - 396);
+        platform2.setTexture(&level2textures[1]);
+        platform2.setPosition(350, groundHeight - 396);
         platforms.push_back(platform2);
 
         // maszt
         sf::RectangleShape platform3(sf::Vector2f(36, 450));
-        platform3.setTexture(&mastTexture);
-        platform3.setTextureRect(sf::IntRect(0, 0, 4, mastTexture.getSize().y));
-        platform3.setPosition(1002, groundHeight - 846);
+        platform3.setTexture(&level2textures[2]);
+        platform3.setTextureRect(sf::IntRect(0, 0, 4, level2textures[2].getSize().y));
+        platform3.setPosition(1052, groundHeight - 846);
         platforms.push_back(platform3);
 
         sf::RectangleShape platform4(sf::Vector2f(300, 50));
-        platform4.setFillColor(sf::Color::Red);
-        platform4.setPosition(702, 250);
+        platform4.setTexture(&level2textures[3]);
+        platform4.setPosition(752, 250);
         platforms.push_back(platform4);
 
         // flaga 
         sf::Sprite flag;
-        flag.setTexture(flagTexture);
+        flag.setTexture(level2textures[4]);
         flag.setScale(9.0f, 9.0f);
-        flag.setPosition(1038, groundHeight - 846);
+        flag.setPosition(1088, groundHeight - 846);
         backgroundElements.push_back(flag);
     }
     else if (mapIndex == 3) {
         //level 3
         sf::RectangleShape platform1(sf::Vector2f(500, 50));
-        platform1.setFillColor(sf::Color::Red);
+        platform1.setTexture(&level3textures[0]);
         platform1.setPosition(1600, 100);
         platforms.push_back(platform1);
 
         sf::RectangleShape platform2(sf::Vector2f(800, 50));
-        platform2.setFillColor(sf::Color::Red);
+        platform2.setTexture(&level3textures[1]);
         platform2.setPosition(800, 150);
         platforms.push_back(platform2);
 
         sf::RectangleShape platform3(sf::Vector2f(500, 50));
-        platform3.setFillColor(sf::Color::Red);
+        platform3.setTexture(&level3textures[2]);
         platform3.setPosition(300, 200);
         platforms.push_back(platform3);
 
         sf::RectangleShape platform4(sf::Vector2f(100, 50));
-        platform4.setFillColor(sf::Color::Red);
+        platform4.setTexture(&level3textures[3]);
         platform4.setPosition(0, 400);
         platforms.push_back(platform4);
 
         sf::RectangleShape platform5(sf::Vector2f(300, 50));
-        platform5.setFillColor(sf::Color::Red);
+        platform5.setTexture(&level3textures[4]);
         platform5.setPosition(300, 600);
         platforms.push_back(platform5);
 
         sf::RectangleShape platform6(sf::Vector2f(500, 50));
-        platform6.setFillColor(sf::Color::Red);
+        platform6.setTexture(&level3textures[5]);
         platform6.setPosition(800, 600);
         platforms.push_back(platform6);
 
         //kolce
         float spikeWidth = 32.0f;
         float spikeHeight = 16.0f;
-        float targetHeight = 50.0f;  
+        float targetHeight = 50.0f;
 
         float scaleX = targetHeight / spikeHeight;
         float startX = 0;
@@ -144,13 +144,14 @@ void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vect
 
         sf::Sprite spikes2;
         spikes2.setTexture(spikeTexture);
-        spikes2.setTextureRect(sf::IntRect(0, 0, (endX - startX) / scaleX, spikeHeight));  
+        spikes2.setTextureRect(sf::IntRect(0, 0, (endX - startX) / scaleX, spikeHeight));
         spikes2.setScale(scaleX, scaleX);
         spikes2.setPosition(0, groundHeight - 50);
         spikes.push_back(spikes2);
-        
+
     }
 }
+
 
 
 void handleCollisions(Postac& character, const std::vector<sf::RectangleShape>& platforms) {
@@ -189,7 +190,7 @@ void handleCollisions(Postac& character, const std::vector<sf::RectangleShape>& 
     }
 }
 
-void resetGame(Hero& hero, Crab& crab, BigGuy& guy1, BigGuy& guy2, Pirate& pirate, Captain& captain, Collectable& key, Collectable& heart1, Collectable& heart2, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& spikes, std::vector<sf::Sprite>& backgroundElements, int& currentMap, int groundHeight, sf::Texture& shipTexture, sf::Texture& mastTexture, sf::Texture& flagTexture, sf::Texture& spikeTexture, Chest& chest) {
+void resetGame(Hero& hero, Crab& crab, BigGuy& guy1, BigGuy& guy2, Pirate& pirate, Captain& captain, Collectable& key, Collectable& heart1, Collectable& heart2, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& spikes, std::vector<sf::Sprite>& backgroundElements, int& currentMap, int groundHeight, sf::Texture& spikeTexture, std::vector <sf::Texture>& level1textures, std::vector <sf::Texture>& level2textures, std::vector <sf::Texture>& level3textures, Chest& chest) {
     // Ustawienie mapy na pocz¹tkow¹
     currentMap = 1;
 
@@ -209,7 +210,7 @@ void resetGame(Hero& hero, Crab& crab, BigGuy& guy1, BigGuy& guy2, Pirate& pirat
     heart2.resetAnimation(30, 355);
 
     // Za³adowanie pocz¹tkowej mapy
-    loadMap(currentMap, platforms, backgroundElements, spikes, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
+    loadMap(currentMap, platforms, backgroundElements, spikes, groundHeight, spikeTexture, level1textures, level2textures, level3textures);
     chest.reset();
 }
 

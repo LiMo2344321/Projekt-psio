@@ -12,11 +12,11 @@
 #include "Collectable.h"
 #include "Chest.h"
 
-void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& backgroundElements, std::vector<sf::Sprite>& spikes, int groundHeight, sf::Texture& shipTexture, sf::Texture& mastTexture, sf::Texture& flagTexture, sf::Texture& spikeTexture);
+void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& backgroundElements, std::vector<sf::Sprite>& spikes, int groundHeight, sf::Texture& spikeTexture, std::vector <sf::Texture>& level1textures, std::vector <sf::Texture>& level2textures, std::vector <sf::Texture>& level3textures);
 
 void handleCollisions(Postac& character, const std::vector<sf::RectangleShape>& platforms);
 
-void resetGame(Hero& hero, Crab& crab, BigGuy& guy1, BigGuy& guy2, Pirate& pirate, Captain& captain, Collectable& key, Collectable& heart1, Collectable& heart2, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& spikes, std::vector<sf::Sprite>& backgroundElements, int& currentMap, int groundHeight, sf::Texture& shipTexture, sf::Texture& mastTexture, sf::Texture& flagTexture, sf::Texture& spikeTexture, Chest& chest);
+void resetGame(Hero& hero, Crab& crab, BigGuy& guy1, BigGuy& guy2, Pirate& pirate, Captain& captain, Collectable& key, Collectable& heart1, Collectable& heart2, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& spikes, std::vector<sf::Sprite>& backgroundElements, int& currentMap, int groundHeight, sf::Texture& spikeTexture, std::vector <sf::Texture>& level1textures, std::vector <sf::Texture>& level2textures, std::vector <sf::Texture>& level3textures, Chest& chest);
 
 bool isHeroInFront(const sf::Sprite& enemy, const sf::Sprite& hero);
 
