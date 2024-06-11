@@ -6,6 +6,7 @@
 #include "Pirate.h"
 #include "Captain.h"
 #include "Collectable.h"
+#include "Chest.h"
 
 void loadMap(int mapIndex, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& backgroundElements, std::vector<sf::Sprite>& spikes, int groundHeight,sf::Texture& shipTexture, sf::Texture& mastTexture, sf::Texture& flagTexture, sf::Texture& spikeTexture) {
     platforms.clear();
@@ -188,7 +189,7 @@ void handleCollisions(Postac& character, const std::vector<sf::RectangleShape>& 
     }
 }
 
-void resetGame(Hero& hero, Crab& crab, BigGuy& guy1, BigGuy& guy2, Pirate& pirate, Captain& captain, Collectable& key, Collectable& heart1, Collectable& heart2, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& spikes, std::vector<sf::Sprite>& backgroundElements, int& currentMap, int groundHeight, sf::Texture& shipTexture, sf::Texture& mastTexture, sf::Texture& flagTexture, sf::Texture& spikeTexture) {
+void resetGame(Hero& hero, Crab& crab, BigGuy& guy1, BigGuy& guy2, Pirate& pirate, Captain& captain, Collectable& key, Collectable& heart1, Collectable& heart2, std::vector<sf::RectangleShape>& platforms, std::vector<sf::Sprite>& spikes, std::vector<sf::Sprite>& backgroundElements, int& currentMap, int groundHeight, sf::Texture& shipTexture, sf::Texture& mastTexture, sf::Texture& flagTexture, sf::Texture& spikeTexture, Chest& chest) {
     // Ustawienie mapy na pocz¹tkow¹
     currentMap = 1;
 
@@ -209,6 +210,7 @@ void resetGame(Hero& hero, Crab& crab, BigGuy& guy1, BigGuy& guy2, Pirate& pirat
 
     // Za³adowanie pocz¹tkowej mapy
     loadMap(currentMap, platforms, backgroundElements, spikes, groundHeight, shipTexture, mastTexture, flagTexture, spikeTexture);
+    chest.reset();
 }
 
 bool isHeroInFront(const sf::Sprite& enemy, const sf::Sprite& hero) {
@@ -222,6 +224,7 @@ bool isHeroInFront(const sf::Sprite& enemy, const sf::Sprite& hero) {
     return (heroLeft >= enemyLeft && heroLeft <= enemyLeft + enemyWidth / 2) ||
         (heroRight >= enemyLeft && heroRight <= enemyLeft + enemyWidth / 2);
 }
+
 
 
 

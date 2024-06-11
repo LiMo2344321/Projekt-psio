@@ -44,6 +44,13 @@ public:
     sf::Sprite& getSprite() {
         return sprite;
     }
+    void reset() {
+        isOpen = false;
+        currentFrame = 0;
+        elapsedTime = sf::Time::Zero;
+        sprite.setTexture(closedTexture);
+    }
+
 
 private:
     sf::Sprite sprite;

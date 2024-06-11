@@ -150,8 +150,7 @@ public:
     }
 
     void kill() {
-        health = 0;
-        hasKey = false;
+        health=0;
     }
 
     void pickUpKey() {
